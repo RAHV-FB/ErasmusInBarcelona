@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./assets/vendor/react.production.min.js"></script>
+<script src="./assets/vendor/react-dom.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<footer style="background: #202124; color: rgba(250,250,247,.85); margin-top: 0;">
+  <div style="max-width: 1360px; margin: 0 auto; padding: clamp(44px, 6vw, 64px) clamp(16px, 4vw, 40px) 28px clamp(16px, 4vw, 40px);">
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px; border-bottom: 1px solid rgba(250,250,247,.25); padding-bottom: clamp(28px, 4vw, 44px);">
+      <p aria-hidden="true" style="margin: 0; font: 700 clamp(64px, 10vw, 112px)/0.85 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.05em; color: #FAFAF7;">EiB<span style="color: #F26B5E;">.</span></p>
+
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 36px 32px; padding-top: clamp(28px, 4vw, 44px);">
+      <div>
+        <p style="margin: 0; font: 700 14px/1.35 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.1em; color: #FAFAF7;">ERASMUS IN BARCELONA</p>
+        <p style="margin: 4px 0 0 0; font: 600 10.5px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: rgba(250,250,247,.55);">BY SPAINBCN-PROGRAMS</p>
+      </div>
+      <nav aria-label="Explore">
+        <h2 style="margin: 0 0 14px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.16em; color: #F3CE67;">EXPLORE</h2>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a href="./join-a-course.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Join a course</a>
+          <a href="./bring-a-group.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Bring a group</a>
+          <a href="./plan-a-mobility.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Plan a mobility</a>
+          <a href="./dates.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Barcelona dates</a>
+          <a href="./your-week.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Your Barcelona week</a>
+          <a href="./barcelona.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Barcelona</a>
+          <a href="./about.dc.html" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">About</a>
+        </div>
+      </nav>
+      <nav aria-label="SpainBcn">
+        <h2 style="margin: 0 0 14px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.16em; color: #F3CE67;">SPAINBCN</h2>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a href="{{ catalogueUrl }}" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Complete course catalogue ↗</a>
+          <a href="{{ locationsUrl }}" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">Other locations in Spain ↗</a>
+          <a href="{{ spainbcnUrl }}" style="color: rgba(250,250,247,.88); text-decoration: none; font: 500 14px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;" style-hover="color: #F3CE67;">SpainBcn.com ↗</a>
+        </div>
+      </nav>
+      <div>
+        <h2 style="margin: 0 0 14px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.16em; color: #F3CE67;">CONTACT</h2>
+        <div style="display: flex; flex-direction: column; gap: 10px; font: 500 14px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;">
+          <a href="{{ emailHref }}" style="color: #FAFAF7; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #F3CE67;">{{ email }}</a>
+          <a href="{{ phoneHref }}" style="color: rgba(250,250,247,.88); text-decoration: none;" style-hover="color: #F3CE67;">{{ phone }}</a>
+          <a href="{{ whatsapp }}" style="color: rgba(250,250,247,.88); text-decoration: none;" style-hover="color: #F3CE67;">WhatsApp ↗</a>
+          <p style="margin: 0; color: rgba(250,250,247,.6); max-width: 26ch;">{{ address }}</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: clamp(28px, 4vw, 40px); padding-top: 20px; border-top: 1px solid rgba(250,250,247,.25); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; font: 500 12.5px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: rgba(250,250,247,.6);">
+      <p style="margin: 0;">© 1997–{{ year }} SpainBcn-Programs in Barcelona SL</p>
+      <a href="./privacy.dc.html" style="color: rgba(250,250,247,.8); text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #FAFAF7;">Privacy</a>
+      <a href="./cookies.dc.html" style="color: rgba(250,250,247,.8); text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #FAFAF7;">Cookies</a>
+      <p style="margin: 0; letter-spacing: 0.08em;">OID {{ oid }}</p>
+    </div>
+  </div>
+</footer>
+<sc-if value="{{ showBanner }}" hint-placeholder-val="{{ false }}">
+  <div role="region" aria-label="Cookie consent" style="position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 430px; z-index: 60; background: #FAFAF7; border: 1px solid #202124; border-radius: 2px; padding: 18px; box-shadow: 0 8px 28px rgba(32,33,36,.22);">
+    <p style="margin: 0 0 14px 0; font: 400 14px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124;">We use necessary cookies so the site works. Optional cookies only help us understand visits — nothing runs without your choice.</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+      <button type="button" onClick="{{ acceptNecessary }}" style="min-height: 48px; padding: 0 16px; background: transparent; border: 1px solid #202124; border-radius: 2px; color: #202124; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em; cursor: pointer;" style-hover="background: #DCE9FA;">NECESSARY ONLY</button>
+      <button type="button" onClick="{{ acceptAll }}" style="min-height: 48px; padding: 0 16px; background: #3157D5; border: 1px solid #3157D5; border-radius: 2px; color: #FAFAF7; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em; cursor: pointer;" style-hover="background: #2445B0;">ACCEPT ALL</button>
+      <a href="./cookies.dc.html" style="font: 500 13px 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; text-decoration: underline; text-underline-offset: 3px;">Cookie settings</a>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1280, &quot;height&quot;: 640}}">
+class Component extends DCLogic {
+  state = { d: null, consent: 'pending' };
+  componentDidMount() {
+    import('./assets/js/site-data.js').then((d) => this.setState({ d }));
+    let consent = null;
+    try { consent = localStorage.getItem('eib-consent-v1'); } catch (e) {}
+    this.setState({ consent });
+  }
+  setConsent(value) {
+    try { localStorage.setItem('eib-consent-v1', value); } catch (e) {}
+    this.setState({ consent: value });
+  }
+  renderVals() {
+    const d = this.state.d;
+    const c = d ? d.contact : {};
+    return {
+      email: c.email, emailHref: c.email ? 'mailto:' + c.email : undefined,
+      phone: c.phone, phoneHref: c.phoneHref, whatsapp: c.whatsapp,
+      address: c.address,
+      oid: d ? d.organisation.oid : '',
+      year: new Date().getFullYear(),
+      spainbcnUrl: d ? d.spainbcn.home : 'https://spainbcn.com',
+      catalogueUrl: d ? d.spainbcn.catalogue : 'https://spainbcn.com',
+      locationsUrl: d ? d.spainbcn.locations : 'https://spainbcn.com/locations',
+      showBanner: this.state.consent === null,
+      acceptNecessary: () => this.setConsent('necessary'),
+      acceptAll: () => this.setConsent('all'),
+    };
+  }
+}
+</script>
+</body>
+</html>

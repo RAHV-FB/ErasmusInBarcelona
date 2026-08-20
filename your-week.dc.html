@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your Barcelona week — Erasmus in Barcelona</title>
+<meta name="description" content="What to expect before you arrive, during the course and between sessions.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./assets/vendor/react.production.min.js"></script>
+<script src="./assets/vendor/react-dom.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    html { scroll-padding-top: 100px; }
+    body { margin: 0; background: #FAFAF7; color: #202124; font-family: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; -webkit-text-size-adjust: 100%; }
+    a { color: #202124; }
+    a:hover { color: #3157D5; }
+    :focus-visible { outline: 3px solid #3157D5; outline-offset: 2px; }
+    ::selection { background: #F3CE67; color: #202124; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  </style>
+</helmet>
+<dc-import name="SiteHeader" current="week" hint-size="100%,100px"></dc-import>
+<main id="main">
+
+  <section data-screen-label="Week — Hero" style="max-width: 1360px; margin: 0 auto; padding: clamp(28px, 4vw, 52px) clamp(16px, 4vw, 40px) 0 clamp(16px, 4vw, 40px);">
+    <h1 style="margin: 0; font: 700 clamp(2.75rem, 7vw, 5.5rem)/0.94 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.045em; text-transform: uppercase;">Your Barcelona week<span style="color: #F26B5E;">.</span></h1>
+    <p style="margin: 18px 0 0 0; font-size: clamp(16px, 1.8vw, 18px); line-height: 1.5; color: rgba(32,33,36,.8); max-width: 56ch;">What to expect before you arrive, during the course and between sessions.</p>
+  </section>
+
+  <section data-screen-label="Week — Before you arrive" style="max-width: 1360px; margin: clamp(36px, 5vw, 60px) auto 0 auto; padding: 0 clamp(16px, 4vw, 40px);">
+    <h2 style="margin: 0 0 clamp(18px, 2.5vw, 26px) 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">Before you arrive</h2>
+    <div style="border-bottom: 1px solid #202124;">
+      <div style="display: flex; gap: clamp(14px, 2.5vw, 32px); align-items: baseline; border-top: 1px solid #202124; padding: 16px 0; flex-wrap: wrap;">
+        <p style="margin: 0; flex: 0 0 34px; font: 700 13px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #F26B5E;">01</p>
+        <p style="margin: 0; flex: 1 1 200px; font: 700 16px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.03em;">Venue &amp; timetable</p>
+        <p style="margin: 0; flex: 2.5 1 300px; font-size: 15px; line-height: 1.5; color: rgba(32,33,36,.8); max-width: 60ch;">Course rooms are in Gràcia or Barceloneta and vary by programme and week. We confirm your exact venue and timetable by email before you travel.</p>
+      </div>
+      <div style="display: flex; gap: clamp(14px, 2.5vw, 32px); align-items: baseline; border-top: 1px solid #D8D9D6; padding: 16px 0; flex-wrap: wrap;">
+        <p style="margin: 0; flex: 0 0 34px; font: 700 13px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #F26B5E;">02</p>
+        <p style="margin: 0; flex: 1 1 200px; font: 700 16px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.03em;">You arrange</p>
+        <p style="margin: 0; flex: 2.5 1 300px; font-size: 15px; line-height: 1.5; color: rgba(32,33,36,.8); max-width: 60ch;">Travel and accommodation are yours to book. Tell us where you're staying and we'll tell you how to reach class — most participants walk or take the metro.</p>
+      </div>
+      <div style="display: flex; gap: clamp(14px, 2.5vw, 32px); align-items: baseline; border-top: 1px solid #D8D9D6; padding: 16px 0; flex-wrap: wrap;">
+        <p style="margin: 0; flex: 0 0 34px; font: 700 13px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #F26B5E;">03</p>
+        <p style="margin: 0; flex: 1 1 200px; font: 700 16px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.03em;">Stay in touch</p>
+        <p style="margin: 0; flex: 2.5 1 300px; font-size: 15px; line-height: 1.5; color: rgba(32,33,36,.8); max-width: 60ch;">Questions before the week — funding paperwork, levels, access requirements — go straight to the team by <a href="{{ emailHref }}" style="color: #202124; font-weight: 600; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">email</a> or <a href="{{ whatsapp }}" style="color: #202124; font-weight: 600; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">WhatsApp</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Week — First day" style="background: #DCE9FA; margin-top: clamp(40px, 6vw, 72px);">
+    <div style="max-width: 1360px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) clamp(16px, 4vw, 40px); display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); align-items: center;">
+      <div style="flex: 1 1 320px; max-width: 560px;">
+        <h2 style="margin: 0 0 14px 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">Monday, 10:00</h2>
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: rgba(32,33,36,.85);">Arrive at the confirmed venue, meet your trainer and your international group, and walk through the week together. Classes start right away — bring whatever you normally take to a working session.</p>
+      </div>
+      <figure style="flex: 1 1 300px; max-width: 520px; margin: 0;">
+        <img src="{{ firstDaySrc }}" alt="{{ firstDayAlt }}" loading="lazy" width="520" height="390" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #FAFAF7;">
+        <figcaption style="margin-top: 6px; font: 700 10px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: rgba(32,33,36,.6);">ICT TRAINING SESSION</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section data-screen-label="Week — Timetable" style="max-width: 1360px; margin: 0 auto; padding: clamp(44px, 6vw, 72px) clamp(16px, 4vw, 40px) 0 clamp(16px, 4vw, 40px);">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 32px; margin-bottom: clamp(18px, 2.5vw, 28px);">
+      <h2 style="margin: 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">During the week</h2>
+      <p style="margin: 0; font: 400 14px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: rgba(32,33,36,.65);">An example week — exact schedules vary by programme.</p>
+    </div>
+    <sc-if value="{{ notNarrow }}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid #202124;">
+        <sc-for list="{{ days }}" as="d" hint-placeholder-count="5">
+          <div style="border-right: 1px solid {{ d.borderRight }}; display: flex; flex-direction: column;">
+            <p style="margin: 0; padding: 12px 14px; font: 700 13px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; border-bottom: 2px solid #202124; background: #FAFAF7;">{{ d.day }}</p>
+            <sc-for list="{{ d.slots }}" as="s" hint-placeholder-count="2">
+              <div style="padding: 14px; border-bottom: 1px solid #D8D9D6; background: {{ s.bg }};">
+                <p style="margin: 0 0 4px 0; font: 700 10.5px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.12em; color: rgba(32,33,36,.55);">{{ s.t }}</p>
+                <p style="margin: 0; font: 600 14.5px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;">{{ s.l }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isNarrow }}" hint-placeholder-val="{{ false }}">
+      <div style="border: 1px solid #202124;">
+        <sc-for list="{{ days }}" as="d" hint-placeholder-count="5">
+          <div style="border-bottom: 1px solid #202124;">
+            <p style="margin: 0; padding: 10px 14px; font: 700 12.5px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; border-bottom: 1px solid #202124; background: #FAFAF7;">{{ d.day }}</p>
+            <sc-for list="{{ d.slots }}" as="s" hint-placeholder-count="2">
+              <div style="padding: 12px 14px; background: {{ s.bg }}; display: flex; gap: 14px; align-items: baseline; border-top: 1px solid #D8D9D6;">
+                <p style="margin: 0; flex: 0 0 96px; font: 700 10.5px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.1em; color: rgba(32,33,36,.55);">{{ s.t }}</p>
+                <p style="margin: 0; font: 600 15px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;">{{ s.l }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <p style="margin: 16px 0 0 0; font: 400 14px/1.6 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: rgba(32,33,36,.65); max-width: 66ch;">Classes run Monday to Friday, 10:00–14:00 or 10:00–15:00. Two afternoon activities are included each week — the days vary by programme.</p>
+  </section>
+
+  <section data-screen-label="Week — Activities & free time" style="max-width: 1360px; margin: 0 auto; padding: clamp(44px, 6vw, 72px) clamp(16px, 4vw, 40px) 0 clamp(16px, 4vw, 40px);">
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); align-items: flex-start;">
+      <figure style="flex: 1.2 1 340px; min-width: 0; margin: 0;">
+        <img src="{{ activitySrc }}" alt="{{ activityAlt }}" loading="lazy" width="640" height="480" style="display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 62%; background: #DCE9FA;">
+        <figcaption style="margin-top: 6px; font: 700 10px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: rgba(32,33,36,.6);">PARC DE LA CIUTADELLA</figcaption>
+      </figure>
+      <div style="flex: 1 1 300px; min-width: 0;">
+        <h2 style="margin: 0 0 12px 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">Cultural activities</h2>
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: rgba(32,33,36,.85); max-width: 54ch;">Two organised afternoons are part of every course week — a guided walk, a visit, a piece of the city with your group. What exactly they are depends on the programme and the season.</p>
+        <h2 style="margin: 28px 0 12px 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">Free time</h2>
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: rgba(32,33,36,.85); max-width: 54ch;">Classes end at 14:00 — lunch like a local, then the city: Gràcia's squares, the Barceloneta seafront, museums, markets. <a href="./barcelona.dc.html" style="color: #202124; font-weight: 600; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">The Barcelona page</a> has the practical guide.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Week — Friday & staying longer" style="background: #BFDCCB; margin-top: clamp(44px, 6vw, 72px);">
+    <div style="max-width: 1360px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) clamp(16px, 4vw, 40px); display: flex; flex-wrap: wrap; gap: clamp(28px, 4vw, 64px);">
+      <div style="flex: 1 1 320px; min-width: 0;">
+        <h2 style="margin: 0 0 12px 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">Friday</h2>
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: rgba(32,33,36,.85); max-width: 54ch;">The last session closes the week and everyone receives a Certificate of Participation — the document most Erasmus+ grants ask for. Photos usually happen.</p>
+      </div>
+      <div style="flex: 1 1 320px; min-width: 0;">
+        <h2 style="margin: 0 0 12px 0; font: 700 clamp(1.7rem, 3.2vw, 2.5rem)/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.03em; text-transform: uppercase;">Staying longer?</h2>
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.55; color: rgba(32,33,36,.85); max-width: 54ch;">Many participants add a weekend. Montserrat, Sitges and the Costa Brava are day trips; a second week of course is also an option — ask us.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<dc-import name="SiteFooter" hint-size="100%,600px"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { d: null, isNarrow: false };
+  componentDidMount() {
+    document.title = 'Your Barcelona week — Erasmus in Barcelona';
+    import('./assets/js/site-data.js').then((d) => this.setState({ d }));
+    this.mq = window.matchMedia('(max-width: 767px)');
+    this.onMq = () => this.setState({ isNarrow: this.mq.matches });
+    if (this.mq.addEventListener) this.mq.addEventListener('change', this.onMq); else this.mq.addListener(this.onMq);
+    this.setState({ isNarrow: this.mq.matches });
+  }
+  componentWillUnmount() {
+    if (this.mq) { if (this.mq.removeEventListener) this.mq.removeEventListener('change', this.onMq); else this.mq.removeListener(this.onMq); }
+  }
+  renderVals() {
+    const d = this.state.d;
+    const days = [
+      { day: 'MON', borderRight: '#202124', slots: [{ t: '10:00–14:00', l: 'Course session', bg: '#FAFAF7' }, { t: 'AFTERNOON', l: 'Barcelona activity', bg: '#DCE9FA' }] },
+      { day: 'TUE', borderRight: '#202124', slots: [{ t: '10:00–14:00', l: 'Course session', bg: '#FAFAF7' }] },
+      { day: 'WED', borderRight: '#202124', slots: [{ t: '10:00–14:00', l: 'Course session', bg: '#FAFAF7' }] },
+      { day: 'THU', borderRight: '#202124', slots: [{ t: '10:00–14:00', l: 'Course session', bg: '#FAFAF7' }, { t: 'AFTERNOON', l: 'Cultural visit', bg: '#DCE9FA' }] },
+      { day: 'FRI', borderRight: 'transparent', slots: [{ t: '10:00–14:00', l: 'Course session', bg: '#FAFAF7' }, { t: 'END OF WEEK', l: 'Certificates', bg: '#F3CE67' }] },
+    ];
+    return {
+      days,
+      firstDaySrc: d ? d.images.ictTable.src : undefined,
+      firstDayAlt: d ? d.images.ictTable.alt : 'Training session in Barcelona',
+      activitySrc: d ? d.images.ciutadella.src : undefined,
+      activityAlt: d ? d.images.ciutadella.alt : 'Group visit in Parc de la Ciutadella',
+      emailHref: d ? 'mailto:' + d.contact.email : '#',
+      whatsapp: d ? d.contact.whatsapp : '#',
+      isNarrow: this.state.isNarrow,
+      notNarrow: !this.state.isNarrow,
+    };
+  }
+}
+</script>
+</body>
+</html>

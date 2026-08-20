@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contact the Barcelona team — Erasmus in Barcelona</title>
+<meta name="description" content="Tell us what you are planning. A rough idea is enough.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./assets/vendor/react.production.min.js"></script>
+<script src="./assets/vendor/react-dom.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    html { scroll-padding-top: 100px; }
+    body { margin: 0; background: #FAFAF7; color: #202124; font-family: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; -webkit-text-size-adjust: 100%; }
+    a { color: #202124; }
+    a:hover { color: #3157D5; }
+    :focus-visible { outline: 3px solid #3157D5; outline-offset: 2px; }
+    ::selection { background: #F3CE67; color: #202124; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  </style>
+</helmet>
+<dc-import name="SiteHeader" current="" hint-size="100%,100px"></dc-import>
+<main id="main">
+
+  <section data-screen-label="Contact — Hero" style="max-width: 1360px; margin: 0 auto; padding: clamp(28px, 4vw, 52px) clamp(16px, 4vw, 40px) 0 clamp(16px, 4vw, 40px);">
+    <h1 style="margin: 0; font: 700 clamp(2.6rem, 6.5vw, 5.2rem)/0.94 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: -0.045em; text-transform: uppercase; max-width: 14ch;">Tell us what you're planning<span style="color: #F26B5E;">.</span></h1>
+    <p style="margin: 18px 0 0 0; font-size: clamp(16px, 1.8vw, 18px); line-height: 1.5; color: rgba(32,33,36,.8); max-width: 54ch;">A rough idea is enough. The more of this you include, the faster the answer:</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px;">
+      <p style="margin: 0; padding: 10px 14px; border: 1px solid #202124; border-radius: 2px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">POSSIBLE DATES</p>
+      <p style="margin: 0; padding: 10px 14px; border: 1px solid #202124; border-radius: 2px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">COURSE OR SUBJECT</p>
+      <p style="margin: 0; padding: 10px 14px; border: 1px solid #202124; border-radius: 2px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">HOW MANY PEOPLE</p>
+      <p style="margin: 0; padding: 10px 14px; border: 1px solid #202124; border-radius: 2px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">INDIVIDUAL / STAFF / STUDENT GROUP</p>
+      <p style="margin: 0; padding: 10px 14px; border: 1px solid #202124; border-radius: 2px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">INSTITUTION &amp; COUNTRY</p>
+    </div>
+  </section>
+
+  <section data-screen-label="Contact — Form + details" id="group" style="max-width: 1360px; margin: clamp(36px, 5vw, 60px) auto 0 auto; padding: 0 clamp(16px, 4vw, 40px);">
+    <div style="display: flex; flex-wrap: wrap; gap: clamp(28px, 4vw, 64px); align-items: flex-start;">
+      <form onSubmit="{{ submit }}" style="flex: 1.3 1 360px; min-width: 0; max-width: 640px; background: #FFFFFF; border: 1px solid #202124;">
+        <p style="margin: 0; padding: 12px 18px; border-bottom: 1px solid #202124; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.15em; background: #202124; color: #FAFAF7;">WRITE TO THE BARCELONA TEAM</p>
+        <div style="padding: 20px 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <label style="display: block;">
+            <span style="display: block; margin-bottom: 6px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">YOUR NAME</span>
+            <input type="text" name="name" autoComplete="name" onChange="{{ setName }}" style="width: 100%; box-sizing: border-box; min-height: 48px; padding: 0 12px; font: 400 16px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; background: #FAFAF7; border: 1px solid #202124; border-radius: 2px;">
+          </label>
+          <label style="display: block;">
+            <span style="display: block; margin-bottom: 6px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">EMAIL</span>
+            <input type="email" name="email" autoComplete="email" onChange="{{ setEmail }}" style="width: 100%; box-sizing: border-box; min-height: 48px; padding: 0 12px; font: 400 16px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; background: #FAFAF7; border: 1px solid #202124; border-radius: 2px;">
+          </label>
+          <label style="display: block; grid-column: 1 / -1;">
+            <span style="display: block; margin-bottom: 6px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">INSTITUTION &amp; COUNTRY <span style="color: rgba(32,33,36,.5); font-weight: 500;">(OPTIONAL)</span></span>
+            <input type="text" name="institution" onChange="{{ setInstitution }}" style="width: 100%; box-sizing: border-box; min-height: 48px; padding: 0 12px; font: 400 16px/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; background: #FAFAF7; border: 1px solid #202124; border-radius: 2px;">
+          </label>
+          <label style="display: block; grid-column: 1 / -1;">
+            <span style="display: block; margin-bottom: 6px; font: 700 12px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.08em;">YOUR PLAN</span>
+            <textarea name="message" rows="6" onChange="{{ setMessage }}" placeholder="Dates, subject, number of people…" style="width: 100%; box-sizing: border-box; min-height: 140px; padding: 12px; font: 400 16px/1.5 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; background: #FAFAF7; border: 1px solid #202124; border-radius: 2px; resize: vertical;"></textarea>
+          </label>
+        </div>
+        <div style="padding: 0 18px 20px 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px;">
+          <button type="submit" style="min-height: 50px; padding: 0 22px; background: #3157D5; color: #FAFAF7; border: 1px solid #3157D5; border-radius: 2px; font: 700 13.5px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.1em; cursor: pointer;" style-hover="background: #2445B0;">SEND VIA YOUR EMAIL APP →</button>
+        </div>
+      </form>
+      <div style="flex: 1 1 280px; min-width: 0;">
+        <div style="border-bottom: 1px solid #202124;">
+          <div style="border-top: 1px solid #202124; padding: 16px 0;">
+            <p style="margin: 0 0 6px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: #3157D5;">EMAIL</p>
+            <a href="{{ emailHref }}" style="font: 700 clamp(17px, 2.4vw, 22px)/1.3 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; text-decoration: underline; text-underline-offset: 4px;" style-hover="color: #3157D5;">{{ email }}</a>
+          </div>
+          <div style="border-top: 1px solid #D8D9D6; padding: 16px 0;">
+            <p style="margin: 0 0 6px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: #3157D5;">PHONE / WHATSAPP</p>
+            <p style="margin: 0; font: 700 17px/1.4 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;"><a href="{{ phoneHref }}" style="color: #202124; text-decoration: none;" style-hover="color: #3157D5;">{{ phone }}</a></p>
+            <a href="{{ whatsapp }}" style="font: 600 13.5px/1.6 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; color: #202124; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">Open WhatsApp ↗</a>
+          </div>
+          <div style="border-top: 1px solid #D8D9D6; padding: 16px 0;">
+            <p style="margin: 0 0 6px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: #3157D5;">HEADQUARTERS</p>
+            <p style="margin: 0; font-size: 15px; line-height: 1.55; color: rgba(32,33,36,.85);">{{ address }}</p>
+            <p style="margin: 8px 0 0 0; font-size: 13.5px; line-height: 1.5; color: rgba(32,33,36,.6);">{{ addressNote }}</p>
+          </div>
+          <div style="border-top: 1px solid #D8D9D6; padding: 16px 0;">
+            <p style="margin: 0 0 6px 0; font: 700 11px/1 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif; letter-spacing: 0.14em; color: #3157D5;">SOCIAL</p>
+            <p style="margin: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font: 600 13.5px/1.6 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;">
+              <a href="{{ facebook }}" style="color: #202124; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">Facebook ↗</a>
+              <a href="{{ instagram }}" style="color: #202124; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">Instagram ↗</a>
+              <a href="{{ linkedin }}" style="color: #202124; text-decoration: underline; text-underline-offset: 3px;" style-hover="color: #3157D5;">LinkedIn ↗</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<dc-import name="SiteFooter" style="display: block; margin-top: clamp(44px, 6vw, 72px);" hint-size="100%,600px"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  // NOTE: no form backend exists yet. The submit handler builds a mailto:
+  // draft in the visitor's own email app — nothing is stored or sent by the
+  // site itself. TODO(production): replace with the real form endpoint if one
+  // is configured, keeping the mailto as fallback.
+  state = { d: null, name: '', email: '', institution: '', message: '' };
+  componentDidMount() {
+    document.title = 'Contact the Barcelona team — Erasmus in Barcelona';
+    import('./assets/js/site-data.js').then((d) => this.setState({ d }));
+  }
+  renderVals() {
+    const d = this.state.d;
+    const c = d ? d.contact : {};
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+    return {
+      email: c.email, emailHref: c.email ? 'mailto:' + c.email : '#',
+      phone: c.phone, phoneHref: c.phoneHref, whatsapp: c.whatsapp,
+      address: c.address, addressNote: c.addressNote,
+      facebook: c.facebook, instagram: c.instagram, linkedin: c.linkedin,
+      setName: set('name'), setEmail: set('email'), setInstitution: set('institution'), setMessage: set('message'),
+      submit: (e) => {
+        e.preventDefault();
+        const s = this.state;
+        const subject = 'Erasmus+ in Barcelona — ' + (s.name || 'enquiry');
+        const body = [s.message, '', '—', s.name, s.institution, s.email].filter(Boolean).join('\n');
+        window.location.href = 'mailto:' + (c.email || '') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

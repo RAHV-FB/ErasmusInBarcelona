@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Image contact sheet (internal)</title>
+<style>body{font:12px ui-monospace,monospace;background:#222;color:#eee;margin:0;padding:12px}div{display:inline-block;vertical-align:top;margin:6px;width:220px}img{width:220px;height:150px;object-fit:cover;background:#555;display:block}p{margin:2px 0}</style></head><body>
+<script>
+const base='https://8493d733cb.clvaw-cdnwnd.com/ee052f7eedd77712b075ddda3dcdb575/';
+const imgs=[
+['header-logo','200000197-40a9040a92/Captura_de_pantalla_2021-07-13_195738-removebg-preview.png'],
+['footer-logo','200000005-77b8f77b91/Screen%20Shot%202019-08-29%20at%2019.03.17.png'],
+['home-group','200000203-ac279ac27b/Captura%20de%20pantalla%202021-07-13%20201550.png'],
+['home-og','200000379-476c2476c3/700/Screenshot%202023-08-04%20at%2014.28.43.png'],
+['founders-1997','200000491-5ec735ec75/Angeles-Mriam%201997.png'],
+['arts-group','200000548-9c0739c075/L-Arts.jpeg'],
+['digital-skills','200000546-1567215674/Digital%20Skills.jpeg'],
+['team-miriam','200000448-d3278d327a/WhatsApp%20Image%202023-09-03%20at%2013.58.22.jpeg'],
+['team-russell','200000426-8a0158a017/russell.jpeg'],
+['team-adriana','200000454-549dc549de/Screenshot%202023-09-03%20at%2015.28.51.png'],
+['team-julie','200000428-2de6a2de6c/julie.jpeg'],
+['team-nigel','200000436-4655046552/nigel.jpeg'],
+['team-james','200000434-578c7578c9/james.jpeg'],
+['team-marius','200000458-62a1362a14/marius.jpeg'],
+['team-jan','200000432-715e3715e5/jan-0.jpeg'],
+['team-mike','200000452-7dba87dbaa/Screenshot%202023-09-03%20at%2014.00.02-7.png'],
+['team-toni','200000440-33bc233bc4/toni-2.jpeg'],
+['team-alberto','200000442-f1ecff1ed1/Screenshot%202023-08-28%20at%2016.34.28-removebg-preview.jpeg'],
+['team-sandra','200000456-974a2974a4/sandra.jpeg'],
+['team-toni-ict','200000438-ad998ad99a/toni.jpeg'],
+['team-mike-ict','200000450-85b7f85b81/Screenshot%202023-09-03%20at%2014.00.02.png']];
+document.body.innerHTML+=imgs.map(([n,p])=>`<div><img src="${base}${p}?ph=8493d733cb" onerror="this.after(Object.assign(document.createElement('p'),{textContent:'LOAD FAILED'}))"><p>${n}</p></div>`).join('');
+</script></body></html>

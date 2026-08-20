@@ -1,0 +1,17 @@
+{
+  "name": "erasmusinbarcelona",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ErasmusInBarcelona.com — Barcelona Workshop redesign",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node scripts/health-check.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
