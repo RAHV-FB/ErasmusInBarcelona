@@ -29,8 +29,8 @@ export default function yourWeek() {
         <p class="lede">What to expect before you arrive, during the course and between sessions.</p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.ictLaptops, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>A morning session in the classroom</figcaption>
+        ${img(d.images.workingSession, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
+        <figcaption>A working session during a course week</figcaption>
       </figure>
     </div>
   </section>

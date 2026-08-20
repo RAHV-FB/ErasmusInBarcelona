@@ -49,16 +49,10 @@ export default function home() {
         </div>
         <p class="meta" style="margin-top:22px">In Barcelona since ${d.organisation.founded}. Small international groups.</p>
       </div>
-      <div class="hero-media hero-media--pair">
-        <figure class="media media--tall">
-          ${img(d.images.certificates, { sizes: '(min-width: 860px) 40vw, 100vw', eager: true })}
-          <figcaption>The last day of a course week</figcaption>
-        </figure>
-        <figure class="media media--photo">
-          ${img(d.images.ictTable, { sizes: '(min-width: 860px) 28vw, 100vw' })}
-          <figcaption>AI and ICT training</figcaption>
-        </figure>
-      </div>
+      <figure class="media media--photo">
+        ${img(d.images.certificates, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
+        <figcaption>The last day of a course week</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -88,7 +82,7 @@ export default function home() {
   </section>
 
   <figure class="media media--band">
-    ${img(d.images.parkGuell, { sizes: '100vw' })}
+    ${img(d.images.arcDeTriomf, { sizes: '100vw' })}
   </figure>
 
   <section class="section">
@@ -105,18 +99,20 @@ export default function home() {
   </section>
 
   <section class="section section--powder">
-    <div class="container cols cols--split">
+    <div class="container cols cols--lead">
       <div>
         <h2>A typical course week</h2>
         <p>Classes run Monday to Friday mornings. You choose 20 or 25 hours a week when you book.
           Two afternoons are given to the week’s cultural activities, and someone from the team goes with the group.</p>
         <p><a class="link-strong" href="/your-week/">See what a week looks like →</a></p>
+        <p style="margin-top:24px">Bringing students instead? Programmes can be built around your group’s dates,
+          size and subject, in English or Spanish. <a class="link-strong" href="/bring-a-group/">Plan a student
+          group →</a></p>
       </div>
-      <div>
-        <h2>Bringing students?</h2>
-        <p>Programmes can be built around your group’s dates, size and subject, in English or Spanish.</p>
-        <p><a class="link-strong" href="/bring-a-group/">Plan a student group →</a></p>
-      </div>
+      <figure class="media media--photo">
+        ${img(d.images.classGroup, { sizes: '(min-width: 860px) 48vw, 100vw' })}
+        <figcaption>A morning session in Barcelona</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -129,8 +125,8 @@ export default function home() {
         <p><a class="link-strong" href="/barcelona/">Practical information for your stay →</a></p>
       </div>
       <div class="hero-media hero-media--even">
+        <figure class="media media--photo">${img(d.images.cafeTerrace, { sizes: '(min-width: 860px) 28vw, 50vw' })}</figure>
         <figure class="media media--photo">${img(d.images.barceloneta, { sizes: '(min-width: 860px) 28vw, 50vw' })}</figure>
-        <figure class="media media--photo">${img(d.images.ciutadella, { sizes: '(min-width: 860px) 28vw, 50vw' })}</figure>
       </div>
     </div>
   </section>

@@ -11,8 +11,8 @@ export default function barcelona() {
   </section>
 
   <figure class="media media--band">
-    ${img(d.images.barceloneta, { sizes: '100vw', eager: true })}
-    <figcaption class="container">The Barceloneta seafront, a few streets from the seaside classrooms</figcaption>
+    ${img(d.images.cathedral, { sizes: '100vw', eager: true })}
+    <figcaption class="container">A course group in the square in front of the cathedral</figcaption>
   </figure>
 
   <section class="section">
@@ -29,9 +29,9 @@ export default function barcelona() {
         <li><span class="facts__term">Access</span><span class="facts__value">Tell us what you need and we will
           confirm what the venue for your week can accommodate.</span></li>
       </ul>
-      <figure class="media" style="margin-top:28px">
-        ${img(d.images.facilities, { sizes: '(min-width: 860px) 60vw, 100vw' })}
-        <figcaption>The school: a classroom, the hallway, the terrace, and a group at work</figcaption>
+      <figure class="media media--wide" style="margin-top:28px">
+        ${img(d.images.officeClassroom, { sizes: '(min-width: 860px) 60vw, 100vw' })}
+        <figcaption>The classroom at the office in Gràcia</figcaption>
       </figure>
     </div>
   </section>
@@ -64,14 +64,18 @@ export default function barcelona() {
           <li>Check which venue your week uses before you book somewhere to stay.</li>
           <li>Summers are hot and winters are mild — check the forecast before you pack.</li>
         </ul>
-      </div>
-      <div>
-        <h2>Language</h2>
+        <h2 style="margin-top:1.6em">Language</h2>
         <p>Catalan and Spanish are both official in Barcelona. Courses are taught in English, except the Spanish
           programmes, which are taught in Spanish.</p>
+      </div>
+      <div>
         <h2>Free afternoons</h2>
         <p>Two afternoons are the week's cultural activities. The rest are yours, and the team is happy to point
           you at something near the venue.</p>
+        <figure class="media media--photo" style="margin-top:18px">
+          ${img(d.images.barceloneta, { sizes: '(min-width: 860px) 45vw, 100vw' })}
+          <figcaption>The Barceloneta seafront, a few streets from the seaside classrooms</figcaption>
+        </figure>
       </div>
     </div>
   </section>

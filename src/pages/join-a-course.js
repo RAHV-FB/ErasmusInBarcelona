@@ -40,8 +40,8 @@ export default function joinACourse() {
         </div>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.englishGroup, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>An English course group in Barcelona</figcaption>
+        ${img(d.images.spanishOffice, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
+        <figcaption>A course group at the SpainBcn office in Gràcia</figcaption>
       </figure>
     </div>
   </section>

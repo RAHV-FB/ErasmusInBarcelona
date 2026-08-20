@@ -32,8 +32,8 @@ export default function bringAGroup() {
         </div>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.viewpoint, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>A student group at a viewpoint over the city</figcaption>
+        ${img(d.images.ciutadella, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
+        <figcaption>A student group in Parc de la Ciutadella</figcaption>
       </figure>
     </div>
   </section>
@@ -74,8 +74,8 @@ export default function bringAGroup() {
         <p class="meta" style="margin-top:14px">Nothing is stored on your device — the answers travel in the link.</p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.parkGuell, { sizes: '(min-width: 860px) 35vw, 100vw' })}
-        <figcaption>A cultural activity during a student programme</figcaption>
+        ${img(d.images.seaGroup, { sizes: '(min-width: 860px) 35vw, 100vw' })}
+        <figcaption>An afternoon out with a student group</figcaption>
       </figure>
     </div>
   </section>

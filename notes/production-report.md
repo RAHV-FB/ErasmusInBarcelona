@@ -75,19 +75,60 @@ photography — but several devices were used less:
 - **01/02/03 numbering**: only the three routes on the home page.
 - **Colour blocks**: cobalt, white and graphite carry the site; powder is used for one or two
   sections a page; mint appears only in the timetable; coral and sun are accents, not sections.
-- **Hero imagery** varies by page: a two-photograph composition on the home page, a single
-  photograph on the courses, groups, week and Barcelona pages, and none on the mobility, dates or
-  contact pages.
+- **Hero imagery** varies by page: one large photograph on the home, courses, groups and week
+  pages, a full-width band on the Barcelona page, and none on the mobility, dates or contact
+  pages. The home page's second photograph moved down to the section it illustrates.
 - **The group planner** exists once, on /bring-a-group/. The duplicate on the home page is gone.
 
 ## Images
 
-All 15 photographs and all 12 team portraits are served from this site. The portraits were
+### Photography pass — 2026-08-20 (second review)
+
+Every photograph in the archive was looked at, not just listed. The first selection was placing
+weak frames in the most prominent slots: the home hero was a wide classroom shot where the people
+were a small band between an empty ceiling and a foreground of empty desks and backpacks; the
+your-week hero was dim, cluttered and 825px wide; the Barcelona page carried a 713px strip of four
+tiny views. Meanwhile the warmest frames in the archive were unused.
+
+The organisation's current site, www.spainbcn.com, turned out to hold a much larger library of its
+own photographs. Seven were brought in (see source-photos/spainbcn/README.md for what each one
+shows and which page it comes from, which is what the alt text may claim). Photographs of the other
+Spanish destinations were left alone: this site is Barcelona only.
+
+What is placed now, and why:
+
+| Where | Photograph | Why this one |
+| --- | --- | --- |
+| Home hero | A course group holding up their certificates | Faces fill the frame, everyone laughing; the warmest frame available |
+| Home, typical week | Participants at the desks of a Barcelona classroom | Daylight from the window, relaxed, nobody posed |
+| Home band | A course group in front of the Arc de Triomf | Blue sky, palms, waving; unmistakably Barcelona |
+| Home, between sessions | A café terrace in Barcelona · the Barceloneta seafront | People enjoying themselves, then the light |
+| Join a course | A course group in the sitting room at the office | The most human frame in the archive: a dozen faces, all smiling |
+| Bring a group | Students at Parc de la Ciutadella · students at a viewpoint | Sunlit, joyful, plainly students |
+| Your week | Participants working with coloured card | Shows the actual work of a session |
+| Barcelona band | A course group in front of the cathedral | The city and the group in one frame |
+| Barcelona, venue | The classroom at the office in Gràcia | Shows the real room, with people in it |
+| About | María Ángeles and Miriam in 1997 | The history, unchanged |
+
+Dropped from the site: the bare-classroom certificates shot, the dim ICT frame, the four-view
+strip of the school, and the soft AI-classroom video still. All originals stay in `uploads/`.
+
+**Crops.** Each photograph now carries a focal point in `site-data.js`, applied as
+`object-position`, so a wide or tall crop keeps the faces rather than the ceiling. The twelve team
+portraits are cropped to the most salient region instead of a fixed top crop, with four —
+Adriana, Julie, Russell and Sandra — given an explicit face box, because they are whole-body
+holiday snapshots in which no automatic crop found a head. They now read as one set.
+
+Only photographs a page actually uses are processed; the rest of the archive is listed in
+`tools/build-images.mjs` and can be brought back by uncommenting a line.
+
+### Sources
+
+All 12 photographs and all 12 team portraits are served from this site. The portraits were
 downloaded from the old CDN and are no longer hotlinked; `clvaw-cdnwnd.com` appears nowhere.
 Originals stay in `uploads/` and `source-photos/`, neither of which is published. Production files
 carry descriptive names (`student-group-park-guell-barcelona-1600.webp`), are WebP, and are served
-at two widths with `srcset` where they are ever displayed large. Total: 2.2 MB, down from 15 MB.
-No placeholder is visible anywhere on the site.
+at up to three widths with `srcset`. No placeholder is visible anywhere on the site.
 
 ## Forms
 

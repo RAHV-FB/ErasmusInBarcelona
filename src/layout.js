@@ -29,9 +29,11 @@ export function img(image, { sizes = '100vw', eager = false, className = '' } = 
   const widest = m.widths[m.widths.length - 1];
   const height = Math.round(widest / m.ratio);
   const srcset = m.widths.map((w) => `/assets/images/${image.file}-${w}.webp ${w}w`).join(', ');
+  // Each photograph carries its own focal point, so a crop keeps the faces.
+  const style = image.focus ? ` style="object-position: ${esc(image.focus)}"` : '';
   return `<img src="/assets/images/${image.file}-${widest}.webp"${m.widths.length > 1 ? `
     srcset="${srcset}" sizes="${esc(sizes)}"` : ''}
-    width="${widest}" height="${height}" alt="${esc(image.alt)}"
+    width="${widest}" height="${height}" alt="${esc(image.alt)}"${style}
     ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}${className ? ` class="${className}"` : ''}>`;
 }
 

@@ -1,74 +1,16 @@
 {
-  "student-group-with-certificates-barcelona": {
-    "widths": [
-      800,
-      1600
-    ],
-    "ratio": 1.3333
-  },
-  "english-course-group-classroom-barcelona": {
-    "widths": [
-      800,
-      1600
-    ],
-    "ratio": 1.3333
-  },
-  "ict-training-group-around-table-barcelona": {
-    "widths": [
-      800
-    ],
-    "ratio": 1.374
-  },
-  "ict-training-group-laptops-classroom": {
-    "widths": [
-      800
-    ],
-    "ratio": 1.778
-  },
-  "ict-course-group-spainbcn-office": {
-    "widths": [
-      800
-    ],
-    "ratio": 1.5174
-  },
   "spanish-course-group-spainbcn-office": {
     "widths": [
       800,
+      1200,
       1600
     ],
     "ratio": 1.1896
   },
-  "spanish-course-group-office-barcelona": {
-    "widths": [
-      800,
-      1600
-    ],
-    "ratio": 1.3333
-  },
-  "spanish-course-for-teachers-classroom": {
-    "widths": [
-      800,
-      1600
-    ],
-    "ratio": 1.3333
-  },
-  "spanish-teacher-group-spainbcn-office": {
-    "widths": [
-      800,
-      1600
-    ],
-    "ratio": 1.3333
-  },
-  "student-group-park-guell-barcelona": {
-    "widths": [
-      800,
-      1600
-    ],
-    "ratio": 1.3031
-  },
   "student-group-ciutadella-barcelona": {
     "widths": [
-      800
+      800,
+      1200
     ],
     "ratio": 1.2811
   },
@@ -87,19 +29,69 @@
   "spainbcn-founders-1997": {
     "widths": [
       800,
+      1200,
       1600
     ],
     "ratio": 1.418
   },
-  "spainbcn-school-facilities-barcelona": {
+  "course-group-with-certificates": {
     "widths": [
-      713
+      800,
+      1200,
+      1600
     ],
-    "ratio": 5.1295
+    "ratio": 1.5052
+  },
+  "course-group-in-class-barcelona": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.5009
+  },
+  "course-group-arc-de-triomf-barcelona": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.4995
+  },
+  "course-group-cafe-terrace-barcelona": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.4995
+  },
+  "course-group-barcelona-cathedral": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.5009
+  },
+  "course-group-spainbcn-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "course-group-working-session": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 1.3333
   },
   "team-adriana": {
     "widths": [
-      372
+      251
     ],
     "ratio": 0.9090909090909091,
     "team": true,
@@ -179,7 +171,7 @@
   },
   "team-sandra": {
     "widths": [
-      170
+      169
     ],
     "ratio": 0.9090909090909091,
     "team": true,

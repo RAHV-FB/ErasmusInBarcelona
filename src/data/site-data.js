@@ -287,19 +287,70 @@ export const history = [
 // in uploads/ and source-photos/, which are not published.
 // ============================================================
 export const images = {
-  certificates: { file: 'student-group-with-certificates-barcelona', alt: 'Course group holding their certificates in the classroom at the end of a week in Barcelona' },
-  englishGroup: { file: 'english-course-group-classroom-barcelona', alt: 'English course group in a Barcelona classroom' },
-  ictTable: { file: 'ict-training-group-around-table-barcelona', alt: 'ICT training group working around a table in Barcelona' },
-  ictLaptops: { file: 'ict-training-group-laptops-classroom', alt: 'ICT training group working on laptops in the classroom' },
-  ictOffice: { file: 'ict-course-group-spainbcn-office', alt: 'ICT course group with laptops at the SpainBcn office' },
-  spanishOffice: { file: 'spanish-course-group-spainbcn-office', alt: 'Spanish course group at the SpainBcn office' },
-  spanishGroup: { file: 'spanish-course-group-office-barcelona', alt: 'Spanish course group at the SpainBcn office in Barcelona' },
-  spanishClassroom: { file: 'spanish-course-for-teachers-classroom', alt: 'Spanish course for teachers in a Barcelona classroom' },
-  spanishTeachers: { file: 'spanish-teacher-group-spainbcn-office', alt: 'Spanish teacher group at the SpainBcn office' },
-  parkGuell: { file: 'student-group-park-guell-barcelona', alt: 'Student group under the stone colonnade of Park Güell during a Barcelona programme' },
-  ciutadella: { file: 'student-group-ciutadella-barcelona', alt: 'Student group at the Cascada Monumental in Parc de la Ciutadella, Barcelona' },
-  viewpoint: { file: 'student-group-viewpoint-barcelona', alt: 'Student group at an outdoor viewpoint over Barcelona' },
-  barceloneta: { file: 'barceloneta-seafront-barcelona', alt: 'Palm trees and evening light on the Barceloneta seafront' },
-  founders: { file: 'spainbcn-founders-1997', alt: 'María Ángeles and Miriam at the SpainBcn exhibition stand in 1997' },
-  facilities: { file: 'spainbcn-school-facilities-barcelona', alt: 'Four views of the school in Barcelona: a classroom, the hallway, the terrace and students working' },
+  // The certificates moment, and the two Barcelona classroom shots, carry
+  // the site: faces close enough to read, daylight, nobody posed stiffly.
+  certificates: {
+    file: 'course-group-with-certificates',
+    alt: 'A course group holding up their certificates at the end of the week',
+    focus: '50% 42%',
+  },
+  classGroup: {
+    file: 'course-group-in-class-barcelona',
+    alt: 'Participants and their trainer at the desks of a Barcelona classroom',
+    focus: '50% 48%',
+  },
+  arcDeTriomf: {
+    file: 'course-group-arc-de-triomf-barcelona',
+    alt: 'A course group waving on the palm-lined promenade in front of the Arc de Triomf in Barcelona',
+    focus: '50% 52%',
+  },
+  cafeTerrace: {
+    file: 'course-group-cafe-terrace-barcelona',
+    alt: 'Course participants raising their glasses at a café terrace in Barcelona',
+    focus: '50% 50%',
+  },
+  cathedral: {
+    file: 'course-group-barcelona-cathedral',
+    alt: 'A course group in the square in front of Barcelona cathedral',
+    focus: '50% 58%',
+  },
+  officeClassroom: {
+    file: 'course-group-spainbcn-classroom',
+    alt: 'Participants at laptops in the SpainBcn classroom in Barcelona',
+    focus: '50% 55%',
+  },
+  workingSession: {
+    file: 'course-group-working-session',
+    alt: 'Participants working with coloured card and paper at classroom tables',
+    focus: '50% 45%',
+  },
+  spanishOffice: {
+    file: 'spanish-course-group-spainbcn-office',
+    alt: 'A Spanish course group in the sitting room at the SpainBcn office in Barcelona',
+    focus: '50% 72%',
+  },
+  ciutadella: {
+    file: 'student-group-ciutadella-barcelona',
+    alt: 'A student group at the Cascada Monumental in Parc de la Ciutadella, Barcelona',
+    focus: '50% 58%',
+  },
+  seaGroup: {
+    file: 'student-group-viewpoint-barcelona',
+    alt: 'A student group sitting together at a viewpoint over the sea in Barcelona',
+    focus: '50% 50%',
+  },
+  barceloneta: {
+    file: 'barceloneta-seafront-barcelona',
+    alt: 'Palm trees and evening light on the Barceloneta seafront',
+    focus: '50% 50%',
+  },
+  founders: {
+    file: 'spainbcn-founders-1997',
+    alt: 'María Ángeles and Miriam at the SpainBcn exhibition stand in 1997',
+    focus: '50% 45%',
+  },
 };
+
+// Only photographs that a page actually uses are processed. The rest of the
+// archive is listed in tools/build-images.mjs; the originals are in uploads/
+// and source-photos/, neither of which is published.
