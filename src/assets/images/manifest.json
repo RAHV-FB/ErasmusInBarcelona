@@ -1,0 +1,196 @@
+{
+  "student-group-with-certificates-barcelona": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "english-course-group-classroom-barcelona": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "ict-training-group-around-table-barcelona": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.374
+  },
+  "ict-training-group-laptops-classroom": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.778
+  },
+  "ict-course-group-spainbcn-office": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.5174
+  },
+  "spanish-course-group-spainbcn-office": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.1896
+  },
+  "spanish-course-group-office-barcelona": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "spanish-course-for-teachers-classroom": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "spanish-teacher-group-spainbcn-office": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "student-group-park-guell-barcelona": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.3031
+  },
+  "student-group-ciutadella-barcelona": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.2811
+  },
+  "student-group-viewpoint-barcelona": {
+    "widths": [
+      720
+    ],
+    "ratio": 1.4545
+  },
+  "barceloneta-seafront-barcelona": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.237
+  },
+  "spainbcn-founders-1997": {
+    "widths": [
+      800,
+      1600
+    ],
+    "ratio": 1.418
+  },
+  "spainbcn-school-facilities-barcelona": {
+    "widths": [
+      713
+    ],
+    "ratio": 5.1295
+  },
+  "team-adriana": {
+    "widths": [
+      372
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "372x476"
+  },
+  "team-alberto": {
+    "widths": [
+      424
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "424x588"
+  },
+  "team-james": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "1440x1920"
+  },
+  "team-jan": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "1085x1261"
+  },
+  "team-julie": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "1440x1920"
+  },
+  "team-marius": {
+    "widths": [
+      278
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "278x610"
+  },
+  "team-mike": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "482x646"
+  },
+  "team-miriam": {
+    "widths": [
+      292
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "292x386"
+  },
+  "team-nigel": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "1440x1920"
+  },
+  "team-russell": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "1920x1440"
+  },
+  "team-sandra": {
+    "widths": [
+      170
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "170x295"
+  },
+  "team-toni": {
+    "widths": [
+      480
+    ],
+    "ratio": 0.9090909090909091,
+    "team": true,
+    "source": "1200x1600"
+  }
+}

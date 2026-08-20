@@ -1,106 +1,127 @@
 // ============================================================
-// Site health check — renders every page in a real browser and
-// reports anything that would be a defect in production.
+// Site health check — builds the site, serves it, and inspects
+// every page in a real browser.
 //
-//   npm run check              (starts its own server)
+//   npm run check              (build + check)
 //   npm run check -- --shots   (also write full-page PNGs)
 //
-// Needs Playwright: npm install (playwright is a devDependency).
-// Checks per page: boot errors, console errors, failed requests,
-// unrendered {{ bindings }}, broken images, missing <title>/lang,
-// horizontal overflow at 1440 / 768 / 390 / 320.
+// It fails on anything that would be a defect in production:
+// console errors, failed requests, dead internal links, missing
+// or duplicate metadata, broken heading order, images without
+// alt text, third-party requests on page load, horizontal
+// overflow at eight widths, touch targets under 44px, and a 404
+// route that answers with the wrong status.
 // ============================================================
 import { chromium } from 'playwright';
-import { spawn } from 'node:child_process';
+import { spawn, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const DIST = path.join(ROOT, 'dist');
 const PORT = Number(process.env.PORT || 4199);
 const BASE = `http://127.0.0.1:${PORT}`;
 const SHOTS = process.argv.includes('--shots');
 const SHOT_DIR = path.join(ROOT, '.health-shots');
+const WIDTHS = [320, 375, 390, 430, 768, 1024, 1280, 1440];
 
-const ROUTES = ['/', '/join-a-course', '/bring-a-group', '/plan-a-mobility', '/dates',
-  '/your-week', '/barcelona', '/about', '/contact', '/privacy', '/cookies'];
-const WIDTHS = [1440, 768, 390, 320];
+execFileSync(process.execPath, [path.join(ROOT, 'build.mjs')], { cwd: ROOT, stdio: 'inherit' });
+
+const ROUTES = ['/', '/join-a-course/', '/bring-a-group/', '/plan-a-mobility/', '/dates/',
+  '/your-week/', '/barcelona/', '/about/', '/contact/', '/privacy/', '/cookies/'];
 
 const server = spawn(process.execPath, [path.join(ROOT, 'server.mjs')], {
-  env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore',
+  cwd: ROOT, env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore',
 });
 const stop = () => { try { server.kill(); } catch {} };
 process.on('exit', stop);
 
-async function waitForServer() {
-  for (let i = 0; i < 50; i++) {
-    try { await fetch(BASE + '/'); return; } catch { await new Promise(r => setTimeout(r, 200)); }
-  }
-  throw new Error('server did not start on ' + BASE);
+for (let i = 0; i < 60; i++) {
+  try { await fetch(BASE + '/'); break; } catch { await new Promise((r) => setTimeout(r, 200)); }
 }
-
-await waitForServer();
 if (SHOTS) fs.mkdirSync(SHOT_DIR, { recursive: true });
 
 const browser = await chromium.launch(
   process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+
 let problems = 0;
+const titles = new Map();
+const descriptions = new Map();
 
 for (const route of ROUTES) {
-  const ctx = await browser.newContext({ viewport: { width: WIDTHS[0], height: 1000 } });
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await ctx.newPage();
-  const errors = [], failed = [];
-  page.on('pageerror', e => errors.push(String(e).slice(0, 200)));
-  page.on('console', m => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); });
-  page.on('requestfailed', r => failed.push(r.url() + ' — ' + (r.failure()?.errorText || '')));
-  page.on('response', r => { if (r.status() >= 400) failed.push('HTTP ' + r.status() + ' ' + decodeURIComponent(r.url())); });
+  const errors = [];
+  const failed = [];
+  const thirdParty = [];
+
+  page.on('pageerror', (e) => errors.push(String(e).slice(0, 200)));
+  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); });
+  page.on('requestfailed', (r) => failed.push(r.url() + ' — ' + (r.failure()?.errorText || '')));
+  page.on('request', (r) => { if (!r.url().startsWith(BASE) && !r.url().startsWith('data:')) thirdParty.push(r.url()); });
+  page.on('response', (r) => { if (r.status() >= 400) failed.push('HTTP ' + r.status() + ' ' + decodeURIComponent(r.url())); });
 
   await page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
-  // The page mounts client-side, then loads site-data.js; give both time.
-  await page.waitForFunction(() => document.body.innerText.trim().length > 200, null, { timeout: 20000 })
-    .catch(() => errors.push('page never rendered any text'));
-  // Scroll the whole page so lazy-loaded images actually start loading.
   await page.evaluate(async () => {
     const step = window.innerHeight;
     for (let y = 0; y < document.body.scrollHeight; y += step) {
       window.scrollTo(0, y);
-      await new Promise(r => setTimeout(r, 120));
+      await new Promise((r) => setTimeout(r, 100));
     }
     window.scrollTo(0, 0);
   });
-
-  // Local images must decode; remote (CDN) ones may be unreachable from here.
-  await page.waitForFunction(() => [...document.images]
-    .filter(i => new URL(i.src, location.href).origin === location.origin)
-    .every(i => i.complete), null, { timeout: 15000 }).catch(() => {});
   await page.waitForLoadState('networkidle').catch(() => {});
 
-  const info = await page.evaluate(() => ({
-    title: document.title,
-    lang: document.documentElement.lang,
-    hasH1: !!document.querySelector('h1'),
-    unrendered: (document.body.innerText.match(/\{\{[^}]+\}\}/g) || []).slice(0, 5),
-    brokenLocalImgs: [...document.images]
-      .filter(i => new URL(i.src, location.href).origin === location.origin)
-      .filter(i => !i.complete || i.naturalWidth === 0)
-      .map(i => i.getAttribute('src')).slice(0, 8),
-    brokenRemoteImgs: [...document.images]
-      .filter(i => new URL(i.src, location.href).origin !== location.origin)
-      .filter(i => !i.complete || i.naturalWidth === 0)
-      .map(i => i.getAttribute('src')).slice(0, 8),
-    localLinks: [...new Set([...document.querySelectorAll('a[href]')]
-      .map(a => a.getAttribute('href'))
-      .filter(h => h && !/^(https?:|mailto:|tel:|#)/.test(h)))],
-  }));
+  const info = await page.evaluate(() => {
+    const meta = (sel) => document.querySelector(sel)?.getAttribute('content') || '';
+    const headings = [...document.querySelectorAll('h1, h2, h3, h4')].map((h) => +h.tagName[1]);
+    let badOrder = null;
+    for (let i = 1; i < headings.length; i++) {
+      if (headings[i] > headings[i - 1] + 1) badOrder = `h${headings[i - 1]} → h${headings[i]}`;
+    }
+    return {
+      title: document.title,
+      description: meta('meta[name="description"]'),
+      canonical: document.querySelector('link[rel="canonical"]')?.href || '',
+      og: ['og:title', 'og:description', 'og:image', 'og:url'].filter((p) => !meta(`meta[property="${p}"]`)),
+      lang: document.documentElement.lang,
+      h1s: document.querySelectorAll('h1').length,
+      badOrder,
+      schema: [...document.querySelectorAll('script[type="application/ld+json"]')]
+        .map((s) => { try { return JSON.parse(s.textContent)['@type']; } catch { return 'INVALID'; } }),
+      unrendered: (document.body.innerText.match(/\{\{[^}]+\}\}|IMAGE REQUIRED|undefined|NaN/g) || []).slice(0, 5),
+      noAlt: [...document.images].filter((i) => !i.hasAttribute('alt')).map((i) => i.getAttribute('src')),
+      emptyAltNonDecorative: [...document.images].filter((i) => i.alt === '' && !i.closest('[aria-hidden]')).length,
+      brokenImgs: [...document.images].filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.getAttribute('src')),
+      noDimensions: [...document.images].filter((i) => !i.getAttribute('width') || !i.getAttribute('height')).map((i) => i.getAttribute('src')),
+      links: [...new Set([...document.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')))],
+      blankNoRel: [...document.querySelectorAll('a[target="_blank"]')]
+        .filter((a) => !(a.rel || '').includes('noopener')).map((a) => a.getAttribute('href')),
+      smallTargets: [...document.querySelectorAll('a.btn, button, .chip, .nav-toggle')]
+        .filter((el) => { const r = el.getBoundingClientRect(); return r.width && (r.height < 44 || r.width < 44); })
+        .map((el) => el.textContent.trim().slice(0, 24)),
+      storage: (() => { try { return Object.keys(localStorage).length + Object.keys(sessionStorage).length; } catch { return -1; } })(),
+      cookies: document.cookie.length,
+    };
+  });
+
+  // internal links must resolve to something the server serves
+  const internal = info.links.filter((h) => h.startsWith('/'));
+  const dead = [];
+  for (const href of internal) {
+    const url = href.split('#')[0];
+    if (!url) continue;
+    const res = await fetch(BASE + url, { redirect: 'manual' });
+    if (res.status >= 400) dead.push(href + ' → ' + res.status);
+  }
 
   const overflow = [];
   for (const w of WIDTHS) {
     await page.setViewportSize({ width: w, height: 900 });
-    // Re-measure until the layout settles: the header and week timetable
-    // re-render on resize, and a mid-relayout reading is meaningless.
     let m = null;
     for (let i = 0; i < 6; i++) {
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(300);
       const now = await page.evaluate(() => ({
         scrollW: document.documentElement.scrollWidth,
         clientW: document.documentElement.clientWidth,
@@ -109,73 +130,109 @@ for (const route of ROUTES) {
       m = now;
     }
     if (m.scrollW > m.clientW + 1) {
-      // Name the widest offending element so the report is actionable.
       const who = await page.evaluate(() => {
         const vw = document.documentElement.clientWidth;
         let worst = null;
         for (const el of document.querySelectorAll('body *')) {
           const r = el.getBoundingClientRect();
-          if (!r.width || r.left < -1000) continue;
-          if (r.right <= vw + 1) continue;
+          if (!r.width || r.left < -1000 || r.right <= vw + 1) continue;
           const pr = el.parentElement?.getBoundingClientRect();
           if (pr && pr.right > vw + 1) continue;
           if (!worst || r.right > worst.right) {
-            worst = { right: r.right, desc: el.tagName.toLowerCase() +
-              (el.id ? '#' + el.id : '') + ' "' + (el.innerText || '').trim().slice(0, 30) + '"' };
+            worst = { right: r.right, desc: el.tagName.toLowerCase() + ' "' + (el.textContent || '').trim().slice(0, 30) + '"' };
           }
         }
         return worst ? worst.desc + ' reaching ' + Math.round(worst.right) + 'px' : 'source not identified';
       });
-      overflow.push(`${w}px → content ${m.scrollW}px (${who})`);
+      overflow.push(`${w}px → ${m.scrollW}px (${who})`);
     }
   }
 
   if (SHOTS) {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.waitForTimeout(400);
-    await page.screenshot({ path: path.join(SHOT_DIR, (route === '/' ? 'home' : route.slice(1)) + '.png'), fullPage: true });
+    await page.screenshot({ path: path.join(SHOT_DIR, (route === '/' ? 'home' : route.replace(/\//g, '')) + '.png'), fullPage: true });
   }
-
-  // Requests for the raw "{{ binding }}" src attributes happen before the
-  // page mounts; they are runtime noise, not site defects.
-  const remote = u => !u.includes(BASE);
-  const realFailures = failed.filter(f => !/\{\{|%7B%7B/.test(f) && !remote(f));
-  const remoteFailures = failed.filter(f => remote(f));
-  // Resource failures carry no URL in the console text; they are reported
-  // from the response/requestfailed handlers above instead.
-  const realErrors = errors.filter(e => !/^Failed to load resource/.test(e));
-  const missingPages = info.localLinks
-    .map(h => h.replace(/^\.\//, '').split('#')[0])
-    .filter(h => h && !fs.existsSync(path.join(ROOT, h)));
 
   const issues = [];
   if (!info.title) issues.push('no <title>');
-  if (!info.lang) issues.push('no lang attribute');
-  if (!info.hasH1) issues.push('no <h1>');
-  if (info.unrendered.length) issues.push('unrendered bindings: ' + info.unrendered.join(', '));
-  if (info.brokenLocalImgs.length) issues.push('images not loaded: ' + info.brokenLocalImgs.join(', '));
-  if (missingPages.length) issues.push('links to missing files: ' + missingPages.join(', '));
+  if (info.title.length > 70) issues.push(`title is ${info.title.length} characters`);
+  if (titles.has(info.title)) issues.push(`title duplicates ${titles.get(info.title)}`);
+  titles.set(info.title, route);
+  if (!info.description) issues.push('no meta description');
+  if (descriptions.has(info.description)) issues.push(`description duplicates ${descriptions.get(info.description)}`);
+  descriptions.set(info.description, route);
+  if (!info.canonical) issues.push('no canonical');
+  if (info.og.length) issues.push('missing Open Graph: ' + info.og.join(', '));
+  if (info.lang !== 'en') issues.push('lang is "' + info.lang + '"');
+  if (info.h1s !== 1) issues.push(info.h1s + ' <h1> elements');
+  if (info.badOrder) issues.push('heading level skipped: ' + info.badOrder);
+  if (info.schema.includes('INVALID')) issues.push('invalid JSON-LD');
+  if (info.unrendered.length) issues.push('placeholder or unrendered text: ' + info.unrendered.join(', '));
+  if (info.noAlt.length) issues.push('images without alt: ' + info.noAlt.join(', '));
+  if (info.brokenImgs.length) issues.push('images not loaded: ' + info.brokenImgs.join(', '));
+  if (info.noDimensions.length) issues.push('images without width/height: ' + info.noDimensions.join(', '));
+  if (dead.length) issues.push('dead internal links: ' + dead.join(', '));
+  if (info.blankNoRel.length) issues.push('target=_blank without noopener: ' + info.blankNoRel.join(', '));
+  if (info.smallTargets.length) issues.push('touch targets under 44px: ' + info.smallTargets.join(', '));
+  if (info.storage > 0) issues.push('page wrote ' + info.storage + ' storage entries on load');
+  if (info.cookies > 0) issues.push('page set cookies on load');
+  if (thirdParty.length) issues.push('third-party requests on load: ' + [...new Set(thirdParty)].slice(0, 4).join(', '));
+  if (failed.length) issues.push('failed requests: ' + failed.slice(0, 4).join(' | '));
+  if (errors.length) issues.push('console errors: ' + errors.slice(0, 4).join(' | '));
   if (overflow.length) issues.push('horizontal overflow at ' + overflow.join('; '));
-  if (realFailures.length) issues.push('failed requests: ' + realFailures.slice(0, 5).join(' | '));
-  if (realErrors.length) issues.push('console errors: ' + realErrors.slice(0, 5).join(' | '));
-
-  // Third-party assets (the team-portrait CDN) are reported, not failed:
-  // they can be blocked by the network this check runs on.
-  const warnings = [];
-  if (info.brokenRemoteImgs.length) warnings.push(info.brokenRemoteImgs.length + ' third-party image(s) did not load (hotlinked CDN)');
-  if (remoteFailures.length) warnings.push(remoteFailures.length + ' third-party request(s) failed');
 
   problems += issues.length;
-  console.log(`${issues.length ? 'FAIL' : ' OK '}  ${route}  — "${info.title}"`);
+  console.log(`${issues.length ? 'FAIL' : ' OK '}  ${route}`);
   for (const i of issues) console.log('        · ' + i);
-  for (const w of warnings) console.log('        ~ warning: ' + w);
   await ctx.close();
 }
 
-// The 404 route must answer with a 404 status, not a 200.
-const res = await fetch(BASE + '/no-such-page');
-if (res.status !== 404) { console.log(`FAIL  /no-such-page — expected 404, got ${res.status}`); problems++; }
-else console.log(' OK   /no-such-page — 404 page served with a 404 status');
+// ---- whole-build checks ----
+const buildIssues = [];
+const files = [];
+(function walk(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) walk(p); else files.push(p);
+  }
+}(DIST));
+
+const html = files.filter((f) => f.endsWith('.html'));
+for (const f of html) {
+  const src = fs.readFileSync(f, 'utf8');
+  const rel = f.replace(DIST, '');
+  if (/\.dc\.html/.test(src)) buildIssues.push(`${rel} still links to a .dc.html page`);
+  const external = [...src.matchAll(/(?:src|href)="(https?:\/\/[^"]+)"/g)].map((m) => m[1])
+    .filter((u) => /\.(png|jpe?g|webp|gif|svg|woff2?)($|\?)/i.test(u));
+  if (external.length) buildIssues.push(`${rel} loads external assets: ${external.join(', ')}`);
+  if (/fonts\.googleapis|fonts\.gstatic|googletagmanager|google-analytics/.test(src)) {
+    buildIssues.push(`${rel} references Google fonts or analytics`);
+  }
+}
+
+const res404 = await fetch(BASE + '/no-such-page');
+if (res404.status !== 404) buildIssues.push(`/no-such-page answered ${res404.status}, expected 404`);
+
+const redirects = { '/school-teachers/': '/join-a-course/', '/our-team/': '/about/#team', '/privacy-policy/': '/privacy/', '/home': '/' };
+for (const [from, to] of Object.entries(redirects)) {
+  const r = await fetch(BASE + from, { redirect: 'manual' });
+  const loc = r.headers.get('location');
+  if (r.status !== 301 || loc !== to) buildIssues.push(`${from} → ${r.status} ${loc}, expected 301 ${to}`);
+  else {
+    const onward = await fetch(BASE + to.split('#')[0], { redirect: 'manual' });
+    if (onward.status !== 200) buildIssues.push(`${from} redirects to ${to}, which answered ${onward.status}`);
+  }
+}
+
+for (const f of ['robots.txt', 'sitemap.xml', '404.html', 'assets/css/site.css', 'assets/js/site.js']) {
+  if (!fs.existsSync(path.join(DIST, f))) buildIssues.push('missing from the build: ' + f);
+}
+
+const bytes = files.reduce((n, f) => n + fs.statSync(f).size, 0);
+console.log(`\nBuild: ${html.length} pages, ${files.length} files, ${(bytes / 1024 / 1024).toFixed(1)} MB`);
+for (const i of buildIssues) console.log('  · ' + i);
+problems += buildIssues.length;
 
 await browser.close();
 stop();

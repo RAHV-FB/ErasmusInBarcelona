@@ -1,0 +1,126 @@
+import { page } from '../layout.js';
+import * as d from '../data/site-data.js';
+
+// NOTE FOR DEPLOYMENT: this policy describes what this site actually
+// does. Two things must be confirmed before it is published:
+//   1. the hosting company named under "When you open a page" — it is
+//      the one used for spainbcn.com;
+//   2. that no analytics or tag manager is added by the host.
+// If either changes, this page changes with it.
+export default function privacy() {
+  const body = `
+  <section class="container hero">
+    <div style="max-width:52ch">
+      <h1>Privacy</h1>
+      <p class="lede">What this website does with information about you, in the order it happens.</p>
+      <p class="meta">Last reviewed 20 August 2026.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container prose">
+      <h2>Who we are</h2>
+      <p>${d.organisation.legalName} (NIF ${d.organisation.nif}), trading as SpainBcn-Programs and publishing this
+        site as Erasmus in Barcelona, is the data controller for everything described here.</p>
+      <ul>
+        <li>Postal address: ${d.contact.address}, Spain</li>
+        <li>Email: <a href="${d.contact.emailHref}">${d.contact.email}</a></li>
+        <li>Telephone: <a href="${d.contact.phoneHref}">${d.contact.phone}</a></li>
+      </ul>
+
+      <h2>When you open a page</h2>
+      <p>This site sets no cookies, stores nothing on your device, and runs no analytics, no advertising and no
+        tracking of any kind. Every image, stylesheet, script and font is served from this site itself, so opening
+        a page does not tell any other company that you did.</p>
+      <p>What does exist is the ordinary record every web server keeps. Our hosting company runs the servers this
+        site sits on, and a line is written to an access log each time a file is requested. It normally contains
+        your IP address, the date and time, the file you asked for, the response code, how much data was sent, the
+        page you came from and the browser and operating system your request announces. We use those logs to keep
+        the site running and to deal with abuse of the server. Legal basis: our legitimate interest in a website
+        that stays up and is not attacked, Article 6(1)(f) GDPR. The logs are not used to build a profile of you
+        and are not joined to anything else we hold. The hosting company handles them on our instructions, as our
+        processor.</p>
+
+      <h2>The sign-up form</h2>
+      <p>The form on the contact page is run by forms.app. It is not loaded when the page opens: nothing is
+        requested from forms.app until you press the button that asks for it. Once you do, forms.app receives your
+        IP address and browser information, can set its own cookies in your browser, and receives everything you
+        type into the form when you send it. It passes what you send to us by email, handling it on our
+        instructions as our processor.</p>
+      <p>Legal basis for loading it: your consent, given by pressing that button, Article 6(1)(a) GDPR, together
+        with Article 22.2 LSSI-CE for anything forms.app then stores on your device. You never have to use it. Our
+        email address and telephone number are written in plain text on the contact page, and the same message
+        reaches the same person.</p>
+
+      <h2>When you write to us</h2>
+      <p>If you email, call or send a WhatsApp message, we hold what you send: your name, your contact details,
+        your institution and whatever you tell us about the course or group you are planning. We use it to answer
+        you and to organise the course. Legal basis: taking steps at your request before entering into a contract,
+        and performing it afterwards, Article 6(1)(b) GDPR; for a general question, our legitimate interest in
+        answering it, Article 6(1)(f).</p>
+      <p>The WhatsApp link on the contact page opens WhatsApp. We do not send you there without your asking, and
+        what happens inside that app is governed by its own terms.</p>
+      <p>Course registrations, invoices and the documents your institution needs are kept in our own email and
+        files, reachable by the small number of people at SpainBcn who organise courses and issue invoices, and by
+        our accountants for invoicing and tax filings.</p>
+
+      <h2>Photographs</h2>
+      <p>The photographs on this site are our own, taken during courses and programmes and published with the
+        agreement of the people in them. If you are in one and would rather not be, write to
+        <a href="${d.contact.emailHref}">${d.contact.email}</a> and we will take it down.</p>
+
+      <h2>Links to other sites</h2>
+      <p>Links to SpainBcn.com, to our social accounts, to Google reviews and to public transport information are
+        ordinary links. Nothing is sent to those companies unless you follow the link, and their own policies
+        apply once you do.</p>
+
+      <h2>Who else sees your information</h2>
+      <ul>
+        <li>Our hosting company, for the server logs described above, as our processor.</li>
+        <li>forms.app, if you choose to load and send the form, as our processor.</li>
+        <li>Our accountants, for invoicing and tax filings.</li>
+      </ul>
+      <p>We do not sell your information, we do not share it for advertising, and we do not publish a list of
+        participants.</p>
+
+      <h2>Transfers outside the European Economic Area</h2>
+      <p>forms.app processes form data under its own data processing terms, which incorporate the European
+        Commission's Standard Contractual Clauses under Article 46(2)(c) GDPR where processing takes place outside
+        the EEA. Ask us and we will send you the terms that apply to our account.</p>
+
+      <h2>How long we keep things</h2>
+      <ul>
+        <li>Enquiries that do not lead to a course: up to two years, so we recognise you if you write again.</li>
+        <li>Course registrations, invoices and grant documents: for as long as Spanish accounting and tax law
+          requires.</li>
+        <li>Server access logs: for the period set in our hosting company's service terms. We do not copy them
+          anywhere else.</li>
+      </ul>
+
+      <h2>Your rights</h2>
+      <p>You can ask us for a copy of what we hold about you, to correct it, to delete it, to restrict or object to
+        how we use it, or to receive it in a portable form. Where we rely on your consent, you can withdraw it at
+        any time without affecting what was done before. Write to
+        <a href="${d.contact.emailHref}">${d.contact.email}</a> and we will answer within one month.</p>
+      <p>If you think we have handled your information badly, you can complain to the Spanish data protection
+        authority, the Agencia Española de Protección de Datos
+        (<a href="https://www.aepd.es" rel="noopener">aepd.es ↗</a>).</p>
+
+      <h2>Children</h2>
+      <p>Student group programmes are arranged with the school or institution, which is responsible for consent
+        and for the participants in its care. We do not collect information directly from students through this
+        website.</p>
+
+      <h2>Changes</h2>
+      <p>If what the site does changes, this page changes with it, and the review date at the top changes too.</p>
+    </div>
+  </section>`;
+
+  return page({
+    path: '/privacy/',
+    current: '',
+    crumb: 'Privacy',
+    title: 'Privacy | Erasmus in Barcelona',
+    description: 'What this site does with information about you: no cookies, no analytics, server logs, the consent-gated sign-up form, and your rights under the GDPR.',
+  }, body);
+}

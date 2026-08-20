@@ -1,3 +1,12 @@
+> **Historical document.** This is an audit of the *previous* erasmusinbarcelona.com, captured
+> 2026-08-20 before the rebuild. It is kept for the legacy URL inventory and for the record of what
+> the old site claimed. Several facts in it were later found to be wrong or out of date and were
+> corrected against www.spainbcn.com — the fee (20 h €400 / 25 h €450, not €400 flat), the
+> certificate ("of attendance", not "of participation"), the class times (SpainBcn publishes no
+> clock times), the address (08025, no "Local 2"), the review count (134), and the blanket
+> "native speaker" claim. See notes/production-report.md for the corrections, and treat
+> src/data/site-data.js as the only current source.
+
 # ErasmusInBarcelona.com — content & data audit (fetched 2026-08-20)
 
 ## Verified organisational facts

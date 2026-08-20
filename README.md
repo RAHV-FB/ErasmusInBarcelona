@@ -1,86 +1,78 @@
 # ErasmusInBarcelona.com
 
-The Barcelona-focused site of SpainBcn-Programs, rebuilt as the "Barcelona Workshop"
-redesign. Twelve pages plus a shared header and footer, all reading their facts from
-one data file.
+The Barcelona site of SpainBcn-Programs: Erasmus+ courses for education staff, programmes for
+student groups, and institutional mobility. Plain static HTML, built from one data file.
 
 ## Run it
 
 ```bash
-npm start            # http://127.0.0.1:4173
+npm install          # Playwright and sharp, both dev-only
+npm start            # build, then serve on http://127.0.0.1:4173
+npm run build        # build dist/ only
+npm run check        # build, serve, and audit every page in a browser
+npm run images       # regenerate the images in src/assets/images
 ```
 
-`server.mjs` has no dependencies — Node 18+ is all you need. It serves the pages under
-the routes the site will publish under, redirects the legacy paths from the current live
-site, and answers unknown paths with the 404 page and a real 404 status.
+Node 18+. The published site is `dist/` — static files, no server-side anything.
 
-| Route | Page |
-| --- | --- |
-| `/` | `index.dc.html` |
-| `/join-a-course` | `join-a-course.dc.html` |
-| `/bring-a-group` | `bring-a-group.dc.html` |
-| `/plan-a-mobility` | `plan-a-mobility.dc.html` |
-| `/dates` | `dates.dc.html` |
-| `/your-week` | `your-week.dc.html` |
-| `/barcelona` | `barcelona.dc.html` |
-| `/about` | `about.dc.html` |
-| `/contact` | `contact.dc.html` |
-| `/privacy` · `/cookies` | `privacy.dc.html` · `cookies.dc.html` |
-
-Routes are served without a trailing slash on purpose: pages link each other as
-`./page.dc.html` and load data as `./assets/js/site-data.js`, so the document base has
-to stay at the site root.
-
-## Check it
-
-```bash
-npm install          # Playwright, dev-only
-npm run check        # add -- --shots for full-page PNGs in .health-shots/
-```
-
-`scripts/health-check.mjs` opens every route in Chromium and fails on anything that
-would be a defect in production: a page that never mounts, console errors, failed
-requests, unrendered `{{ bindings }}`, local images that don't load, links to files that
-don't exist, a missing `<title>`/`lang`/`<h1>`, horizontal overflow at 1440 / 768 / 390 /
-320 px, or a 404 route answering with the wrong status. Third-party assets are reported
-as warnings, not failures — they can be blocked by the network the check runs on.
-
-## How a page works
-
-Pages are Design Components (`.dc.html`): a `<x-dc>` template with `{{ bindings }}`, and a
-`class Component extends DCLogic` that supplies the values. `support.js` mounts them in
-the browser. React is vendored in `assets/vendor/` and loaded before `support.js`, so no
-page depends on a CDN being reachable.
-
-Every fact — contact details, OID, dates, programmes, team, photography — comes from
-`assets/js/site-data.js`. Do not hard-code any of it in page markup; edit the data file
-and every page follows.
-
-## Layout
+## How it fits together
 
 ```
-*.dc.html                 pages, one per route
-SiteHeader/SiteFooter     shared components imported by every page
-assets/js/site-data.js    single source of shared facts
-assets/vendor/            React UMD builds (no CDN at runtime)
-support.js                Design Component runtime
-uploads/                  the organisation's own photographs
-notes/                    live-site audit and production report
-server.mjs                local/static server
-scripts/health-check.mjs  browser health check
+src/data/site-data.js     every fact the site states, in one place
+src/pages/*.js            one module per page, returning its HTML
+src/layout.js             <head>, header, footer, image helpers, structured data
+src/assets/css/site.css   the whole stylesheet
+src/assets/js/site.js     menu, date filter, group planner, form loading
+src/assets/images/        production images (WebP, generated)
+build.mjs                 renders src/pages → dist/
+server.mjs                static server: clean URLs, legacy redirects, real 404
+tools/build-images.mjs    originals → resized WebP with descriptive names
+scripts/health-check.mjs  the browser audit behind `npm run check`
+uploads/, source-photos/  the untouched original photographs; never published
+notes/                    the live-site audit and the production report
 ```
 
-## Before launch
+Every number, price, date, address, programme name and person on the site comes from
+`src/data/site-data.js`. Nothing factual belongs in a page template. Change the data, run
+`npm run build`, and every page that mentions it follows.
 
-- **Team portraits are hotlinked** from the organisation's current CDN
-  (`assets/js/site-data.js` → `portraits`). Download them into `assets/images/` — if the
-  CDN goes away the About page loses all twelve faces.
-- **Photograph weights**: `uploads/` is ~15 MB, with two PNGs near 4 MB. Resize and
-  convert to JPEG/WebP under the descriptive `file` names already listed in
-  `site-data.js` before publishing.
-- **Contact form** composes a prefilled email in the visitor's mail app; there is no
-  backend endpoint yet.
-- **Redirect table** in `server.mjs` mirrors `notes/production-report.md` — reproduce it
-  in the production server config.
-- **OID discrepancy** (`E10336106` site-wide vs `E10139423` on the current contact page)
-  is still open — see `notes/audit.md`.
+Pages are ordinary HTML when they arrive: titles, descriptions, canonicals, Open Graph tags and
+JSON-LD are all in the markup, not assigned by script. JavaScript handles the menu, the date
+filter, the group planner and loading the sign-up form — nothing else. Layout is CSS only; no
+JavaScript decides what the page looks like at any width.
+
+## Facts and where they come from
+
+In this order of authority:
+
+1. the organisation's own DATES-SPAINBCN sheet, for the course weeks;
+2. [www.spainbcn.com](https://www.spainbcn.com/), for prices, programme names, certificates and formats;
+3. the organisation's published contact and legal details.
+
+The previous erasmusinbarcelona.com is history, not a source. If those sources disagree with
+what is on the page, the page is wrong.
+
+Re-check before each publish: the Barcelona fee (currently €400 for 20 h a week, €450 for 25),
+the scheduled weeks, and the programme names and their links on SpainBcn.
+
+## Adding or changing a course week
+
+Weeks are exported by hand from the sheet, as the owner asked — no live connection. Update the
+`dates` array in `src/data/site-data.js`, set `datesSource.importedOn`, and rebuild. The home
+page, the courses page and the dates page all read from it.
+
+## Third parties
+
+The site loads nothing from anyone else on page view: no fonts, no analytics, no tag manager, no
+CDN, no cookies, no local storage. The one exception is the sign-up form on `/contact/`, which is
+hosted by forms.app and is requested only when a visitor presses the button asking for it. That is
+what `/privacy/` and `/cookies/` describe; if a third party is ever added, both pages have to
+change with it.
+
+## Before publishing
+
+- Confirm the hosting company named in `/privacy/` under "When you open a page".
+- Point `SITE_URL` in `src/layout.js` at the live domain if it is not
+  `https://www.erasmusinbarcelona.com`.
+- Reproduce the redirect table in `server.mjs` in the production server configuration.
+- Serve `404.html` with a 404 status.

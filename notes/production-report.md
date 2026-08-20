@@ -1,86 +1,139 @@
-# Production report — ErasmusInBarcelona.com redesign
-2026-08-20 · built in this workspace as Design Component pages (one per route)
+# Production report — ErasmusInBarcelona.com
 
-## What changed
-- New intent-led IA: / · join-a-course · bring-a-group · plan-a-mobility · dates · your-week · barcelona · about · contact · privacy · cookies · 404. No course-code navigation; SpainBcn.com remains the catalogue and is linked explicitly.
-- New "Barcelona Workshop" visual system (v2, after client reset): single grotesk sans, #FAFAF7 ground, cobalt/powder/mint colour blocks, coral/sun accents, square 0–2px geometry, poster hero with real-photo collage, indexed situation rows, programme-board dates, real week timetable, tangible group planner. Visually unrelated to SpainBcn; ownership stated in header ("BY SPAINBCN-PROGRAMS ↗"), About, final CTA and footer.
-- Copy rewritten: short, concrete, no marketing slop, no repeated OID/price/contact (OID appears once per page at most; contact in footer + contact page).
+Current as of 2026-08-20. This replaces the earlier report written against the Design Component
+prototype; that prototype no longer exists in the repository, and several of the facts it recorded
+turned out to be wrong (see "Factual corrections" below).
 
-## Pages built (12)
-index, join-a-course, bring-a-group, plan-a-mobility, dates, your-week, barcelona, about, contact, privacy (legal text preserved verbatim, restyled), cookies (with working consent controls), 404. Shared SiteHeader (sticky, mobile drawer, Escape/scroll-lock) + SiteFooter (compact cookie banner: equal-weight Necessary only / Accept all, choice stored locally, no trackers shipped).
+## What the site is now
+
+Twelve static pages built by `build.mjs` from `src/pages/*.js`, rendering `src/data/site-data.js`.
+No runtime framework, no client-side rendering, no third-party requests on page view.
+
+| Route | Page |
+| --- | --- |
+| `/` | Home |
+| `/join-a-course/` | Courses for teachers and education staff |
+| `/bring-a-group/` | Student group programmes, with the group planner |
+| `/plan-a-mobility/` | Coordinators and institutions |
+| `/dates/` | The scheduled Barcelona weeks |
+| `/your-week/` | What a course week looks like |
+| `/barcelona/` | Venues, travel, practical information |
+| `/about/` | History, team, organisation |
+| `/contact/` | Email, phone, WhatsApp, sign-up form |
+| `/privacy/` · `/cookies/` | Legal, matching what the site actually does |
+| `/404.html` | Served with a 404 status |
+
+## Factual corrections
+
+Checked against www.spainbcn.com and the organisation's own course calendar on 2026-08-20.
+
+| Was | Now | Source |
+| --- | --- | --- |
+| €400 per person per week for both 20 h and 25 h | €400 for 20 h a week, €450 for 25 h | SpainBcn subject-area pages |
+| "Certificate of Participation" | Certificate of attendance, issued on the final day | SpainBcn, throughout |
+| "Classes 10:00–14:00" / "10:00–15:00" | "Classes run Monday to Friday mornings"; 20 or 25 hours chosen at booking | SpainBcn publishes no clock times — see "Unresolved" |
+| Invented programme names ("Technology in the Classroom", "Practical English (A1–C2)", "Mindfulness in the Classroom" as a programme, …) | Only SpainBcn's own 39 programme names, each linking to its own entry | SpainBcn catalogue |
+| Catalogue link pointed at the SpainBcn homepage | `https://www.spainbcn.com/courses.html` | SpainBcn navigation |
+| 10–20 "View programme" links all going to the homepage | Every programme name links to its own anchor on the relevant subject-area page | SpainBcn |
+| "around twenty courses across some thirty weeks" | Removed; the catalogue's size is SpainBcn's to state | — |
+| "Every trainer is a native speaker with specialised teaching certifications" | Removed. "Courses are taught by trainers working in their own subject areas" | Unsupportable as stated |
+| Address conflict: 08025 vs "Local 2, 08024" | Carrer del Pare Lainez 19, 08025 Barcelona, everywhere | SpainBcn contact, Barcelona and privacy pages all agree |
+| Google reviews "4.9 / 136" | 4.9 from 134 reviews | SpainBcn homepage |
+| OID shown on many pages | E10336106, in the footer, on /about/ and once on /plan-a-mobility/ | SpainBcn |
+| LinkedIn and YouTube links | Removed; the organisation currently publishes Facebook and Instagram only | SpainBcn footer |
+| "university internships" among the formats | Removed. The formats listed are the six SpainBcn publishes | SpainBcn projects page |
+| "Custom courses for accepted projects" | "A private programme or a group project is quoted for the group" | — |
+| Course weeks with a "confirmed" state | Every week is "scheduled"; the calendar records no other state | The organisation's own sheet |
+| Dates: 12 Barcelona weeks | Unchanged — all 12 verified row by row against the sheet | DATES-SPAINBCN, gid 480287972 |
+
+## Copy
+
+Removed: "on purpose", "actually local", "a short honest list", "roughly is fine", "the week you
+get back", "Photos usually happen", "One per afternoon is plenty", "bring whatever you normally
+take to a working session", "lunch like a local", "The team replies from Barcelona", "Erasmus in
+Barcelona is SpainBcn in Barcelona", "This website is the Barcelona-focused home of…", the
+seasonal Barcelona-tourism section, the T-casual ticket recommendation, the dinner-time
+observation, the two unsupported transport generalisations, and the repeated ownership
+disclaimers in CTA blocks.
+
+The ownership relationship is now stated three times in total: in the header, once on /about/,
+and in the footer's legal line.
+
+## Design
+
+The visual system is unchanged — white ground, cobalt, graphite, square geometry, real
+photography — but several devices were used less:
+
+- **Uppercase**: 44 uppercase runs remain across nine pages, all of them tiny labels: one eyebrow,
+  the footer column headings, the timetable day names, the registered company name and the
+  acronym CLIL. Every heading is sentence case.
+- **The coral full stop** after headings: gone.
+- **"BCN"** as a substitute for Barcelona: gone, except the airport code.
+- **"EiB"**: only the favicon. The header carries the full name and "by SpainBcn-Programs".
+- **Arrows**: 4 on the home page, 11 on the longest page. `→` for a major internal action, `↗` for
+  a link that leaves the site. Never appended to social or navigation links.
+- **01/02/03 numbering**: only the three routes on the home page.
+- **Colour blocks**: cobalt, white and graphite carry the site; powder is used for one or two
+  sections a page; mint appears only in the timetable; coral and sun are accents, not sections.
+- **Hero imagery** varies by page: a two-photograph composition on the home page, a single
+  photograph on the courses, groups, week and Barcelona pages, and none on the mobility, dates or
+  contact pages.
+- **The group planner** exists once, on /bring-a-group/. The duplicate on the home page is gone.
 
 ## Images
-Reused (owner uploads, uploads/ → rename per site-data.js `file` keys in production): certificates group (home hero, groups), English course group (courses), ICT office/table groups (home, courses, mobility, your-week), Spanish classroom (home), Park Güell + Ciutadella + viewpoint student groups (groups, home, your-week), Barceloneta seafront (barcelona, home), founders 1997 (about). Team portraits: 12 real people, still hotlinked from the current site CDN — download in production.
-Not used: AI-generated Dec-2025 image (excluded per brief), category graphics (not photography), soft/upscaled ai-classroom shot (quality).
-Still missing (honest placeholder slots): Gràcia street near course rooms; metro shot no longer required by any layout.
 
-## Data
-Single source: assets/js/site-data.js — organisation, contact, venues, schedule/fees, 6 course areas, 16 featured programmes, team, images, reviews (4.9/136, verified from Google Business panel).
-Dates: imported 2026-08-20 from the owner's DATES-SPAINBCN Google Sheet (gid 480287972), Barcelona upcoming rows only (12 weeks, Sep 2026–Nov 2026). Sheet stays authoritative; re-export manually into site-data.js on each update (owner requested no live connection). Non-Barcelona rows intentionally excluded (SpainBcn territory).
-⚠ Unresolved discrepancies to confirm with SpainBcn: contact page OID E10139423 + PIC 933769240 vs. site-wide OID E10336106 (used the latter); postcode 08025 (public pages) vs 08024 Local 2 (legal notice — kept verbatim in privacy).
+All 15 photographs and all 12 team portraits are served from this site. The portraits were
+downloaded from the old CDN and are no longer hotlinked; `clvaw-cdnwnd.com` appears nowhere.
+Originals stay in `uploads/` and `source-photos/`, neither of which is published. Production files
+carry descriptive names (`student-group-park-guell-barcelona-1600.webp`), are WebP, and are served
+at two widths with `srcset` where they are ever displayed large. Total: 2.2 MB, down from 15 MB.
+No placeholder is visible anywhere on the site.
 
-## Legacy → redirects (for production server config)
-/school-teachers/, /universities/, /english-courses-for-teachers/, /ai-ict/, /ict-integration/, /e-learning-ict/, /ict/, /course-catalogue/ → /join-a-course/
-/school-students/, /english-courses-students/, /spanish-courses-for-students/, /ict-courses-for-students/, /other-courses-for-students/ → /bring-a-group/
-/currently-open-dates/, /season-courses/ → /dates/
-/create-your-own-course/ → /plan-a-mobility/
-/about-us/, /our-team/, /10-reasons/, /2025-at-a-glance/ → /about/
-/contact/ → /contact/ · /privacy-policy/ → /privacy/ · /home/ → /
-Delete (content absorbed or obsolete): flat course-code catalogue page, repeated OID/fee blocks, "For more information contact us!" billboard, GTM + double Google Maps iframes (not carried over — re-add analytics only as a deliberate, consented decision).
+## Forms
 
-## Responsive
-System-level: clamp() type/spacing, wrap-based grids, JS breakpoints only for header nav (920px) and week timetable (768px); no fixed widths, 44–52px touch targets, 16px form inputs (no iOS zoom). Verifier-checked at desktop + no-overflow probing; spot-check 320/375/390/430/768/1024/1280/1440 before launch is still recommended.
+The contact page offers the organisation's own forms.app sign-up form. Nothing is requested from
+forms.app until the visitor presses "Load the form"; the page states what that discloses before
+they press it. Email, telephone and WhatsApp are in plain text next to it. The group planner's
+answers travel to /contact/ in the URL, are shown back to the visitor, and are pre-filled into the
+email link, so nothing is typed twice. The third-party form embed cannot itself be pre-filled.
 
-## Technical
-- Pages are .dc.html Design Components (this workspace's format; content/structure ports 1:1 to static HTML). Form backend: none invented — contact form composes a prefilled email in the visitor's own mail app (marked TODO for a real endpoint).
-- Consent: eib-consent-v1 in localStorage; no optional cookies/trackers actually ship.
-- Repo RAHV-FB/ErasmusInBarcelona associated (github.md); browsing tools were unavailable this session, so no repo files were imported or modified — SpainBcn untouched.
+## Privacy and cookies
 
-## Files
-Pages: index, join-a-course, bring-a-group, plan-a-mobility, dates, your-week, barcelona, about, contact, privacy, cookies, 404 (.dc.html) · Shared: SiteHeader.dc.html, SiteFooter.dc.html · Data: assets/js/site-data.js · Docs: notes/audit.md, notes/production-report.md, github.md, CLAUDE.md
+Rewritten to describe this site: no cookies, no local storage, no analytics, no advertising, no
+maps, no fonts or assets from anyone else. Server access logs, the consent-gated form, what
+happens when you write to us, photographs, retention, legal bases, rights and the AEPD. The
+consent banner is gone, because there is nothing left to consent to on page view.
 
----
+## Verification
 
-## Site health check — 2026-08-20 (repo import)
+- **Cross-browser**: Chromium (Chrome and Edge), Firefox 153 and WebKit 26.5 (Safari and iOS),
+  every route at 320, 375, 390, 430, 768, 1024, 1280 and 1440 px — 88 combinations per engine, no
+  horizontal overflow and no console errors in any of them, plus an iPhone 13 profile for tap
+  behaviour.
+- **Accessibility**: keyboard path from skip link to footer, focus moved into the mobile menu and
+  returned to its button on Escape, `aria-expanded` and scroll lock, one `<h1>` per page and no
+  skipped heading levels, alt text on every image, no tap target under 44 px, and every text
+  colour at or above 4.5:1 against its background.
+- **Performance**: 32–338 KB and 4–8 requests for an initial view, cumulative layout shift 0.0000
+  on every page.
+- **Links**: every internal link resolves, every legacy path redirects in one hop to a page that
+  answers 200, and `/no-such-page` answers 404.
 
-Every page rendered in Chromium at 1440 / 768 / 390 / 320 px, with console errors,
-failed requests, broken images, unrendered bindings and link targets recorded. Result
-after the fixes below: **all 12 routes healthy**, one standing warning (team portraits
-hotlinked from a third-party CDN).
+`npm run check` re-runs all of the above except the cross-browser matrix.
 
-### Fixed
-- **The site could not render at all without internet access.** `support.js` fetched
-  React and ReactDOM from unpkg.com at boot; when that host is unreachable (offline,
-  blocked network, unpkg outage) every page stayed blank. React 18.3.1 UMD is now
-  vendored in `assets/vendor/` and loaded before `support.js`, which skips the CDN when
-  `window.React` already exists.
-- **No page had a `<title>`, a `lang` attribute or a meta description in its markup.**
-  Titles were only set in `componentDidMount`, i.e. after JS booted — a blank browser
-  tab until mount, and nothing for crawlers or no-JS clients. Static `<title>` (matching
-  each page's own runtime title verbatim), `<meta name="description">` drawn from the
-  page's own lede, and `lang="en"` added to all twelve pages.
-- **Home page overflowed horizontally on phones** (632 px of content in a 390 px
-  viewport). The hero photo grid used `grid-template-columns: 1.3fr 1fr`; the tall
-  figure's `aspect-ratio` plus a definite height gave the column a 544 px min-content
-  contribution. Columns are now `minmax(0, …fr)`, and the aspect-ratio wrapper carries an
-  explicit `width: 100%`.
-- **Team strip on the home page overflowed to 640 px whenever the portrait CDN was
-  unreachable** — broken images fall back to their `width="200"` attribute, blowing out
-  `repeat(3, 1fr)`. All fixed-count grids (`repeat(N, 1fr)` on home, join-a-course,
-  your-week) are now `repeat(N, minmax(0, 1fr))`.
+## Unresolved — needs a human
 
-### Verified working
-Cookie banner (appears once, stores the choice in `eib-consent-v1`, stays gone on
-reload) · mobile nav drawer (opens, locks scroll, closes on Escape) · dates filtering ·
-home group planner selection state · contact `mailto:` composition · all internal links
-resolve to files that exist · 404 route answers with a 404 status.
-
-### Still open (not code defects)
-Portraits hotlinked from the current site CDN · ~15 MB of unoptimised uploads, two PNGs
-near 4 MB · contact form has no backend endpoint · the `{{ binding }}` image URLs in the
-raw template fire a few 404s per page before the component mounts, which is inherent to
-the Design Component runtime.
-
-### Running it
-`npm start` serves the site on the routes it will publish under, including the legacy
-redirect table from this report. `npm run check` re-runs the audit above. See README.md.
+1. **Class times.** SpainBcn publishes "Monday to Friday mornings" and a 20 or 25 hour choice, but
+   no clock times. The old site's "10:00–14:00 / 10:00–15:00" could not be confirmed, so the site
+   no longer states times. If they are correct, put them in `schedule` in `site-data.js`.
+2. **The hosting company** named in `/privacy/`. The policy describes the server logs of the host
+   used for spainbcn.com; confirm who will host this site before publishing.
+3. **Google reviews link.** The rating and count come from SpainBcn's homepage; the link here is a
+   Google local-results search rather than the organisation's own review URL, which the current
+   SpainBcn markup does not expose in a stable form.
+4. **Minimum group size.** The old site said five students. Nothing on SpainBcn confirms it, so it
+   is not stated here.
+5. **Venue accessibility.** No published information, so the Barcelona page invites the question
+   instead of answering it.
+6. **The last four course weeks** were verified against the organisation's own sheet; SpainBcn's
+   own dates page was rate-limiting requests and could not be read as a second source.
