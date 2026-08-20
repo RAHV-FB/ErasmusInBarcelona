@@ -1,0 +1,79 @@
+# ============================================================
+# Build the site and deploy it to GitHub Pages.
+#
+# Pages is served from this workflow's artifact, not from a
+# branch, so the repository holds only source. `configure-pages`
+# tells us the URL the site will be served from, and the build
+# uses it: on a project site that means every root-relative link
+# gets the /<repo> prefix.
+#
+# The deployment is a prototype for review — PROTOTYPE=1 makes
+# every page noindex and robots.txt disallow everything. Drop it
+# when this becomes the published site.
+# ============================================================
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/site-health-check-df5ie0
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deployment finish rather than cancelling it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The build itself needs no dependencies — only Node's own
+      # modules. sharp and Playwright are for `npm run images` and
+      # `npm run check`, which do not run here.
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Build
+        run: node build.mjs
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+          PROTOTYPE: '1'
+
+      - name: Check the build looks right
+        run: |
+          test -f dist/index.html
+          test -f dist/assets/css/site.css
+          test "$(find dist -name index.html | wc -l)" -ge 12
+          echo "Built for ${{ steps.pages.outputs.base_url }}"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
