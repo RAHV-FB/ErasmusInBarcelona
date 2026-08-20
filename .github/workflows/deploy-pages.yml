@@ -1,11 +1,24 @@
 # ============================================================
 # Build the site and deploy it to GitHub Pages.
 #
-# Pages is served from this workflow's artifact, not from a
-# branch, so the repository holds only source. `configure-pages`
-# tells us the URL the site will be served from, and the build
-# uses it: on a project site that means every root-relative link
-# gets the /<repo> prefix.
+# This workflow builds the site and deploys it to Pages.
+#
+# It only takes effect once someone with admin rights sets
+# Settings → Pages → Build and deployment → Source to "GitHub
+# Actions". The Actions token cannot make that change itself: the
+# API answers 403 "Resource not accessible by integration". Until
+# it is changed, Pages also runs its own Jekyll build of this
+# branch, and the two race — so the built site is committed at the
+# repository root as well, with a .nojekyll file, and both routes
+# serve the same thing. `npm run publish:pages` refreshes that copy.
+#
+# Once the source is switched: the Jekyll build stops firing, this
+# workflow becomes the only deployer, and the root copy can be
+# deleted (the files listed in .pages-published.json).
+#
+# `configure-pages` tells us the URL the site will be served from,
+# and the build uses it: on a project site that means every
+# root-relative link gets the /<repo> prefix.
 #
 # The deployment is a prototype for review — PROTOTYPE=1 makes
 # every page noindex and robots.txt disallow everything. Drop it
@@ -44,13 +57,9 @@ jobs:
       # modules. sharp and Playwright are for `npm run images` and
       # `npm run check`, which do not run here.
 
-      # Pages was originally set to build this branch with Jekyll. That
-      # built-in build fires on every push and races this workflow — whichever
-      # finishes last wins, which is how the site briefly reverted to Jekyll's
-      # rendering of README.md. Switching the source to "workflow" stops the
-      # built-in build from running at all. It is idempotent, so it is safe to
-      # run on every deploy.
-      - name: Make Pages build from this workflow, not from the branch
+      # Tries to switch the source; the Actions token is normally refused, so
+      # this is a no-op that reports what a person has to do instead.
+      - name: Try to make Pages build from this workflow
         run: |
           gh api -X PUT "repos/$GITHUB_REPOSITORY/pages" -f build_type=workflow \
             && echo "Pages source: GitHub Actions" \
