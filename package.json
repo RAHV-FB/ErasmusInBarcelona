@@ -9,7 +9,8 @@
     "images": "node tools/build-images.mjs",
     "start": "node build.mjs && node server.mjs",
     "serve": "node server.mjs",
-    "check": "node scripts/health-check.mjs"
+    "check": "node scripts/health-check.mjs",
+    "links": "node scripts/link-check.mjs"
   },
   "devDependencies": {
     "playwright": "^1.49.0",
