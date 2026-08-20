@@ -42,5 +42,6 @@ date: 2026-08-20T21:00:00Z
 ## GitHub Pages
 `.github/workflows/deploy-pages.yml` builds the site and deploys it to Pages on every push to this
 branch, so <https://rahv-fb.github.io/ErasmusInBarcelona/> tracks the branch without any generated
-file being committed. Pages is configured to publish from GitHub Actions rather than from a
-branch. The deployment is marked `noindex` while it is a prototype.
+file being committed. The Pages source is set to GitHub Actions, so this workflow is the only
+deployer; if it is ever set back to a branch, GitHub's own Jekyll build races it and the workflow
+warns. The deployment is marked `noindex` while it is a prototype.

@@ -22,22 +22,8 @@ npm run images       # regenerate the images in src/assets/images
 to Pages. `actions/configure-pages` reports the URL the site will be served from and the build
 takes its base path from that, so the repository name is not written into the workflow.
 
-**One setting still has to be changed by hand.** Pages is set to "deploy from a branch", so
-GitHub also runs its own Jekyll build of this branch on every push, and the two race — the site
-flips between the real thing and Jekyll's rendering of README.md. The Actions token is not allowed
-to change that setting (the API answers 403), so someone with admin rights has to set
-**Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
-
-Until then the built site is also committed at the repository root with a `.nojekyll` file, so
-both deployers serve the same thing and the race is harmless. Refresh that copy with
-`npm run publish:pages` when the site changes, and commit it. Once the source is switched, the
-Jekyll build stops, the workflow becomes the only deployer, and the root copy (everything listed
-in `.pages-published.json`) can be deleted.
-
-The prototype build differs from a real deploy in three ways: every root-relative link is prefixed
-with the project path, every page is `noindex` and `robots.txt` disallows everything, and the
-legacy paths ship as small redirecting pages because a static host cannot answer with a 301. Drop
-`PROTOTYPE` from the workflow when this becomes the published site.
+Nothing generated is committed: the repository holds source only, and the deployed site comes from
+the workflow's artifact.
 
 To build and check it locally the way Pages serves it:
 

@@ -1,20 +1,9 @@
 # ============================================================
 # Build the site and deploy it to GitHub Pages.
 #
-# This workflow builds the site and deploys it to Pages.
-#
-# It only takes effect once someone with admin rights sets
-# Settings → Pages → Build and deployment → Source to "GitHub
-# Actions". The Actions token cannot make that change itself: the
-# API answers 403 "Resource not accessible by integration". Until
-# it is changed, Pages also runs its own Jekyll build of this
-# branch, and the two race — so the built site is committed at the
-# repository root as well, with a .nojekyll file, and both routes
-# serve the same thing. `npm run publish:pages` refreshes that copy.
-#
-# Once the source is switched: the Jekyll build stops firing, this
-# workflow becomes the only deployer, and the root copy can be
-# deleted (the files listed in .pages-published.json).
+# Builds the site and deploys it to Pages. The Pages source is set
+# to GitHub Actions, so this workflow is the only deployer and the
+# repository holds source only.
 #
 # `configure-pages` tells us the URL the site will be served from,
 # and the build uses it: on a project site that means every
@@ -57,13 +46,15 @@ jobs:
       # modules. sharp and Playwright are for `npm run images` and
       # `npm run check`, which do not run here.
 
-      # Tries to switch the source; the Actions token is normally refused, so
-      # this is a no-op that reports what a person has to do instead.
-      - name: Try to make Pages build from this workflow
+      # Warns if the Pages source is ever set back to a branch, because
+      # GitHub's own Jekyll build would then race this workflow.
+      - name: Check Pages still builds from this workflow
         run: |
-          gh api -X PUT "repos/$GITHUB_REPOSITORY/pages" -f build_type=workflow \
-            && echo "Pages source: GitHub Actions" \
-            || echo "::warning::Could not set the Pages source. If a Jekyll 'pages build and deployment' run appears alongside this one, set Settings → Pages → Source to GitHub Actions by hand."
+          build_type=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type 2>/dev/null || echo unknown)
+          echo "Pages build type: $build_type"
+          if [ "$build_type" = "legacy" ]; then
+            echo "::warning::Pages is set to deploy from a branch, which races this workflow. Set Settings → Pages → Source to GitHub Actions."
+          fi
         env:
           GH_TOKEN: ${{ github.token }}
 
