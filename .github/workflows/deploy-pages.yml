@@ -44,6 +44,20 @@ jobs:
       # modules. sharp and Playwright are for `npm run images` and
       # `npm run check`, which do not run here.
 
+      # Pages was originally set to build this branch with Jekyll. That
+      # built-in build fires on every push and races this workflow — whichever
+      # finishes last wins, which is how the site briefly reverted to Jekyll's
+      # rendering of README.md. Switching the source to "workflow" stops the
+      # built-in build from running at all. It is idempotent, so it is safe to
+      # run on every deploy.
+      - name: Make Pages build from this workflow, not from the branch
+        run: |
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/pages" -f build_type=workflow \
+            && echo "Pages source: GitHub Actions" \
+            || echo "::warning::Could not set the Pages source. If a Jekyll 'pages build and deployment' run appears alongside this one, set Settings → Pages → Source to GitHub Actions by hand."
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
