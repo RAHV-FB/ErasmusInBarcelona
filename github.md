@@ -38,3 +38,9 @@ date: 2026-08-20T21:00:00Z
 ## Not published
 `uploads/` and `source-photos/` hold the original photographs and are excluded from `dist/`.
 `dist/` itself is generated and git-ignored; build it with `npm run build`.
+
+## GitHub Pages
+`.github/workflows/deploy-pages.yml` builds the site and deploys it to Pages on every push to this
+branch, so <https://rahv-fb.github.io/ErasmusInBarcelona/> tracks the branch without any generated
+file being committed. Pages is configured to publish from GitHub Actions rather than from a
+branch. The deployment is marked `noindex` while it is a prototype.

@@ -18,24 +18,22 @@ npm run images       # regenerate the images in src/assets/images
 
 <https://rahv-fb.github.io/ErasmusInBarcelona/> is a prototype for review, not the live site.
 
-```bash
-npm run publish:pages    # build for the Pages sub-path and copy it to the repo root
-git add -A && git commit && git push
-```
+It deploys itself: `.github/workflows/deploy-pages.yml` builds the site on every push to this
+branch and publishes the result to Pages. Nothing generated is committed — the repository holds
+source only. `actions/configure-pages` reports the URL the site will be served from and the build
+takes its base path from that, so the repository name is not written into the workflow.
 
-Pages publishes this branch's root folder, so the built site lives beside the source there;
-`.pages-published.json` records what the last publish wrote, and the next one removes it first.
 The prototype build differs from a real deploy in three ways: every root-relative link is prefixed
-with `/ErasmusInBarcelona`, every page is `noindex` and `robots.txt` disallows everything, and the
-legacy paths ship as small redirecting pages because a static host cannot answer with a 301.
+with the project path, every page is `noindex` and `robots.txt` disallows everything, and the
+legacy paths ship as small redirecting pages because a static host cannot answer with a 301. Drop
+`PROTOTYPE` from the workflow when this becomes the published site.
 
-To check that build the way Pages serves it:
+To build and check it locally the way Pages serves it:
 
 ```bash
+npm run build:pages
 BASE_PATH=/ErasmusInBarcelona npm run check
 ```
-
-Node 18+. The published site is `dist/` — static files, no server-side anything.
 
 ## How it fits together
 

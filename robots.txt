@@ -1,3 +1,0 @@
-# Prototype build — not the published site.
-User-agent: *
-Disallow: /
