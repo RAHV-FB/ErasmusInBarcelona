@@ -7,7 +7,16 @@
 import * as data from './data/site-data.js';
 import manifest from './assets/images/manifest.json' with { type: 'json' };
 
-export const SITE_URL = 'https://www.erasmusinbarcelona.com';
+// Where the build will be published. The GitHub Pages prototype sets both
+// of these (see `npm run build:pages`); a real deploy needs neither.
+export const SITE_URL = process.env.SITE_URL || 'https://www.erasmusinbarcelona.com';
+
+// A GitHub project site is served from a sub-path, so every root-relative
+// link needs that prefix. build.mjs applies it to the rendered HTML.
+export const BASE_PATH = (process.env.BASE_PATH || '').replace(/\/$/, '');
+
+// A prototype should never be indexed alongside the real site.
+export const PROTOTYPE = process.env.PROTOTYPE === '1';
 
 export const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -168,7 +177,7 @@ export function page(meta, body) {
 <title>${esc(meta.title)}</title>
 <meta name="description" content="${esc(meta.description)}">
 <link rel="canonical" href="${url}">
-${meta.noindex ? '<meta name="robots" content="noindex, follow">' : '<meta name="robots" content="index, follow">'}
+${meta.noindex || PROTOTYPE ? '<meta name="robots" content="noindex, follow">' : '<meta name="robots" content="index, follow">'}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Erasmus in Barcelona">
 <meta property="og:title" content="${esc(meta.title)}">

@@ -21,7 +21,10 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const PORT = Number(process.env.PORT || 4199);
-const BASE = `http://127.0.0.1:${PORT}`;
+// Set BASE_PATH to check a build made for a sub-path (the GitHub Pages
+// prototype); the build and the server both read the same variable.
+const BASE_PATH = (process.env.BASE_PATH || '').replace(/\/$/, '');
+const BASE = `http://127.0.0.1:${PORT}${BASE_PATH}`;
 const SHOTS = process.argv.includes('--shots');
 const SHOT_DIR = path.join(ROOT, '.health-shots');
 const WIDTHS = [320, 375, 390, 430, 768, 1024, 1280, 1440];
@@ -30,6 +33,7 @@ execFileSync(process.execPath, [path.join(ROOT, 'build.mjs')], { cwd: ROOT, stdi
 
 const ROUTES = ['/', '/join-a-course/', '/bring-a-group/', '/plan-a-mobility/', '/dates/',
   '/your-week/', '/barcelona/', '/about/', '/contact/', '/privacy/', '/cookies/'];
+const ORIGIN = `http://127.0.0.1:${PORT}`;
 
 const server = spawn(process.execPath, [path.join(ROOT, 'server.mjs')], {
   cwd: ROOT, env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore',
@@ -112,7 +116,7 @@ for (const route of ROUTES) {
   for (const href of internal) {
     const url = href.split('#')[0];
     if (!url) continue;
-    const res = await fetch(BASE + url, { redirect: 'manual' });
+    const res = await fetch(ORIGIN + url, { redirect: 'manual' });
     if (res.status >= 400) dead.push(href + ' → ' + res.status);
   }
 
@@ -218,8 +222,9 @@ const redirects = { '/school-teachers/': '/join-a-course/', '/our-team/': '/abou
 for (const [from, to] of Object.entries(redirects)) {
   const r = await fetch(BASE + from, { redirect: 'manual' });
   const loc = r.headers.get('location');
-  if (r.status !== 301 || loc !== to) buildIssues.push(`${from} → ${r.status} ${loc}, expected 301 ${to}`);
-  else {
+  if (r.status !== 301 || loc !== BASE_PATH + to) {
+    buildIssues.push(`${from} → ${r.status} ${loc}, expected 301 ${BASE_PATH + to}`);
+  } else {
     const onward = await fetch(BASE + to.split('#')[0], { redirect: 'manual' });
     if (onward.status !== 200) buildIssues.push(`${from} redirects to ${to}, which answered ${onward.status}`);
   }

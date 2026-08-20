@@ -10,38 +10,15 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { REDIRECTS } from './src/data/redirects.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dist');
 const PORT = Number(process.env.PORT || 4173);
 const HOST = process.env.HOST || '127.0.0.1';
+// Set when serving a build made for a sub-path, so the local server
+// behaves exactly like GitHub Pages does for a project site.
+const BASE_PATH = (process.env.BASE_PATH || '').replace(/\/$/, '');
 
-// Legacy paths from the previous erasmusinbarcelona.com, each mapped to
-// the page that now answers it. One hop only — no redirect chains.
-export const REDIRECTS = {
-  '/home': '/',
-  '/home/': '/',
-  '/school-teachers/': '/join-a-course/',
-  '/universities/': '/join-a-course/',
-  '/english-courses-for-teachers/': '/join-a-course/#english',
-  '/course-catalogue/': '/join-a-course/',
-  '/ai-ict/': '/join-a-course/#ai',
-  '/ict/': '/join-a-course/#ai',
-  '/ict-integration/': '/join-a-course/#ai',
-  '/e-learning-ict/': '/join-a-course/#ai',
-  '/school-students/': '/bring-a-group/',
-  '/english-courses-students/': '/bring-a-group/',
-  '/spanish-courses-for-students/': '/bring-a-group/',
-  '/ict-courses-for-students/': '/bring-a-group/',
-  '/other-courses-for-students/': '/bring-a-group/',
-  '/currently-open-dates/': '/dates/',
-  '/season-courses/': '/dates/',
-  '/create-your-own-course/': '/plan-a-mobility/',
-  '/about-us/': '/about/',
-  '/our-team/': '/about/#team',
-  '/10-reasons/': '/about/',
-  '/2025-at-a-glance/': '/about/',
-  '/privacy-policy/': '/privacy/',
-};
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -95,16 +72,25 @@ const server = http.createServer((req, res) => {
   if (!fs.existsSync(ROOT)) return send(res, 500, 'Run `npm run build` first.');
 
   const url = new URL(req.url, `http://${req.headers.host || HOST}`);
-  const pathname = url.pathname;
+  let pathname = url.pathname;
+
+  if (BASE_PATH) {
+    if (pathname === BASE_PATH) return send(res, 301, '', { Location: BASE_PATH + '/' });
+    if (!pathname.startsWith(BASE_PATH + '/')) {
+      // Outside the project path, exactly as GitHub Pages would answer.
+      return send(res, 404, 'Not found');
+    }
+    pathname = pathname.slice(BASE_PATH.length) || '/';
+  }
 
   const redirect = REDIRECTS[pathname] || REDIRECTS[pathname.replace(/\/$/, '')];
-  if (redirect) return send(res, 301, '', { Location: redirect });
+  if (redirect) return send(res, 301, '', { Location: BASE_PATH + redirect });
 
   // Directory URLs keep their trailing slash, so relative links and
   // canonical URLs agree with each other.
   if (!path.extname(pathname) && !pathname.endsWith('/')) {
     const asDir = resolve(pathname + '/');
-    if (asDir) return send(res, 301, '', { Location: pathname + '/' + url.search });
+    if (asDir) return send(res, 301, '', { Location: BASE_PATH + pathname + '/' + url.search });
   }
 
   const file = resolve(pathname);
@@ -117,5 +103,5 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(`Erasmus in Barcelona — serving ${ROOT}`);
-  console.log(`  http://${HOST}:${PORT}/`);
+  console.log(`  http://${HOST}:${PORT}${BASE_PATH}/`);
 });

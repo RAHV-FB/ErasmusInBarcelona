@@ -14,6 +14,27 @@ npm run links        # check every off-site link and anchor (hits real servers)
 npm run images       # regenerate the images in src/assets/images
 ```
 
+### The GitHub Pages prototype
+
+<https://rahv-fb.github.io/ErasmusInBarcelona/> is a prototype for review, not the live site.
+
+```bash
+npm run publish:pages    # build for the Pages sub-path and copy it to the repo root
+git add -A && git commit && git push
+```
+
+Pages publishes this branch's root folder, so the built site lives beside the source there;
+`.pages-published.json` records what the last publish wrote, and the next one removes it first.
+The prototype build differs from a real deploy in three ways: every root-relative link is prefixed
+with `/ErasmusInBarcelona`, every page is `noindex` and `robots.txt` disallows everything, and the
+legacy paths ship as small redirecting pages because a static host cannot answer with a 301.
+
+To check that build the way Pages serves it:
+
+```bash
+BASE_PATH=/ErasmusInBarcelona npm run check
+```
+
 Node 18+. The published site is `dist/` — static files, no server-side anything.
 
 ## How it fits together
