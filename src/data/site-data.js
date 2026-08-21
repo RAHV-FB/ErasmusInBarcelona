@@ -69,6 +69,15 @@ export const spainbcn = {
 // its own, read from the published form definition, and are used to
 // pass the group planner's answers into the matching field.
 // ============================================================
+// Who serves the site. Named in /privacy/ as the processor for the server
+// logs. Details from Dinahosting's own legal notice, dinahosting.com/legal.
+export const hosting = {
+  name: 'Dinahosting S.L.',
+  country: 'Spain',
+  place: 'Santiago de Compostela',
+  privacy: 'https://en.dinahosting.com/legal/proteccion-datos',
+};
+
 export const formsApp = {
   id: '6a6cadc0a2c530505fdac56f',
   host: 'https://rear0ghq.forms.app',

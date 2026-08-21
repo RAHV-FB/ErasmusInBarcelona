@@ -2,11 +2,10 @@ import { page } from '../layout.js';
 import * as d from '../data/site-data.js';
 import { analytics } from '../data/analytics.js';
 
-// This page describes what the site actually does. Two things must be
-// confirmed against reality before publishing, and again whenever either
-// changes: the hosting company named under "When you open this website",
-// and the forms.app form's own configuration (no CAPTCHA and no analytics
-// integrations are enabled on it today).
+// This page describes what the site actually does. Whenever any of it
+// changes, this page changes in the same commit. The forms.app form's own
+// configuration — no CAPTCHA, no analytics integrations — is the one part
+// that lives outside this repository, so re-check it there.
 export default function privacy() {
   const body = `
   <section class="container hero hero--tight">
@@ -29,13 +28,15 @@ export default function privacy() {
       </ul>
 
       <h2>When you open this website</h2>
-      <p>Our hosting company runs the servers this site sits on, and a line is written to an access
-        log each time a file is requested. It normally contains your IP address, the date and time,
-        the file requested, the response code, how much data was sent, the page you came from and the
-        browser and operating system your request announces. We use those logs to keep the site
-        running and to deal with abuse of the server. Legal basis: our legitimate interest in a
-        website that stays up and is not attacked, Article 6(1)(f) GDPR. The hosting company handles
-        them on our instructions, as our processor.</p>
+      <p>The site is hosted by ${d.hosting.name}, a Spanish company based in ${d.hosting.place}. A
+        line is written to an access log each time a file is requested. It normally contains your IP
+        address, the date and time, the file requested, the response code, how much data was sent,
+        the page you came from and the browser and operating system your request announces. We use
+        those logs to keep the site running and to deal with abuse of the server. Legal basis: our
+        legitimate interest in a website that stays up and is not attacked, Article 6(1)(f) GDPR.
+        ${d.hosting.name} handles them on our instructions, as our processor.</p>
+      <p class="meta"><a href="${d.hosting.privacy}" rel="noopener">${d.hosting.name} data
+        protection ↗</a></p>
       <p>The site stores one thing on your device: your answer to the privacy choice below, under the
         name <code>eib-privacy-v1</code> in your browser's local storage. It records whether you
         allowed the sign-up form and when you answered. It holds no identifier and never leaves your
@@ -97,7 +98,7 @@ export default function privacy() {
 
       <h2>Who else sees your information</h2>
       <ul>
-        <li>Our hosting company, for the server logs described above.</li>
+        <li>${d.hosting.name}, for the server logs described above.</li>
         <li>${analytics.operator}, for the analytics described above.</li>
         <li>forms.app, if you choose to load and send the form.</li>
         <li>Our accountants, for invoicing and tax filings.</li>
@@ -106,16 +107,17 @@ export default function privacy() {
         list of participants.</p>
 
       <h2>Transfers outside the European Economic Area</h2>
-      <p>Where a provider processes data outside the EEA, it does so under the European Commission's
-        Standard Contractual Clauses, Article 46(2)(c) GDPR, incorporated in its data processing
-        terms. Ask us and we will send you the terms that apply to our accounts.</p>
+      <p>Hosting is in ${d.hosting.country}. Where a provider processes data outside the EEA, it
+        does so under the European Commission's Standard Contractual Clauses, Article 46(2)(c) GDPR,
+        incorporated in its data processing terms. Ask us and we will send you the terms that apply
+        to our accounts.</p>
 
       <h2>How long we keep things</h2>
       <ul>
         <li>Enquiries that do not lead to a course: up to two years.</li>
         <li>Registrations, invoices and grant documents: as long as Spanish accounting and tax law
           requires.</li>
-        <li>Server access logs: the period set in our hosting company's service terms.</li>
+        <li>Server access logs: the period set in ${d.hosting.name}'s service terms.</li>
         <li>Analytics: aggregate counts, kept for as long as the analytics account is open.</li>
       </ul>
 

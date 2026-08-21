@@ -441,22 +441,45 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--ink-55); }
 .form-slot { position: relative; min-height: 640px; }
 @media (max-width: 640px) { .form-slot { min-height: 560px; } }
 
-.form-gate { border: 1px solid var(--line); padding: 20px; background: var(--white); }
+.form-gate {
+  position: absolute; inset: 0; overflow: hidden;
+  border: 1px solid var(--line); background: var(--white);
+  display: grid; place-items: center; padding: 24px;
+}
 .form-gate[data-loading] { opacity: .6; }
-.form-gate__ask { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+/* Something is clearly there and clearly not readable yet. Deliberately not
+   the shape of the form: no labels, no fields, no submit button, nothing a
+   visitor could mistake for something to fill in. */
+.form-gate__behind {
+  position: absolute; inset: -20px; z-index: 0;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: 1fr; gap: 16px; padding: 36px;
+  filter: blur(16px); opacity: .85;
+}
+.form-gate__behind span { background: var(--powder); }
+.form-gate__behind span:nth-child(1) { grid-column: span 3; }
+.form-gate__behind span:nth-child(2) { grid-column: span 2; }
+.form-gate__behind span:nth-child(3) { grid-column: span 4; }
+.form-gate__behind span:nth-child(4) { grid-column: span 5; grid-row: span 2; }
+.form-gate__behind span:nth-child(5) { grid-column: span 2; }
+.form-gate__behind span:nth-child(6) { grid-column: span 3; }
+.form-gate__behind span:nth-child(7) { grid-column: span 6; }
+.form-gate__behind span:nth-child(8) { grid-column: span 2; }
+.form-gate__behind span:nth-child(9) { grid-column: span 4; }
+
+.form-gate__ask {
+  position: relative; z-index: 1;
+  max-width: 34ch; text-align: center;
+  background: var(--white); border: 1px solid var(--graphite);
+  padding: 24px 22px;
+  box-shadow: 0 8px 28px rgba(32, 33, 36, .10);
+}
 .form-gate__ask p { margin-bottom: .8rem; }
 .form-gate__ask .btn { margin-bottom: .8rem; }
-.form-gate__failed { color: var(--graphite); }
-
-.skeleton { display: grid; gap: 14px; }
-.skeleton__field { display: grid; gap: 6px; }
-.skeleton__label { font-size: .82rem; color: var(--ink-55); }
-.skeleton__box { display: block; height: 38px; background: var(--powder); border-radius: var(--radius); }
-.skeleton__box--tall { height: 84px; }
-.skeleton__button {
-  justify-self: start; padding: 10px 20px; background: var(--powder);
-  color: var(--ink-55); font: 600 .9rem/1 var(--sans); border-radius: var(--radius);
-}
+.form-gate__ask .meta { margin-bottom: 0; }
+.form-gate__ask .meta a { white-space: nowrap; }
+.form-gate__failed { color: var(--graphite); margin-top: .8rem; margin-bottom: 0; }
 
 /* ---------- privacy banner and settings ---------- */
 

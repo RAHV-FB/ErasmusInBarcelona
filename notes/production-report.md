@@ -252,10 +252,11 @@ variable `UMAMI_WEBSITE_ID`. Until then the build ships no tracker and says so.
 ### The sign-up form — forms.app
 
 Nothing is requested from forms.app until a visitor allows it: no script, no iframe, no preconnect,
-no cookie. The contact page shows a drawing of the real form's four fields — shapes only, `inert`
-and `aria-hidden`, so nothing focusable and nothing to type into — with one line of permission text
-and a button. After permission the skeleton, the explanation and the button all disappear and only
-the form remains. The choice is stored as `eib-privacy-v1` in local storage and read before first
+no cookie. Where the form will be, the contact page shows a blurred abstract backdrop — irregular
+blocks, `inert` and `aria-hidden`, deliberately not the shape of a form, with no labels, no fields
+and no submit button, so nothing can be mistaken for something to fill in. The permission card sits
+above it: one line of text, the button, and the links out. After permission the backdrop and the
+card both disappear and only the form remains. The choice is stored as `eib-privacy-v1` in local storage and read before first
 paint, so a returning visitor with permission sees the form directly, with no flash of the gate. The
 form area reserves the embed's height, so nothing moves when it mounts.
 
@@ -288,9 +289,9 @@ Both third parties were intercepted locally so their real requests could be obse
 
 | Scenario | Result |
 | --- | --- |
-| Fresh visit, no choice | Umami script requested · **zero forms.app requests** · zero cookies · nothing in local storage · banner shown · skeleton gate shown |
+| Fresh visit, no choice | Umami script requested · **zero forms.app requests** · zero cookies · nothing in local storage · banner shown · blurred gate shown |
 | "Necessary only" | Banner gone · preference stored `formsApp:false` · **still zero forms.app requests** · Umami still running |
-| "Allow sign-up form" | forms.app requested **only after the click** (`cdn.formsapp.io/embed.js`) · gate and skeleton removed · iframe mounted |
+| "Allow sign-up form" | forms.app requested **only after the click** (`cdn.formsapp.io/embed.js`) · gate removed · iframe mounted |
 | Return visit with permission | No banner · form loads automatically · gate never visible |
 | Withdrawal | Embed removed · gate restored · preference `false` · later visits do not load it |
 | Umami payload, from a URL carrying planner answers and a fragment | `url` sent as `/contact/` — no query string, no fragment · no planner answers anywhere in the payload · no Distinct ID · no cookies set |
@@ -311,3 +312,20 @@ contains no tracker — `UMAMI_WEBSITE_ID` is not set — and no forms.app refer
 
 The same build was re-checked with `BASE_PATH=/ErasmusInBarcelona`, so the sub-path prefixing of
 links, images and `srcset` candidates is confirmed on the form the project site actually serves.
+
+
+### Hosting named
+
+The site will be served by Dinahosting S.L., a Spanish company in Santiago de Compostela; setup and
+the domain transfer are in progress. It is now one fact in `site-data.js` (`hosting`) and rendered
+into `/privacy/` in three places — the server-log section, the list of who else sees your
+information, and the retention list — plus a link to its data protection page. The transfers section
+says hosting is in Spain. Until the transfer completes the prototype is served by GitHub Pages,
+which is why that build is `noindex` and disallowed in robots.txt.
+
+### The permission gate, second pass
+
+The first version drew the real form's four fields. It read as a form, which is the opposite of what
+it is, so it was replaced: a blurred, irregular backdrop that shows something is there and cannot be
+mistaken for anything to fill in, with the permission card layered above it. Same behaviour, same 26
+network checks, same reserved height.
