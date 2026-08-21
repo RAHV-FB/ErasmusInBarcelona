@@ -7,7 +7,6 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 
 ```bash
 npm install          # Playwright and sharp, both dev-only
-UMAMI_WEBSITE_ID=… npm run build   # with analytics; without it, no tracker ships
 npm start            # build, then serve on http://127.0.0.1:4173
 npm run build        # build dist/ only
 npm run check        # build, serve, and audit every page in a browser
@@ -83,10 +82,12 @@ page, the courses page and the dates page all read from it.
 
 Two, and no more.
 
-**Umami Cloud** runs on every page. It is configured in `src/data/analytics.js`: cookie-free, query
-strings and fragments excluded, do-not-track respected, reporting only from the production domains.
-It needs a website id — this site's own, not spainbcn.com's — supplied as `UMAMI_WEBSITE_ID`.
-Without it the build ships no tracker and says so.
+**Umami Cloud** runs on every page, on Umami's EU region. It is configured in
+`src/data/analytics.js`: cookie-free, query strings and fragments excluded, do-not-track respected,
+reporting only from the production domains. The website id is this site's own, not spainbcn.com's,
+and it is public — it appears in the markup of every page. `data-host-url` is not optional: without
+it the tracker falls back to its US-facing collector whichever host the script came from. Set
+`UMAMI_WEBSITE_ID` to report a test build somewhere else.
 
 **forms.app** provides the sign-up form on `/contact/` and is requested only after the visitor
 allows it. Their choice is stored as `eib-privacy-v1` in local storage and read before first paint.

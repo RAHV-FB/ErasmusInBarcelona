@@ -13,6 +13,7 @@
 // route that answers with the wrong status.
 // ============================================================
 import { chromium } from 'playwright';
+import { analytics } from '../src/data/analytics.js';
 import { spawn, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -28,6 +29,8 @@ const BASE = `http://127.0.0.1:${PORT}${BASE_PATH}`;
 const SHOTS = process.argv.includes('--shots');
 const SHOT_DIR = path.join(ROOT, '.health-shots');
 const WIDTHS = [320, 375, 390, 430, 768, 1024, 1280, 1440];
+// The only host a page may talk to on load.
+const ANALYTICS_HOST = analytics.websiteId ? new URL(analytics.scriptUrl).host : '';
 
 execFileSync(process.execPath, [path.join(ROOT, 'build.mjs')], { cwd: ROOT, stdio: 'inherit' });
 
@@ -88,6 +91,18 @@ for (const route of ROUTES) {
   page.on('requestfailed', (r) => failed.push(r.url() + ' — ' + (r.failure()?.errorText || '')));
   page.on('request', (r) => { if (!r.url().startsWith(BASE) && !r.url().startsWith('data:')) thirdParty.push(r.url()); });
   page.on('response', (r) => { if (r.status() >= 400) failed.push('HTTP ' + r.status() + ' ' + decodeURIComponent(r.url())); });
+
+  // The tracker is the one third party allowed on load. Answer it here
+  // rather than letting it out: no real hit is recorded by a test run, and
+  // the check does not depend on reaching the internet. Anything else that
+  // leaves the page is still a failure.
+  const tracker = [];
+  if (ANALYTICS_HOST) {
+    await page.route(`**://${ANALYTICS_HOST}/**`, (r) => {
+      tracker.push(r.request().url());
+      r.fulfill({ contentType: 'text/javascript', body: '' });
+    });
+  }
 
   await page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
   await page.evaluate(async () => {
@@ -207,7 +222,9 @@ for (const route of ROUTES) {
   if (info.smallTargets.length) issues.push('touch targets under 44px: ' + info.smallTargets.join(', '));
   if (info.storage > 0) issues.push('page wrote ' + info.storage + ' storage entries on load');
   if (info.cookies > 0) issues.push('page set cookies on load');
-  if (thirdParty.length) issues.push('third-party requests on load: ' + [...new Set(thirdParty)].slice(0, 4).join(', '));
+  const uninvited = [...new Set(thirdParty)].filter((u) => !ANALYTICS_HOST || new URL(u).host !== ANALYTICS_HOST);
+  if (uninvited.length) issues.push('third-party requests on load: ' + uninvited.slice(0, 4).join(', '));
+  if (ANALYTICS_HOST && analytics.websiteId && !tracker.length) issues.push('tracker did not load');
   if (failed.length) issues.push('failed requests: ' + failed.slice(0, 4).join(' | '));
   if (errors.length) issues.push('console errors: ' + errors.slice(0, 4).join(' | '));
   if (overflow.length) issues.push('horizontal overflow at ' + overflow.join('; '));

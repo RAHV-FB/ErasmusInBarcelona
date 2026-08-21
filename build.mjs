@@ -129,6 +129,6 @@ console.log(`${count} pages → ${DIST}/${BASE_PATH ? ` (base path ${BASE_PATH})
 console.log(`${urls.length} URLs in sitemap.xml · ${data.dates.length} course weeks · ` +
   `${data.courseAreas.length} subject areas`);
 console.log(analytics.websiteId
-  ? `analytics: ${analytics.provider}, website ${analytics.websiteId.slice(0, 8)}…, reporting only from ${analytics.domains}`
-  : 'analytics: no tracker in this build — set UMAMI_WEBSITE_ID to the website id from the ' +
-    'organisation\'s Umami Cloud account (see src/data/analytics.js)');
+  ? `analytics: ${analytics.provider} ${analytics.region}, website ${analytics.websiteId.slice(0, 8)}…, `
+    + `reporting to ${new URL(analytics.collector).host} only from ${analytics.domains}`
+  : 'analytics: no tracker in this build');

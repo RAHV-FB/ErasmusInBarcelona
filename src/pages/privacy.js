@@ -54,10 +54,12 @@ export default function privacy() {
         group planner carries to the contact page never reach it. We do not send names, email
         addresses, form contents or planner answers to Umami, and we do not use its Distinct ID or
         session-replay features. Visitors whose browser asks not to be tracked are not counted.</p>
-      <p>Analytics is provided by ${analytics.provider}, operated by ${analytics.operator}. The
-        tracker is served from <code>${new URL(analytics.scriptUrl).host}</code> and reports to
-        <code>${new URL(analytics.collector).host}</code>. Legal basis: our legitimate interest in
-        understanding general website use and improving the service, Article 6(1)(f) GDPR.</p>
+      <p>Analytics is provided by ${analytics.provider}, operated by ${analytics.operator}, on its
+        European region. The tracker is served from
+        <code>${new URL(analytics.scriptUrl).host}</code> and reports to
+        <code>${new URL(analytics.collector).host}</code>, so the analytics data is handled in the
+        European Union. Legal basis: our legitimate interest in understanding general website use
+        and improving the service, Article 6(1)(f) GDPR.</p>
 
       <h2>The sign-up form</h2>
       <p>The sign-up form on the contact page is provided by forms.app. We do not connect to
@@ -99,7 +101,7 @@ export default function privacy() {
       <h2>Who else sees your information</h2>
       <ul>
         <li>${d.hosting.name}, for the server logs described above.</li>
-        <li>${analytics.operator}, for the analytics described above.</li>
+        <li>${analytics.operator}, on its European region, for the analytics described above.</li>
         <li>forms.app, if you choose to load and send the form.</li>
         <li>Our accountants, for invoicing and tax filings.</li>
       </ul>
@@ -107,10 +109,11 @@ export default function privacy() {
         list of participants.</p>
 
       <h2>Transfers outside the European Economic Area</h2>
-      <p>Hosting is in ${d.hosting.country}. Where a provider processes data outside the EEA, it
-        does so under the European Commission's Standard Contractual Clauses, Article 46(2)(c) GDPR,
-        incorporated in its data processing terms. Ask us and we will send you the terms that apply
-        to our accounts.</p>
+      <p>Hosting is in ${d.hosting.country} and analytics is on ${analytics.provider}'s European
+        region, so neither leaves the EU in normal use. forms.app is outside the EEA; where a
+        provider processes data outside the EEA it does so under the European Commission's Standard
+        Contractual Clauses, Article 46(2)(c) GDPR, incorporated in its data processing terms. Ask
+        us and we will send you the terms that apply to our accounts.</p>
 
       <h2>How long we keep things</h2>
       <ul>

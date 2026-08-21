@@ -15,9 +15,11 @@ anything.
 - **CSS decides layout, not JavaScript.** `src/assets/js/site.js` handles the menu, the date
   filter, the group planner and loading the sign-up form. Nothing else. No React, Vue, Tailwind,
   Bootstrap, jQuery or animation libraries.
-- **Two third parties, both on a leash.** Umami Cloud runs on every page: cookie-free, query
-  strings and fragments excluded, do-not-track respected, no Distinct ID, no replay, no custom
-  events, configured once in `src/data/analytics.js`. forms.app loads only after the visitor allows
+- **Two third parties, both on a leash.** Umami Cloud runs on every page, on its EU region:
+  cookie-free, query strings and fragments excluded, do-not-track respected, reporting only from
+  the production domains, no Distinct ID, no replay, no custom events, configured once in
+  `src/data/analytics.js`. The EU endpoint is set by `data-host-url`; drop it and the tracker
+  silently reports to the US instead. forms.app loads only after the visitor allows
   it, and never before — no script, no iframe, no preconnect. Nothing else may be added. If either
   changes, `/privacy/` and `/cookies/` change with it in the same commit, and the network behaviour
   is re-checked rather than assumed.

@@ -21,8 +21,8 @@ export default function cookies() {
 
       <h2>Umami analytics</h2>
       <p>Umami runs on every page and uses no cookies. It counts visits and pages; it does not
-        identify you or follow you to other sites. Details are in the
-        <a href="/privacy/">privacy policy</a>.</p>
+        identify you or follow you to other sites, and it runs on Umami's European region. Details
+        are in the <a href="/privacy/">privacy policy</a>.</p>
 
       <h2>The sign-up form</h2>
       <p>The form on the contact page comes from forms.app and is not loaded unless you allow it.
@@ -41,6 +41,6 @@ export default function cookies() {
     current: '',
     crumb: 'Cookies',
     title: 'Cookies and Privacy Choices | Erasmus in Barcelona',
-    description: 'Umami analytics runs without cookies; the forms.app sign-up form loads only with your permission and then uses its own cookies. Change your choice here.',
+    description: 'Umami analytics runs without cookies and on its European region; the forms.app sign-up form loads only with your permission and then uses its own cookies. Change your choice here.',
   }, body);
 }

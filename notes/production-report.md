@@ -234,20 +234,29 @@ describes every photograph.
 
 ### Analytics — Umami
 
-Umami Cloud, the same provider the organisation already uses for spainbcn.com. Configured in
-`src/data/analytics.js`, one place, and emitted only when a website id is supplied:
+Umami Cloud, the organisation's own account, on Umami's EU region, with this site's own website id
+— not spainbcn.com's, which would have mixed the two together. Configured in
+`src/data/analytics.js`, one place:
 
-    data-exclude-search="true"   query strings never recorded
-    data-exclude-hash="true"     fragments never recorded
-    data-do-not-track="true"     browsers asking not to be tracked are not counted
+    data-host-url="https://eu.umami.is"   reports to the EU endpoint
+    data-exclude-search="true"            query strings never recorded
+    data-exclude-hash="true"              fragments never recorded
+    data-do-not-track="true"              browsers asking not to be tracked are not counted
     data-domains="erasmusinbarcelona.com,www.erasmusinbarcelona.com"
 
 No Distinct ID, no `umami.identify()`, no session replay, no custom events, no form or planner data.
 Verified by capturing the actual request the tracker makes (see QA below).
 
-**Needs the owner:** this site needs its own website id in the organisation's Umami Cloud account —
-reusing spainbcn.com's id would mix the two sites together. Add the website, then set the repository
-variable `UMAMI_WEBSITE_ID`. Until then the build ships no tracker and says so.
+`data-host-url` is the part that is easy to get wrong. Loading the script from `eu.umami.is` does
+**not** by itself keep the data in the EU: the file served there is byte-identical to the one at
+`cloud.umami.is`, and it resolves its collector as `(data-host-url || "https://gateway.umami.is") +
+"/api/send"`. Without the attribute an EU-region site reports to the US-facing gateway. Both were
+read directly from the served script and both endpoints were probed. Umami's own FAQ states its
+cloud servers are in the US and the EU.
+
+The website id is public — it is in the markup of every page — so it lives in `analytics.js` rather
+than in a repository variable. `UMAMI_WEBSITE_ID` still overrides it, which is how the network QA
+below points a build at a throwaway id.
 
 ### The sign-up form — forms.app
 
@@ -308,7 +317,9 @@ Pushed to `claude/site-health-check-df5ie0`; the Actions workflow built and depl
 https://rahv-fb.github.io/ErasmusInBarcelona/ every route answers 200, an unknown path answers 404,
 the 22 legacy paths still redirect to their new pages, and every page carries `noindex` with
 robots.txt disallowing everything, because this is still a prototype build. The deployed HTML
-contains no tracker — `UMAMI_WEBSITE_ID` is not set — and no forms.app reference before consent.
+contains the tracker, which loads and sends nothing: `data-domains` is an allowlist on sending, not
+only on counting — the script returns early on any other hostname, github.io included. No forms.app
+reference appears before consent.
 
 The same build was re-checked with `BASE_PATH=/ErasmusInBarcelona`, so the sub-path prefixing of
 links, images and `srcset` candidates is confirmed on the form the project site actually serves.
@@ -329,3 +340,20 @@ The first version drew the real form's four fields. It read as a form, which is 
 it is, so it was replaced: a blurred, irregular backdrop that shows something is there and cannot be
 mistaken for anything to fill in, with the permission card layered above it. Same behaviour, same 26
 network checks, same reserved height.
+
+
+### Analytics moved to the EU region
+
+The account is in Umami's EU region, so the tracker is served from `eu.umami.is` and, through
+`data-host-url`, reports there too. Confirmed in a browser: the page view was intercepted at
+`https://eu.umami.is/api/send`, which only happens if the attribute is applied — without it the
+request would have gone to `gateway.umami.is` instead. `/privacy/` and `/cookies/` now say the
+analytics data is handled in the EU, and the transfers section distinguishes hosting and analytics
+(both EU) from forms.app (outside the EEA, under Standard Contractual Clauses).
+
+`npm run check` gained a rule to match: the tracker's host is the only third party a page may
+contact on load, it is answered inside the test rather than allowed out, and a page that fails to
+request it now fails the check. Anything else leaving the page is still a failure.
+
+Two test hits were recorded against the real website id while working out which region holds it —
+hostname `region-check.invalid`, url `/setup-region-check`. They are the only artificial traffic.
