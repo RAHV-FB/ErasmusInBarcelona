@@ -102,11 +102,17 @@ the same commit — and the network behaviour gets re-checked, not assumed.
 The live site is <https://www.erasmusinbarcelona.com>, hosted by Dinahosting and served by Apache.
 
 `.github/workflows/deploy-dinahosting.yml` builds the site on every push to `main`, generates
-`dist/.htaccess`, and mirrors `dist/` into the web root over FTPS. The mirror deletes whatever is
-no longer in `dist/`, so the live site is exactly what this repository builds. FTP credentials are
+`dist/.htaccess`, and mirrors `dist/` into the web root over FTPS with `lftp`. The mirror deletes
+whatever is no longer in `dist/`, so the live site is exactly what this repository builds —
+except `cgi-bin/` and `.well-known/`, which belong to the server and are excluded. Credentials are
 repository secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`); the web root is the repository
-variable `FTP_SERVER_DIR`. The workflow refuses to upload a build carrying `noindex`, and checks
-four pages, the 404 status and one legacy redirect against the live domain afterwards.
+variable `DEPLOY_DIR`, defaulting to `/www/`. The workflow refuses to publish a prototype build or
+to mirror anywhere but the web root, and afterwards checks five pages, the 404 status and three
+legacy redirects against the live domain.
+
+The hosting serves a certificate for `*.espacioseguro.com` on port 21, which cannot match the host
+being dialled, so the upload verifies the certificate chain but not the hostname. A client that
+checks the hostname simply hangs until it times out — which is what the first attempt did.
 
 `tools/build-htaccess.mjs` writes the Apache configuration from `src/data/redirects.js` and
 `SITE_URL` — the same two sources `server.mjs` uses — so local and production behaviour cannot

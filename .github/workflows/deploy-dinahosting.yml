@@ -5,23 +5,38 @@
 # production .htaccess generated from src/data/redirects.js, and
 # mirrors the result into the hosting account's web root over FTPS.
 #
+# The transfer is FTPS driven by lftp, after the first attempt
+# timed out on the control socket. A probe from a runner found
+# port 21 open and AUTH TLS completing in about a second, so the
+# server was never the problem: it presents a valid certificate
+# issued for *.espacioseguro.com, which does not match the host
+# being dialled, and a client that verifies the hostname waits
+# there until it gives up.
+#
+# So the chain is still verified — ssl:verify-certificate stays
+# on — and only the hostname check is dropped, which is the one
+# thing that cannot succeed against a shared-hosting certificate.
+#
 # The mirror deletes files on the server that are no longer in
 # dist/, so the live site is always exactly what this repository
 # builds. Anything the server keeps for itself is named in the
 # exclude list on the upload step.
 #
-# Credentials live in repository secrets and never appear here:
-#   FTP_SERVER    the hosting account's FTP host
-#   FTP_USERNAME  the FTP user
+# Credentials live in repository secrets and never appear here.
+# SSH and FTP share them on this host, so the FTP_* names still
+# fit:
+#   FTP_SERVER    the hosting account's host
+#   FTP_USERNAME  the account user
 #   FTP_PASSWORD  its password
 #
-# The FTP user lands in the account home, not the web root, so
-# server-dir is /www/ — the directory Apache serves. Mirroring
-# into the home directory would delete Maildir, logs and the rest
-# of the account, so the path is checked before anything uploads.
-# Repository variable FTP_SERVER_DIR overrides it; SITE_CHECK_URL
+# The user lands in the account home, not the web root, so the
+# target is /www/ — the directory Apache serves. Mirroring into
+# the home itself would delete Maildir, logs and the rest of the
+# account, so the path is checked before anything uploads.
+# Repository variable DEPLOY_DIR overrides it; SITE_CHECK_URL
 # points the post-deploy check somewhere else (the hosting's own
-# *.dinaserver.com name, while the domain still answers elsewhere).
+# *.dinaserver.com name, while the domain still answers
+# elsewhere).
 # ============================================================
 name: Deploy to dinahosting
 
@@ -63,10 +78,10 @@ jobs:
       # thing that must never be wrong is where it points.
       - name: Refuse to mirror outside the web root
         run: |
-          dir='${{ vars.FTP_SERVER_DIR || '/www/' }}'
+          dir='${{ vars.DEPLOY_DIR || '/www/' }}'
           case "$dir" in
-            /www/*|/www/) ;;
-            *) echo "::error::FTP_SERVER_DIR is '$dir'. The deploy deletes whatever is not in dist/, so it may only target the web root."; exit 1 ;;
+            /www/|/www/*) ;;
+            *) echo "::error::DEPLOY_DIR is '$dir'. The deploy deletes whatever is not in dist/, so it may only target the web root."; exit 1 ;;
           esac
           echo "web root: $dir"
 
@@ -93,24 +108,30 @@ jobs:
           echo "publishable build: robots.txt allows indexing, only 404.html is noindex"
 
       - name: Publish over FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          local-dir: ./dist/
-          server-dir: ${{ vars.FTP_SERVER_DIR || '/www/' }}
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            .well-known/**
-            cgi-bin/**
-            stats/**
-            logs/**
+        env:
+          HOST: ${{ secrets.FTP_SERVER }}
+          USER: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DIR: ${{ vars.DEPLOY_DIR || '/www/' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+          # cgi-bin belongs to the server and .well-known is where
+          # Let's Encrypt writes its challenge. Neither comes from
+          # dist/, so neither may be swept up by --delete.
+          # --env-password keeps the password out of the process
+          # list, where -u user,pass would put it.
+          lftp -u "$USER" --env-password "ftp://$HOST" <<LFTP
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set ssl:verify-certificate true
+          set ssl:check-hostname no
+          set net:max-retries 3
+          set net:timeout 20
+          set cmd:fail-exit true
+          mirror -R --delete --parallel=4 --verbose=1 --exclude-glob .git* --exclude cgi-bin/ --exclude .well-known/ dist/ $DIR
+          bye
+          LFTP
 
       # Against the real domain once it points here; against the
       # hosting's own name while it does not.
