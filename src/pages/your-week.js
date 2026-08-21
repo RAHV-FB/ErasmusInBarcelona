@@ -29,7 +29,7 @@ export default function yourWeek() {
   <section class="container hero hero--tight">
     <div class="cols cols--lead">
       <div>
-        <h1>Your Barcelona week</h1>
+        <h1>A staff training week in Barcelona</h1>
         <p class="lede">What is settled before you travel, what the five days look like, and what you
           leave with.</p>
       </div>
@@ -120,7 +120,7 @@ export default function yourWeek() {
     path: '/your-week/',
     current: 'week',
     crumb: 'Your week',
-    title: 'What an Erasmus+ Course Week in Barcelona Looks Like',
-    description: 'The five days of a Barcelona course week: hours, cultural afternoons, what to bring, the documents provided and what happens if your plans change.',
+    title: 'What a Staff Training Week in Barcelona Looks Like | SpainBcn-Programs',
+    description: 'The five days of a staff-training week in Barcelona: hours, cultural afternoons, what to bring, the documents provided and what happens if your plans change.',
   }, body);
 }

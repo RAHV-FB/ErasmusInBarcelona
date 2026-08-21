@@ -23,8 +23,10 @@ export default function bringAGroup() {
     <div class="cols cols--lead">
       <div>
         <h1>Bring your students to Barcelona</h1>
-        <p class="lede">Programmes for secondary, high-school and VET groups, in English or Spanish,
-          with the accompanying teachers taking part alongside the students.</p>
+        <p class="lede">Programmes for secondary, high-school and VET student groups, in English or
+          Spanish, with the accompanying teachers taking part alongside the students.</p>
+        <p class="meta">Looking for training for your staff rather than your students?
+          <a href="/join-a-course/">See the staff training courses →</a></p>
         <div class="btn-row">
           <a class="btn" href="#plan">Plan your group</a>
           <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -112,7 +114,7 @@ export default function bringAGroup() {
         <h2>What happens next</h2>
         <ol class="steps">
           <li>You send the group, the subject and the dates you are considering.</li>
-          <li>We propose the programme for the Spain-based part and quote it in writing.</li>
+          <li>We propose the programme and quote it in writing.</li>
           <li>When you accept, we confirm the arrangements and send the documents your project needs.</li>
         </ol>
         <p class="meta">${d.contact.replyTime} Asking is not a commitment.</p>
@@ -121,7 +123,7 @@ export default function bringAGroup() {
         <h2>If you are the coordinator</h2>
         <p>The documents, the OID, the receiving-partner role and how invoicing works are set out for
           institutions on their own page.</p>
-        <p><a class="link-strong" href="/plan-a-mobility/">Planning a mobility for your institution →</a></p>
+        <p><a class="link-strong" href="/plan-a-mobility/">Institutional programmes →</a></p>
       </div>
     </div>
   </section>
@@ -130,7 +132,7 @@ export default function bringAGroup() {
   return page({
     path: '/bring-a-group/',
     current: 'group',
-    crumb: 'Bring a group',
+    crumb: 'Student groups',
     title: 'Erasmus+ Student Group Programmes in Barcelona | SpainBcn-Programs',
     description: 'Programmes in Barcelona for secondary, high-school and VET student groups: what we build, what a group price covers, what your school arranges, and how a quote works.',
   }, body);

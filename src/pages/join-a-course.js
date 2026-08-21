@@ -58,10 +58,12 @@ export default function joinACourse() {
   <section class="container hero hero--tight">
     <div class="cols cols--lead">
       <div>
-        <h1>Courses in Barcelona</h1>
-        <p class="lede">Staff-training courses for teachers and education professionals. Each runs for
-          one week, Monday to Friday mornings, at 20 or 25 training hours. A few subjects also run as
-          a two-week intensive at 50 hours.</p>
+        <h1>Staff training courses in Barcelona</h1>
+        <p class="lede">Erasmus+ KA1 courses for teachers and education staff. Each runs for one week,
+          Monday to Friday mornings, at 20 or 25 training hours; a few subjects also run as a two-week
+          intensive at 50 hours.</p>
+        <p>${d.offer.staffScope}</p>
+        <p class="meta">${d.offer.funding}</p>
         <ul class="price price--inline">
           <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
           <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
@@ -139,8 +141,8 @@ export default function joinACourse() {
   return page({
     path: '/join-a-course/',
     current: 'join',
-    crumb: 'Courses',
-    title: 'Erasmus+ Staff Training Courses in Barcelona | SpainBcn-Programs',
-    description: `Erasmus+ courses in Barcelona for teachers and education staff, with the next scheduled week for each subject. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25.`,
+    crumb: 'Staff training',
+    title: 'Erasmus+ KA1 Staff Training Courses in Barcelona | SpainBcn-Programs',
+    description: `Erasmus+ KA1 staff training in Barcelona for teachers and education staff, with the next scheduled week for each subject. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25. Erasmus+ funding is not required.`,
   }, body);
 }

@@ -17,9 +17,9 @@ export default function dates() {
   const body = `
   <section class="container hero">
     <div style="max-width:52ch">
-      <h1>Course dates in Barcelona</h1>
-      <p class="lede">The ${d.dates.length} weeks in the current Barcelona calendar, Monday to Friday.
-        Any course can also be requested for a week that is not listed here.</p>
+      <h1>Staff training dates in Barcelona</h1>
+      <p class="lede">The ${d.dates.length} staff-training weeks in the current Barcelona calendar,
+        Monday to Friday. Any course can also be requested for a week that is not listed here.</p>
     </div>
   </section>
 
@@ -82,7 +82,7 @@ export default function dates() {
     path: '/dates/',
     current: 'dates',
     crumb: 'Dates',
-    title: 'Erasmus+ Course Dates in Barcelona | SpainBcn-Programs',
-    description: `The ${d.dates.length} scheduled Erasmus+ course weeks in Barcelona, with the subject and dates of each. Other dates and levels open on request.`,
+    title: 'Erasmus+ Staff Training Dates in Barcelona | SpainBcn-Programs',
+    description: `The ${d.dates.length} scheduled staff-training weeks in Barcelona, with the subject and dates of each. Other weeks and levels open on request.`,
   }, body);
 }

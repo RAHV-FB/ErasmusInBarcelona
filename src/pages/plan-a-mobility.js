@@ -10,9 +10,12 @@ export default function planAMobility() {
   const body = `
   <section class="container hero hero--tight">
     <div style="max-width:54ch">
-      <h1>Planning a mobility for your institution</h1>
-      <p class="lede">What SpainBcn-Programs can host in Barcelona, which documents it issues and when,
-        how a quote and an invoice work, and the registration details your application needs.</p>
+      <h1>Institutional programmes in Barcelona</h1>
+      <p class="lede">For coordinators arranging an Erasmus+ mobility: private course weeks for one
+        institution, job shadowing and educational visits, and the documents, quotes and registration
+        details your application needs.</p>
+      <p class="meta">Sending individual staff to a scheduled week instead?
+        <a href="/join-a-course/">See the staff training courses →</a></p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Tell us about the project</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -99,7 +102,7 @@ export default function planAMobility() {
         <h2>When to get in touch</h2>
         <p>Before you submit, if you can. The pre-registration confirmation and the course description
           your application needs take a couple of working days to prepare, and we can confirm dates and
-          fees in writing so the Spanish part of the budget is costed rather than estimated.</p>
+          fees in writing so the Barcelona side of the budget is costed rather than estimated.</p>
         <p>After approval we act as the receiving partner: we deliver the programme, confirm every
           arrangement in writing and issue the documents your grant administration needs.</p>
         <p class="meta">If a participant has to withdraw: ${d.booking.cancellation.toLowerCase()}</p>
@@ -121,8 +124,8 @@ export default function planAMobility() {
   return page({
     path: '/plan-a-mobility/',
     current: '',
-    crumb: 'Plan a mobility',
-    title: 'Plan an Erasmus+ Mobility in Barcelona | SpainBcn-Programs',
-    description: 'For Erasmus+ coordinators and institutions: tailored training, student groups, job shadowing and educational visits in Barcelona, with the documents your grant administration needs.',
+    crumb: 'Institutional programmes',
+    title: 'Erasmus+ Institutional Programmes in Barcelona | SpainBcn-Programs',
+    description: 'For Erasmus+ coordinators: private course weeks, job shadowing and educational visits in Barcelona, with the documents, quotes and registration details your grant administration needs.',
   }, body);
 }

@@ -191,7 +191,7 @@ export default function barcelona() {
     path: '/barcelona/',
     current: 'barcelona',
     crumb: 'Barcelona',
-    title: 'Planning Your Erasmus+ Course in Barcelona | SpainBcn-Programs',
+    title: 'Planning Your Staff Training Week in Barcelona | SpainBcn-Programs',
     description: 'Where to stay, how to get from Barcelona airport to class, which transport ticket to buy for a five-day course, and where the two course venues are.',
   }, body);
 }

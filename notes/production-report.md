@@ -493,3 +493,73 @@ unchanged by the rewrite.
 5. **Accessibility at each course area.** Currently answered as "tell us and we will confirm before
    you commit". If step-free access is known for either area, it can be stated.
 6. **The Google reviews link** still points at a search, not a place listing.
+
+
+---
+
+## 21 August 2026 — positioning audit
+
+A separate pass on one question: does a new visitor know what is being sold and whether it is for
+them, within seconds?
+
+**It did not.** The home page led with "Erasmus+ courses and programmes in Barcelona" over "Staff
+training, student groups and tailored programmes" — which names no product, blends all three offers
+into one sentence, says nothing about who may attend, and leaves "Erasmus" doing work it cannot do.
+Someone searching "Erasmus Barcelona" for a student exchange had nothing to correct them. The most
+prominent button on every page said "Plan a mobility" — the secondary offer — and went to /contact/.
+
+### Verified before writing
+
+Every clause of the new positioning is SpainBcn's own claim, not an inference:
+
+| Claim | Source |
+| --- | --- |
+| "Erasmus+ staff mobility courses for teachers and staff of schools, VET centers, universities and other education organizations" | spainbcn.com home |
+| "for schools, universities, VET and adult-education organizations across Europe" | spainbcn.com/about.html |
+| "Erasmus+ KA1 eligible" | spainbcn.com/courses.html |
+| Non-teaching staff: school leaders, school support and administrative staff, university teaching, research and administrative staff, education administrators, coordinators | the audience lists in SpainBcn's structured course data |
+| Booking and invoicing privately rather than through an institution | spainbcn.com/terms.html |
+
+### Changes
+
+- **`offer` in `site-data.js`** — the product, the audience, the institution types, the staff scope
+  and the funding position, written once and drawn on in short forms elsewhere.
+- **Home** — H1 is now *Staff training courses in Barcelona*. The lede names Erasmus+ KA1 and the
+  five institution types; the line under it says funding is common but not required; the CTAs are
+  *See course dates* and *Choose a course*. The three offers are separated under "Three things we
+  run": staff training first, then student groups, then institutional programmes.
+- **Header CTA** — "Plan a mobility" → "Contact us", so the button's label matches where it goes and
+  stops promoting the secondary offer above the principal one.
+- **Navigation** — "Courses / Groups" → "Staff training / Student groups". Footer and breadcrumbs
+  match.
+- **Courses** — H1 is *Staff training courses in Barcelona*, with the KA1 context, the teaching and
+  non-teaching scope, and the funding note on the first screen.
+- **Dates** — *Staff training dates in Barcelona*, so the list cannot read as student-exchange dates.
+- **Your week** — *A staff training week in Barcelona*.
+- **Institutional programmes** — renamed from "Planning a mobility for your institution", and it now
+  points staff sending individuals to the Courses page. Student groups points there too.
+- **Titles and descriptions** rewritten on all nine public pages.
+
+### Sweeps
+
+"Erasmus+ week", "Erasmus programme" and "education programme(s)" no longer appear anywhere.
+"Mobility" survives in three places only: "Erasmus+ staff mobility" in the About history,
+"coordinators arranging an Erasmus+ mobility" where it is the reader's own word, and "Europass
+Mobility support", a document name. KA1 appears once in the home body and twice each on Courses,
+Dates and Your Week — each time naming the application a document is for, never as decoration.
+
+### The six visitors
+
+| Visitor | Answered on the first screen by |
+| --- | --- |
+| Teacher with Erasmus+ funding | "Erasmus+ KA1 courses for teachers and education staff" |
+| University administrator | "…from schools, universities…"; the scope line names administrative and support staff |
+| Non-teaching school employee | "teaching and non-teaching staff alike", on Home and Courses |
+| Institution paying directly | "Erasmus+ funding is common, but it is not required to attend" |
+| Parent or student searching "Erasmus Barcelona" | H1 "Staff training courses", audience "teachers and education staff" |
+| Coordinator with 20 students | Nav "Student groups"; second of the three routes, "arranged with the school" |
+
+### QA
+
+12 pages healthy at eight widths, no horizontal overflow at 390 or 1280, 41 external links resolve,
+privacy and network QA 27 of 27.

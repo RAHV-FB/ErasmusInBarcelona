@@ -47,8 +47,8 @@ export function portrait(person, size = 'people') {
 }
 
 const NAV = [
-  { href: '/join-a-course/', label: 'Courses', key: 'join' },
-  { href: '/bring-a-group/', label: 'Groups', key: 'group' },
+  { href: '/join-a-course/', label: 'Staff training', key: 'join' },
+  { href: '/bring-a-group/', label: 'Student groups', key: 'group' },
   { href: '/dates/', label: 'Dates', key: 'dates' },
   { href: '/your-week/', label: 'Your week', key: 'week' },
   { href: '/barcelona/', label: 'Barcelona', key: 'barcelona' },
@@ -67,7 +67,7 @@ function header(current) {
       <nav class="nav" id="site-nav" aria-label="Main">
         <ul class="nav__list">
           ${items}
-          <li class="nav__cta"><a class="btn" href="/contact/">Plan a mobility</a></li>
+          <li class="nav__cta"><a class="btn" href="/contact/">Contact us</a></li>
         </ul>
       </nav>
     </div>
@@ -87,9 +87,9 @@ function footer() {
         <div>
           <h2>Pages</h2>
           <ul>
-            <li><a href="/join-a-course/">Join a course</a></li>
-            <li><a href="/bring-a-group/">Bring a group</a></li>
-            <li><a href="/plan-a-mobility/">Plan a mobility</a></li>
+            <li><a href="/join-a-course/">Staff training courses</a></li>
+            <li><a href="/bring-a-group/">Student groups</a></li>
+            <li><a href="/plan-a-mobility/">Institutional programmes</a></li>
             <li><a href="/dates/">Dates</a></li>
             <li><a href="/your-week/">Your week</a></li>
             <li><a href="/barcelona/">Barcelona</a></li>

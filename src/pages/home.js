@@ -2,9 +2,12 @@ import { page, img, esc } from '../layout.js';
 import * as d from '../data/site-data.js';
 
 const ROUTES = [
-  { href: '/join-a-course/', label: 'I’m joining a course', note: 'Scheduled weeks for teachers and education staff.' },
-  { href: '/bring-a-group/', label: 'I’m bringing students', note: 'Programmes built around a school or VET group.' },
-  { href: '/plan-a-mobility/', label: 'I’m organising for my institution', note: 'Coordinators arranging staff or student mobility.' },
+  { href: '/join-a-course/', label: 'Staff training courses',
+    note: 'Scheduled weeks in Barcelona. Join one on your own or with colleagues.' },
+  { href: '/bring-a-group/', label: 'Student groups',
+    note: 'Programmes for secondary, high-school and VET groups, arranged with the school.' },
+  { href: '/plan-a-mobility/', label: 'Institutional programmes',
+    note: 'Private course weeks, job shadowing and educational visits for one institution.' },
 ];
 
 export default function home() {
@@ -34,13 +37,15 @@ export default function home() {
   <section class="container hero">
     <div class="cols cols--lead">
       <div>
-        <h1 class="hero__title">Erasmus+ courses and programmes in Barcelona</h1>
-        <p class="lede hero__lede">Staff training, student groups and tailored programmes run by
-          SpainBcn-Programs, in Barcelona since ${d.organisation.founded}.</p>
+        <h1 class="hero__title">Staff training courses in Barcelona</h1>
+        <p class="lede hero__lede">${d.offer.ka1}</p>
+        <p>Erasmus+ funding is common, but it is not required to attend.</p>
         <div class="btn-row">
-          <a class="btn" href="/dates/">See Barcelona dates</a>
-          <a class="btn btn--ghost" href="/join-a-course/">Find a course</a>
+          <a class="btn" href="/dates/">See course dates</a>
+          <a class="btn btn--ghost" href="/join-a-course/">Choose a course</a>
         </div>
+        <p class="meta" style="margin-top:20px">Run by SpainBcn-Programs, in Barcelona since
+          ${d.organisation.founded}.</p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.certificates, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
@@ -50,7 +55,7 @@ export default function home() {
 
   <section class="section section--cobalt">
     <div class="container">
-      <p class="eyebrow">Start here</p>
+      <p class="eyebrow">Three things we run</p>
       <ul class="routes">
         ${routes}
       </ul>
@@ -60,9 +65,9 @@ export default function home() {
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <h2>Upcoming weeks in Barcelona</h2>
-        <p>${d.dates.length} weeks are in the current calendar. Any course can also be requested for a
-          week that is not listed.</p>
+        <h2>Upcoming staff training weeks</h2>
+        <p>${d.dates.length} weeks are in the current Barcelona calendar. Any course can also be
+          requested for a week that is not listed.</p>
       </div>
       <div class="board">
         ${board}
@@ -82,6 +87,7 @@ export default function home() {
     <div class="container">
       <div class="section-head">
         <h2>Course areas</h2>
+        <p>${d.offer.staffScope} ${d.offer.funding}</p>
       </div>
       <div class="grid-cards grid-cards--three">
         ${areas}
@@ -93,7 +99,7 @@ export default function home() {
   <section class="section section--powder">
     <div class="container cols cols--lead">
       <div>
-        <h2>A typical course week</h2>
+        <h2>A typical staff training week</h2>
         <p>Class every morning, Monday to Friday, at 20 or 25 hours for the week. Two afternoons are
           the week’s cultural activities; the rest are free.</p>
         <p><a class="link-strong" href="/your-week/">What a week involves →</a></p>
@@ -133,7 +139,7 @@ export default function home() {
   return page({
     path: '/',
     current: '',
-    title: 'Erasmus+ Courses & Mobility in Barcelona | SpainBcn-Programs',
-    description: 'Erasmus+ staff training, student group programmes and tailored education mobility in Barcelona, run by SpainBcn-Programs since 1997.',
+    title: 'Erasmus+ Staff Training Courses in Barcelona | SpainBcn-Programs',
+    description: 'Erasmus+ KA1 staff training in Barcelona for teachers and education staff from schools, universities, VET and adult education. Erasmus+ funding is not required. Student groups and institutional programmes arranged separately.',
   }, body);
 }

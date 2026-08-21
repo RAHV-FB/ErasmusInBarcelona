@@ -28,8 +28,8 @@ export default function about() {
       <div>
         <h1>In Barcelona since 1997</h1>
         <p class="lede">${d.organisation.founders} opened a Spanish school for international students in
-          1997. It has taught in Barcelona ever since, and now runs Erasmus+ courses for education staff
-          and programmes for student groups.</p>
+          1997. It has taught in Barcelona ever since, and now runs Erasmus+ KA1 staff training for
+          teachers and education staff, along with programmes for student groups and institutions.</p>
         <p>Erasmus in Barcelona is the Barcelona site of SpainBcn-Programs.
           <a href="${d.spainbcn.catalogue}" rel="noopener">Full SpainBcn catalogue ↗</a></p>
       </div>

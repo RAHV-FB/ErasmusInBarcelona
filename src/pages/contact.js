@@ -62,6 +62,6 @@ export default function contact() {
     current: '',
     crumb: 'Contact',
     title: 'Contact the Barcelona Team | Erasmus in Barcelona',
-    description: 'Email, phone and WhatsApp for SpainBcn-Programs in Barcelona, and the sign-up form for a course week or a group.',
+    description: 'Email, phone and WhatsApp for SpainBcn-Programs in Barcelona, and the sign-up form for a staff training week, a student group or an institutional programme.',
   }, body);
 }

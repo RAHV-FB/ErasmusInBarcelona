@@ -54,6 +54,20 @@ eyebrows, day names, footer column headings. No coral full stop after headings. 
 for a link that leaves the site, and nowhere else. Numbered sections only where the sequence
 matters. Do not demonstrate the whole system on every page.
 
+## What is being sold
+
+The principal offer is **Erasmus+ KA1 staff training in Barcelona**, for teachers and education staff
+from schools, universities, VET centres, adult education and other education organisations, teaching
+and non-teaching alike. Erasmus+ funding is common but not required — institutions and individuals
+also pay directly. Student groups and institutional programmes are two separate offers, never blended
+into "education programmes".
+
+State that in full once, on the home page, from `offer` in `site-data.js`; everywhere else use the
+short form. "Erasmus+ week", "Erasmus programme" and bare "programme" are too vague to name the
+product. Use KA1 where it establishes the offer or names a document's purpose, then plain words —
+staff training, course, week, participant. Never imply we decide whether someone's grant covers a
+course; that is their national agency's call.
+
 ## Usefulness
 
 Every section answers a question a visitor actually has. Before keeping a paragraph, ask what

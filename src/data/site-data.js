@@ -120,6 +120,37 @@ export const pricing = {
 // (spainbcn.com/terms.html, reviewed there 4 August 2026). These are the
 // questions a participant or a finance office actually asks, so the site
 // answers them rather than sending people to read the terms.
+// ============================================================
+// What is being sold, and to whom. Stated in full once — on the home
+// page — and drawn on in shorter forms elsewhere. Every clause is
+// SpainBcn's own claim:
+//   "Erasmus+ staff mobility courses for teachers and staff of schools,
+//    VET centers, universities and other education organizations"
+//                                            — spainbcn.com
+//   "for schools, universities, VET and adult-education organizations"
+//                                            — spainbcn.com/about.html
+//   "Erasmus+ KA1 eligible"                  — spainbcn.com/courses.html
+//   Private booking, and invoicing the individual rather than an
+//   institution, is set out in spainbcn.com/terms.html.
+//
+// The funding line must not suggest we rule on anyone's grant. Whether a
+// particular participant's Erasmus+ application is approved is a matter
+// for their national agency, not for us.
+// ============================================================
+export const offer = {
+  product: 'Staff training courses in Barcelona',
+  audience: 'teachers and education staff',
+  institutions: 'schools, universities, VET centres, adult education and other education organisations',
+  ka1: 'Erasmus+ KA1 courses for teachers and education staff from schools, universities, VET centres, '
+    + 'adult education and other education organisations.',
+  staffScope: 'Courses are for teaching and non-teaching staff alike: classroom teachers, school '
+    + 'leaders, trainers, coordinators, and administrative and support staff, where the course suits '
+    + 'the role.',
+  funding: 'Erasmus+ funding is not required. Courses are also open to participants funded directly '
+    + 'by their institution or privately.',
+  notStudents: 'Programmes for student groups are arranged separately, with the school.',
+};
+
 export const booking = {
   steps: [
     'You write with the course and the week. We reply within two working days.',
