@@ -103,20 +103,146 @@
     });
   }
 
+  /* ---------- the sign-up form, and only ever after permission ---------- */
+
+  var gate = document.querySelector('[data-form-gate]');
+  var mountPoint = document.getElementById('form-embed');
+  var instance = null;
+
+  var loadForm = function () {
+    if (!gate || !mountPoint || instance) return;
+    var id = gate.getAttribute('data-form-id');
+    var host = gate.getAttribute('data-form-host');
+    var answerField = gate.getAttribute('data-form-answer-field');
+
+    gate.setAttribute('data-loading', 'true');
+
+    var script = document.querySelector('script[data-formsapp]');
+    var start = function () {
+      try {
+        // The standard embed attaches to an element carrying the form id.
+        var mount = document.createElement('div');
+        mount.setAttribute('formsappId', id);
+        mountPoint.replaceChildren(mount);
+
+        var options = { width: '100%', height: '640px' };
+        // The planner's own answers, into the field that asks for them.
+        // Never a name, an email address or anything the visitor typed.
+        if (answerField && enquiryLines.length) {
+          options.answers = {};
+          options.answers[answerField] = encodeURIComponent(enquiryLines.join(' · '));
+        }
+        instance = new window.formsapp(id, 'standard', options, host);
+        gate.hidden = true;
+        gate.removeAttribute('data-loading');
+      } catch (e) {
+        failForm();
+      }
+    };
+
+    if (window.formsapp) { start(); return; }
+
+    if (!script) {
+      script = document.createElement('script');
+      script.src = 'https://cdn.formsapp.io/embed.js';
+      script.async = true;
+      script.setAttribute('data-formsapp', '');
+      script.addEventListener('load', start);
+      script.addEventListener('error', failForm);
+      document.head.appendChild(script);
+    } else {
+      script.addEventListener('load', start);
+    }
+  };
+
+  function failForm() {
+    if (!gate) return;
+    gate.removeAttribute('data-loading');
+    var fallback = gate.querySelector('[data-form-failed]');
+    if (fallback) fallback.hidden = false;
+    var action = gate.querySelector('[data-privacy-set]');
+    if (action) action.hidden = true;
+  }
+
+  var unloadForm = function () {
+    if (instance && instance.destroy) {
+      try { instance.destroy(); } catch (e) {}
+    }
+    instance = null;
+    if (mountPoint) mountPoint.replaceChildren();
+    if (gate) gate.hidden = false;
+  };
+
+  /* ---------- privacy choices ---------- */
+
+  var STORE = 'eib-privacy-v1';
+
+  var readPrivacy = function () {
+    try {
+      var p = JSON.parse(localStorage.getItem(STORE) || 'null');
+      return p && typeof p.formsApp === 'boolean' ? p : null;
+    } catch (e) { return null; }
+  };
+
+  var writePrivacy = function (formsApp) {
+    var value = { version: 1, formsApp: formsApp, decidedAt: new Date().toISOString() };
+    try { localStorage.setItem(STORE, JSON.stringify(value)); } catch (e) {}
+    document.documentElement.classList.add('privacy-decided');
+    document.documentElement.classList.toggle('formsapp-allowed', formsApp);
+    return value;
+  };
+
+  var banner = document.querySelector('[data-privacy-banner]');
+  var dialog = document.querySelector('[data-privacy-dialog]');
+  var stateLabel = document.querySelector('[data-privacy-state]');
+
+  var showState = function () {
+    var p = readPrivacy();
+    if (stateLabel) stateLabel.textContent = p && p.formsApp ? 'Allowed' : 'Not allowed';
+    if (dialog) {
+      dialog.querySelectorAll('[data-privacy-set]').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(!!p && String(p.formsApp) === b.getAttribute('data-privacy-set')));
+      });
+    }
+  };
+
+  if (banner && !readPrivacy()) banner.hidden = false;
+  showState();
+
+  document.querySelectorAll('[data-privacy-set]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var allow = button.getAttribute('data-privacy-set') === 'true';
+      writePrivacy(allow);
+      if (banner) banner.hidden = true;
+      showState();
+      if (allow) loadForm();
+      else unloadForm();
+    });
+  });
+
+  document.querySelectorAll('[data-privacy-open]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (!dialog) return;
+      showState();
+      if (dialog.showModal) dialog.showModal(); else dialog.setAttribute('open', '');
+    });
+  });
+
+  document.querySelectorAll('[data-privacy-close]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (!dialog) return;
+      if (dialog.close) dialog.close(); else dialog.removeAttribute('open');
+    });
+  });
+
   /* ---------- contact: carry the planner's answers over ---------- */
 
+  var enquiryLines = [];
   var summary = document.querySelector('[data-enquiry-summary]');
   if (summary) {
-    var LABELS = {
-      group: 'Who is coming',
-      size: 'Group size',
-      focus: 'Subject',
-      duration: 'Length',
-      when: 'Dates',
-    };
+    var LABELS = { group: 'Group', size: 'Size', focus: 'Subject', duration: 'Length', when: 'Dates' };
     var params = new URLSearchParams(window.location.search);
     var list = summary.querySelector('dl');
-    var lines = [];
 
     Object.keys(LABELS).forEach(function (key) {
       var value = params.get(key);
@@ -127,52 +253,20 @@
       var dd = document.createElement('dd');
       dd.textContent = value;
       list.append(dt, dd);
-      lines.push(LABELS[key] + ': ' + value);
+      enquiryLines.push(LABELS[key] + ': ' + value);
     });
 
-    if (lines.length) {
+    if (enquiryLines.length) {
       summary.hidden = false;
-      // Carry the same answers into the mail link, so nobody types them twice.
       document.querySelectorAll('[data-mail-prefill]').forEach(function (a) {
         a.setAttribute('href', a.getAttribute('href').split('?')[0] +
           '?subject=' + encodeURIComponent('Group enquiry') +
-          '&body=' + encodeURIComponent(lines.join('\n') + '\n\n'));
+          '&body=' + encodeURIComponent(enquiryLines.join('\n') + '\n\n'));
       });
     }
   }
 
-  /* ---------- the sign-up form, loaded only when asked ---------- */
-
-  var formButton = document.querySelector('[data-load-form]');
-  if (formButton) {
-    formButton.addEventListener('click', function () {
-      var target = document.getElementById('form-embed');
-      var id = formButton.getAttribute('data-form-id');
-      var host = formButton.getAttribute('data-form-host');
-      formButton.disabled = true;
-      formButton.textContent = 'Loading the form…';
-
-      var mount = document.createElement('div');
-      mount.setAttribute('formsappId', id);
-      target.replaceChildren(mount);
-
-      var s = document.createElement('script');
-      s.src = 'https://cdn.formsapp.io/embed.js';
-      s.async = true;
-      s.onload = function () {
-        try {
-          new window.formsapp(id, 'standard', { width: '100%', height: '640px' }, host);
-          formButton.remove();
-        } catch (e) {
-          target.textContent = 'The form could not be loaded. Please write to us instead.';
-        }
-      };
-      s.onerror = function () {
-        formButton.disabled = false;
-        formButton.textContent = 'Load the form';
-        target.textContent = 'The form could not be loaded. Please write to us instead.';
-      };
-      document.head.appendChild(s);
-    });
-  }
+  // Last, so an already-allowed form is built with the planner's answers
+  // rather than before they have been read out of the URL.
+  if (gate && document.documentElement.classList.contains('formsapp-allowed')) loadForm();
 }());

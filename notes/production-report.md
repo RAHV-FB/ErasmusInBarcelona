@@ -178,3 +178,125 @@ consent banner is gone, because there is nothing left to consent to on page view
    instead of answering it.
 6. **The last four course weeks** were verified against the organisation's own sheet; SpainBcn's
    own dates page was rate-limiting requests and could not be read as a second source.
+
+---
+
+## Differentiation, privacy and copy pass — 2026-08-21
+
+### Courses page: the main structural change
+
+It was a subject list with a description and programme links under each — the same shape as a
+catalogue page on SpainBcn, with fewer programmes. It is now a Barcelona directory: a jump index of
+the six areas, then one row per area in three zones — the subject and what it covers, the programme
+names (each linking to its own entry on SpainBcn), and **the next scheduled Barcelona weeks for that
+subject**, read from the same `dates` data the dates page uses. Areas with no scheduled week say
+"Dates on request" and link to the enquiry, because other dates open on request.
+
+That third column is the difference: SpainBcn answers "what courses exist", this page answers "when
+can I do this in Barcelona". Catalogue totals ("all 39 programmes across 14 subject areas") are gone
+— those are SpainBcn's numbers to keep current, not ours.
+
+### Page structures no longer share one template
+
+Home is routes and upcoming weeks; Courses is the directory; Groups is the planner; Dates is the
+board; Your week is the timetable; Barcelona is venue and travel facts; Mobility is a two-state
+project layout (already funded / still preparing) plus the document list; About is history and
+people; Contact is the form. Three pages no longer end with a cobalt block: Groups ends at the
+planner, Barcelona at a link to the dates, About at the organisation details.
+
+### Copy removed
+
+"A real person replies…" (now "We normally reply within two working days", used once per page at
+most) · "Six ways into the catalogue…" · "The full programme descriptions live on SpainBcn" · "Your
+answers travel with you to the enquiry" · "Nothing is stored on your device — the answers travel in
+the link" · "Reviews are published by the people who wrote them, on Google" (now just the rating and
+count) · "Participants meet the same small Barcelona team during the week" · "This site covers the
+courses and education programmes we run in Barcelona…" · the whole forms.app explanation on the
+contact page. Headings moved from questions to statements where the question added nothing:
+"Programme formats", "Choosing a week", "Your first day", "Arriving", "Reviews", "How the courses
+run". Three question headings remain, all on pages where they read as an actual question to the
+visitor.
+
+### Fees
+
+"What the fee does not cover" is gone. The fee block now reads: €400 for 20 hours, €450 for 25, then
+"The fee covers the course, materials, the week's two cultural activities and your certificate of
+attendance", then one neutral line about travel and accommodation. The second column is "Documents
+for your mobility" rather than a list of exclusions, and the Erasmus+ budget-line explanation is off
+the pricing block entirely.
+
+### Captions
+
+Nine visible captions became three, all of which identify a place rather than narrate the picture:
+"Parc de la Ciutadella, Barcelona", "Plaça de la Seu, Barcelona", "The classroom at Carrer del Pare
+Lainez 19", plus "Barceloneta" and "María Ángeles and Miriam, 1997". Alt text is unchanged and still
+describes every photograph.
+
+### Analytics — Umami
+
+Umami Cloud, the same provider the organisation already uses for spainbcn.com. Configured in
+`src/data/analytics.js`, one place, and emitted only when a website id is supplied:
+
+    data-exclude-search="true"   query strings never recorded
+    data-exclude-hash="true"     fragments never recorded
+    data-do-not-track="true"     browsers asking not to be tracked are not counted
+    data-domains="erasmusinbarcelona.com,www.erasmusinbarcelona.com"
+
+No Distinct ID, no `umami.identify()`, no session replay, no custom events, no form or planner data.
+Verified by capturing the actual request the tracker makes (see QA below).
+
+**Needs the owner:** this site needs its own website id in the organisation's Umami Cloud account —
+reusing spainbcn.com's id would mix the two sites together. Add the website, then set the repository
+variable `UMAMI_WEBSITE_ID`. Until then the build ships no tracker and says so.
+
+### The sign-up form — forms.app
+
+Nothing is requested from forms.app until a visitor allows it: no script, no iframe, no preconnect,
+no cookie. The contact page shows a drawing of the real form's four fields — shapes only, `inert`
+and `aria-hidden`, so nothing focusable and nothing to type into — with one line of permission text
+and a button. After permission the skeleton, the explanation and the button all disappear and only
+the form remains. The choice is stored as `eib-privacy-v1` in local storage and read before first
+paint, so a returning visitor with permission sees the form directly, with no flash of the gate. The
+form area reserves the embed's height, so nothing moves when it mounts.
+
+Withdrawing permission in "Privacy choices" unmounts the embed and restores the gate, and later
+visits do not load it. Cookies already set on forms.app's own domain can only be cleared in the
+browser — said once, in the cookie policy, not in the contact flow.
+
+The planner's answers are passed into the form's own "What course, location and date are you
+interested in?" field using the embed's documented `answers` option. Names, email addresses and
+anything the visitor types are never passed.
+
+**Audited from the published form definition:** four questions (full name, email, course/location/
+date, comments); no CAPTCHA forced; no analytics, pixel, tag-manager or webhook integrations
+configured; its own cookie modal disabled. The form could not be rendered in this sandbox — the
+browser here cannot reach forms.app — so a visual check in a normal browser is the one thing left.
+
+### Privacy and cookies pages
+
+Both rewritten in the present tense for the stack as it now works: server logs, the local privacy
+preference, Umami (what it records, that it uses no cookies, that IP is used transiently and not
+stored, that query strings and fragments are excluded, no Distinct ID, no replay, legitimate
+interest under Article 6(1)(f)), and forms.app (consent before loading, what it receives, its own
+cookies, its policies linked, consent under Article 6(1)(a) plus Article 22.2 LSSI-CE, and the
+contract basis for the enquiry itself). Both meta descriptions updated: neither says "no analytics"
+or "sets no cookies" any more.
+
+### Network QA — measured, not assumed
+
+Both third parties were intercepted locally so their real requests could be observed.
+
+| Scenario | Result |
+| --- | --- |
+| Fresh visit, no choice | Umami script requested · **zero forms.app requests** · zero cookies · nothing in local storage · banner shown · skeleton gate shown |
+| "Necessary only" | Banner gone · preference stored `formsApp:false` · **still zero forms.app requests** · Umami still running |
+| "Allow sign-up form" | forms.app requested **only after the click** (`cdn.formsapp.io/embed.js`) · gate and skeleton removed · iframe mounted |
+| Return visit with permission | No banner · form loads automatically · gate never visible |
+| Withdrawal | Embed removed · gate restored · preference `false` · later visits do not load it |
+| Umami payload, from a URL carrying planner answers and a fragment | `url` sent as `/contact/` — no query string, no fragment · no planner answers anywhere in the payload · no Distinct ID · no cookies set |
+
+### Everything else
+
+`npm run check` passes on all 12 pages: metadata, heading order, alt text, dead links, third-party
+requests on load, tap targets and horizontal overflow at 320, 375, 390, 430, 768, 1024, 1280 and
+1440 px. A scan of the built HTML for the 30 phrases this pass was asked to remove finds none.

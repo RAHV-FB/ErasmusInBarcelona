@@ -27,7 +27,7 @@ export default function home() {
 
   const areas = d.courseAreas.map((a) => `<div>
           <h3><a href="/join-a-course/#${a.id}">${esc(a.label)}</a></h3>
-          <p>${esc(a.desc)}</p>
+          <p>${esc(a.short)}</p>
         </div>`).join('\n        ');
 
   const people = d.team.core.map((p) => `<li>
@@ -51,7 +51,6 @@ export default function home() {
       </div>
       <figure class="media media--photo">
         ${img(d.images.certificates, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
-        <figcaption>The last day of a course week</figcaption>
       </figure>
     </div>
   </section>
@@ -89,9 +88,8 @@ export default function home() {
     <div class="container">
       <div class="section-head">
         <h2>What do you want to work on?</h2>
-        <p>Six ways into the catalogue. The full programme descriptions live on SpainBcn.</p>
       </div>
-      <div class="grid-cards">
+      <div class="grid-cards grid-cards--three">
         ${areas}
       </div>
       <p style="margin-top:28px"><a class="link-strong" href="/join-a-course/">See the Barcelona courses →</a></p>
@@ -111,7 +109,6 @@ export default function home() {
       </div>
       <figure class="media media--photo">
         ${img(d.images.classGroup, { sizes: '(min-width: 860px) 48vw, 100vw' })}
-        <figcaption>A morning session in Barcelona</figcaption>
       </figure>
     </div>
   </section>
@@ -135,9 +132,9 @@ export default function home() {
     <div class="container cols cols--split">
       <div>
         <h2>The people behind your week</h2>
-        <p>Miriam coordinates the courses, Adriana handles the paperwork, and the trainers teach in their own
-          subject areas. Participants meet the same small Barcelona team during the week.</p>
-        <p class="meta"><a href="${d.reviews.url}" rel="noopener">${d.reviews.rating} from ${d.reviews.count} reviews on Google ↗</a></p>
+        <p>Miriam coordinates the courses and Adriana handles registration and paperwork. The trainers
+          teach in their own subject areas.</p>
+        <p class="meta"><a href="${d.reviews.url}" rel="noopener">${d.reviews.rating}/5 from ${d.reviews.count} Google reviews ↗</a></p>
         <p><a class="link-strong" href="/about/">Meet the team →</a></p>
       </div>
       <div>

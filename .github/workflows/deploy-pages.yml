@@ -70,6 +70,11 @@ jobs:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
           SITE_URL: ${{ steps.pages.outputs.base_url }}
           PROTOTYPE: '1'
+          # Set the repository variable UMAMI_WEBSITE_ID to the website id from
+          # the organisation's Umami Cloud account. Without it the build ships
+          # no tracker. The tracker only reports from the production domains, so
+          # this prototype never counts towards the real figures either way.
+          UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
 
       - name: Check the build looks right
         run: |

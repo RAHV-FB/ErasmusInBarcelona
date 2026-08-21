@@ -15,10 +15,15 @@ anything.
 - **CSS decides layout, not JavaScript.** `src/assets/js/site.js` handles the menu, the date
   filter, the group planner and loading the sign-up form. Nothing else. No React, Vue, Tailwind,
   Bootstrap, jQuery or animation libraries.
-- **Nothing third-party on page view.** No fonts, analytics, tag managers, maps, CDNs, cookies or
-  local storage. The forms.app embed on `/contact/` loads only when a visitor presses the button
-  that asks for it. If that ever changes, `/privacy/` and `/cookies/` change with it in the same
-  commit.
+- **Two third parties, both on a leash.** Umami Cloud runs on every page: cookie-free, query
+  strings and fragments excluded, do-not-track respected, no Distinct ID, no replay, no custom
+  events, configured once in `src/data/analytics.js`. forms.app loads only after the visitor allows
+  it, and never before — no script, no iframe, no preconnect. Nothing else may be added. If either
+  changes, `/privacy/` and `/cookies/` change with it in the same commit, and the network behaviour
+  is re-checked rather than assumed.
+- **Never send anything personal to analytics.** No names, emails, form contents, planner answers,
+  or identifiers. The planner's answers travel in the query string, which is exactly why the
+  tracker excludes query strings.
 - **Images are local.** Originals stay in `uploads/` and `source-photos/` (never published);
   `tools/build-images.mjs` produces the WebP files in `src/assets/images` under descriptive names.
   No hotlinking, ever.
@@ -48,6 +53,13 @@ for a link that leaves the site, and nowhere else. Numbered sections only where 
 matters. Do not demonstrate the whole system on every page.
 
 ## Writing
+
+Explain the service, never the website. No sentence whose subject is this page, this site, this
+link, the form, the catalogue or where the answers travel. Technical and legal explanation belongs
+on `/privacy/`, not in the middle of a conversion page.
+
+A photograph does not need a caption because it exists. Caption only what a reader cannot see —
+a place, a date — and keep the alt text descriptive either way.
 
 Say something specific or say nothing. No marketing language, no conversational asides that
 announce their own honesty, no tricolons, no "designed to", no "not just X but Y", no

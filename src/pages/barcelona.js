@@ -12,7 +12,7 @@ export default function barcelona() {
 
   <figure class="media media--band">
     ${img(d.images.cathedral, { sizes: '100vw', eager: true })}
-    <figcaption class="container">A course group in the square in front of the cathedral</figcaption>
+    <figcaption class="container">Plaça de la Seu, Barcelona</figcaption>
   </figure>
 
   <section class="section">
@@ -31,7 +31,7 @@ export default function barcelona() {
       </ul>
       <figure class="media media--wide" style="margin-top:28px">
         ${img(d.images.officeClassroom, { sizes: '(min-width: 860px) 60vw, 100vw' })}
-        <figcaption>The classroom at the office in Gràcia</figcaption>
+        <figcaption>The classroom at Carrer del Pare Lainez 19</figcaption>
       </figure>
     </div>
   </section>
@@ -39,7 +39,7 @@ export default function barcelona() {
   <section class="section section--powder">
     <div class="container cols cols--split">
       <div>
-        <h2>Getting here</h2>
+        <h2>Arriving</h2>
         <p>Fly into Barcelona–El Prat (BCN). An airport bus, a train and taxis all run from the terminals into the
           centre, and the office is a short metro ride from there.</p>
         <p>Around the city, the metro is the simplest way to reach both venues: L5 Sagrada Família or L4/L5
@@ -74,20 +74,15 @@ export default function barcelona() {
           you at something near the venue.</p>
         <figure class="media media--photo" style="margin-top:18px">
           ${img(d.images.barceloneta, { sizes: '(min-width: 860px) 45vw, 100vw' })}
-          <figcaption>The Barceloneta seafront, a few streets from the seaside classrooms</figcaption>
+          <figcaption>Barceloneta</figcaption>
         </figure>
       </div>
     </div>
   </section>
 
-  <section class="section section--cobalt">
+  <section class="section section--rule">
     <div class="container">
-      <h2>Still deciding on a week?</h2>
-      <p class="lede">The scheduled Barcelona weeks are on the dates page, and other dates open on request.</p>
-      <div class="btn-row">
-        <a class="btn" href="/dates/">See the dates</a>
-        <a class="btn btn--ghost" href="/your-week/">What a week looks like</a>
-      </div>
+      <p><a class="link-strong" href="/dates/">See Barcelona course dates →</a></p>
     </div>
   </section>`;
 

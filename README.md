@@ -7,6 +7,7 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 
 ```bash
 npm install          # Playwright and sharp, both dev-only
+UMAMI_WEBSITE_ID=… npm run build   # with analytics; without it, no tracker ships
 npm start            # build, then serve on http://127.0.0.1:4173
 npm run build        # build dist/ only
 npm run check        # build, serve, and audit every page in a browser
@@ -80,11 +81,19 @@ page, the courses page and the dates page all read from it.
 
 ## Third parties
 
-The site loads nothing from anyone else on page view: no fonts, no analytics, no tag manager, no
-CDN, no cookies, no local storage. The one exception is the sign-up form on `/contact/`, which is
-hosted by forms.app and is requested only when a visitor presses the button asking for it. That is
-what `/privacy/` and `/cookies/` describe; if a third party is ever added, both pages have to
-change with it.
+Two, and no more.
+
+**Umami Cloud** runs on every page. It is configured in `src/data/analytics.js`: cookie-free, query
+strings and fragments excluded, do-not-track respected, reporting only from the production domains.
+It needs a website id — this site's own, not spainbcn.com's — supplied as `UMAMI_WEBSITE_ID`.
+Without it the build ships no tracker and says so.
+
+**forms.app** provides the sign-up form on `/contact/` and is requested only after the visitor
+allows it. Their choice is stored as `eib-privacy-v1` in local storage and read before first paint.
+"Privacy choices" in the footer changes it; withdrawing unmounts the embed.
+
+`/privacy/` and `/cookies/` describe exactly this. If either service changes, those pages change in
+the same commit — and the network behaviour gets re-checked, not assumed.
 
 ## Before publishing
 

@@ -30,7 +30,6 @@ export default function yourWeek() {
       </div>
       <figure class="media media--photo">
         ${img(d.images.workingSession, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>A working session during a course week</figcaption>
       </figure>
     </div>
   </section>
@@ -44,8 +43,8 @@ export default function yourWeek() {
         <li><span class="facts__term">Registration</span><span class="facts__value">Write to us with the course and
           the week you want. A question is not a booking, and we confirm your place in writing.</span></li>
         <li><span class="facts__term">Your venue</span><span class="facts__value">${d.contact.venueNote}</span></li>
-        <li><span class="facts__term">Accommodation</span><span class="facts__value">You book your own; it is not part
-          of the course fee. Under Erasmus+, travel and accommodation come from your grant's own budget lines.</span></li>
+        <li><span class="facts__term">Travel and stay</span><span class="facts__value">You arrange your travel and accommodation
+          separately. We confirm the course venue before you travel.</span></li>
         <li><span class="facts__term">Paperwork</span><span class="facts__value">Tell us what your institution needs —
           invitation letter, acceptance letter or course description — and we send it before you travel.</span></li>
       </ul>
@@ -69,7 +68,7 @@ export default function yourWeek() {
   <section class="section">
     <div class="container cols cols--split">
       <div>
-        <h2>The first day</h2>
+        <h2>Your first day</h2>
         <p>You meet the trainer and the rest of the group at the venue confirmed with your registration.
           ${d.schedule.materials}</p>
         <p>${d.schedule.groupSize}</p>

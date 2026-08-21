@@ -36,7 +36,7 @@ export const contact = {
   get address() { return `${this.street}, ${this.postcode} ${this.city}`; },
   officeNote: 'Five minutes on foot from the Sagrada Família. Metro L5 Sagrada Família, L4/L5 Verdaguer.',
   venueNote: 'Classes also run at Barceloneta, by the sea. We confirm which venue your week uses with your registration.',
-  replyTime: 'A real person replies within two working days, usually sooner.',
+  replyTime: 'We normally reply within two working days.',
 };
 
 // Only the accounts the organisation currently publishes.
@@ -59,10 +59,31 @@ export const spainbcn = {
   barcelona: 'https://www.spainbcn.com/barcelona.html',
   about: 'https://www.spainbcn.com/about.html',
   contact: 'https://www.spainbcn.com/contact.html',
-  // The organisation's sign-up form, hosted by forms.app. Loaded only
-  // when a visitor asks for it — see src/assets/js/site.js.
-  formsAppId: '6a6cadc0a2c530505fdac56f',
-  formsAppHost: 'https://rear0ghq.forms.app',
+};
+
+// ============================================================
+// The organisation's sign-up form, hosted by forms.app. Nothing is
+// requested from forms.app until a visitor allows it.
+//
+// The form itself ("Sign Up Now!") asks four questions; the ids are
+// its own, read from the published form definition, and are used to
+// pass the group planner's answers into the matching field.
+// ============================================================
+export const formsApp = {
+  id: '6a6cadc0a2c530505fdac56f',
+  host: 'https://rear0ghq.forms.app',
+  privacy: 'https://forms.app/en/privacy-policy',
+  cookies: 'https://forms.app/en/cookie-policy',
+  fields: {
+    name: { id: '6a6cae069a7b7458ace74c76', label: 'Full name', type: 'name' },
+    email: { id: '6a6cae229a7b7458ace74c77', label: 'Email', type: 'email' },
+    interest: {
+      id: '6a6cae849a7b7458ace74c7f',
+      label: 'What course, location and date are you interested in?',
+      type: 'line',
+    },
+    message: { id: '6a6cae579a7b7458ace74c79', label: 'Any questions or comments?', type: 'block' },
+  },
 };
 
 export const venues = [
@@ -75,8 +96,8 @@ export const venues = [
 export const pricing = {
   currency: '€',
   barcelona: { hours20: 400, hours25: 450 },
-  includes: 'Course materials and the week\'s two cultural activities are included.',
-  excludes: 'Travel, accommodation and meals are not part of the fee. Under Erasmus+ they come from the grant\'s own budget lines.',
+  includes: 'The fee covers the course, materials, the week\'s two cultural activities and your certificate of attendance.',
+  travel: 'Travel, accommodation and meals are arranged separately, by you or by your institution.',
   groups: 'A private programme or a group project is quoted for the group: tell us the group and we confirm the fee and the invoicing in writing before you commit.',
 };
 
@@ -126,9 +147,9 @@ export const courseAreas = [
   {
     id: 'ai',
     label: 'AI and digital teaching',
-    desc: 'Digital tools and AI you can use for planning, materials and feedback, tried on your own lessons.',
+    short: 'AI, digital tools and classroom technology.',
+    desc: 'Digital tools and AI for planning, materials, feedback and classroom work.',
     subjects: [{ name: 'AI & ICT in Education', url: SB + 'group-ai-ict.html' }],
-    total: 9,
     programmes: [
       { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
       { name: 'School AI & ICT', url: SB + 'group-ai-ict.html#school-ai-and-ict' },
@@ -139,13 +160,13 @@ export const courseAreas = [
   {
     id: 'english',
     label: 'English and communication',
-    desc: 'Your own English, how you teach in it, and speaking in front of a room.',
+    short: 'Language, methodology and presentation.',
+    desc: 'Your own English, teaching through it, and speaking in front of a room.',
     subjects: [
       { name: 'English', url: SB + 'group-english.html' },
       { name: 'Presentation & Communication', url: SB + 'group-presentation.html' },
       { name: 'CLIL & Bilingual Teaching', url: SB + 'group-clil.html' },
     ],
-    total: 8,
     programmes: [
       { name: 'General English by level', url: SB + 'group-english.html#general-english-by-level' },
       { name: 'Teaching Methodology in English', url: SB + 'group-english.html#teaching-methodology-in-english' },
@@ -156,9 +177,9 @@ export const courseAreas = [
   {
     id: 'spanish',
     label: 'Spanish',
-    desc: 'Spanish in a small group, with the city and its history used as the material.',
+    short: 'Language, culture and teaching.',
+    desc: 'Spanish in a small group, with the city and its history as the material.',
     subjects: [{ name: 'Spanish', url: SB + 'group-spanish.html' }],
-    total: 3,
     programmes: [
       { name: 'General Spanish by level', url: SB + 'group-spanish.html#general-spanish-by-level' },
       { name: 'Culture & History in Spanish', url: SB + 'group-spanish.html#culture-and-history-in-spanish' },
@@ -168,12 +189,12 @@ export const courseAreas = [
   {
     id: 'inclusion',
     label: 'Inclusion and special needs',
-    desc: 'Teaching learners with special educational needs, and classrooms where a mixed group works.',
+    short: 'SEN, inclusion and classroom support.',
+    desc: 'Special educational needs, and classrooms where a mixed group works.',
     subjects: [
       { name: 'Special Needs Education (SEN)', url: SB + 'group-sen.html' },
       { name: 'Inclusion & Diversity', url: SB + 'group-inclusion.html' },
     ],
-    total: 6,
     programmes: [
       { name: 'Special Needs Education', url: SB + 'group-sen.html#special-needs-education' },
       { name: 'Digital tools for SEN', url: SB + 'group-sen.html#digital-tools-for-sen' },
@@ -184,12 +205,12 @@ export const courseAreas = [
   {
     id: 'wellbeing',
     label: 'Wellbeing and classroom practice',
-    desc: 'Staying well in a demanding job, and the routines that keep a class calm and learning.',
+    short: 'Wellbeing, mindfulness and classroom management.',
+    desc: 'Staying well in the job, and the routines that keep a class calm and learning.',
     subjects: [
       { name: 'Wellbeing for Educators', url: SB + 'group-wellbeing.html' },
       { name: 'Classroom Management', url: SB + 'group-classroom.html' },
     ],
-    total: 4,
     programmes: [
       { name: 'Mental Health & Well-being for Teachers', url: SB + 'group-wellbeing.html#mental-health-and-well-being-for-teachers' },
       { name: 'Yoga & Meditation', url: SB + 'group-wellbeing.html#yoga-and-meditation' },
@@ -199,7 +220,8 @@ export const courseAreas = [
   },
   {
     id: 'creative',
-    label: 'Creative, outdoor and citizenship',
+    label: 'Creative and experiential learning',
+    short: 'Art, outdoor learning, sustainability and citizenship.',
     desc: 'Art, field work, sustainability and human rights as ways into other subjects.',
     subjects: [
       { name: 'Art & Creative Teaching', url: SB + 'group-art.html' },
@@ -208,7 +230,6 @@ export const courseAreas = [
       { name: 'Citizenship & Human Rights', url: SB + 'group-citizenship.html' },
       { name: 'Leadership & Careers', url: SB + 'group-leadership.html' },
     ],
-    total: 9,
     programmes: [
       { name: 'Art-Based Teaching', url: SB + 'group-art.html#art-based-teaching' },
       { name: 'Outdoor Learning, basics', url: SB + 'group-outdoor.html#outdoor-learning-basics' },
@@ -218,7 +239,6 @@ export const courseAreas = [
   },
 ];
 
-export const catalogue = { areas: 14, programmes: 39 };
 
 // ============================================================
 // COURSE WEEKS IN BARCELONA

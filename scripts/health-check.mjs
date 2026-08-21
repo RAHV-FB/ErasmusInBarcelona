@@ -46,8 +46,31 @@ for (let i = 0; i < 60; i++) {
 }
 if (SHOTS) fs.mkdirSync(SHOT_DIR, { recursive: true });
 
-const browser = await chromium.launch(
-  process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+// Playwright normally finds its own browser. When the installed
+// Playwright and the browsers on disk are different versions — a
+// container with a pre-seeded browser cache — it looks for a build that
+// isn't there, so fall back to whichever Chromium is present.
+function findChromium() {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+  const dir = process.env.PLAYWRIGHT_BROWSERS_PATH;
+  if (!dir || !fs.existsSync(dir)) return undefined;
+  const candidates = fs.readdirSync(dir)
+    .filter((n) => n.startsWith('chromium'))
+    .map((n) => [path.join(dir, n, 'chrome-linux', 'chrome'),
+      path.join(dir, n, 'chrome-linux', 'headless_shell')])
+    .flat()
+    .filter((f) => fs.existsSync(f));
+  return candidates[0];
+}
+
+let browser;
+try {
+  browser = await chromium.launch();
+} catch (err) {
+  const executablePath = findChromium();
+  if (!executablePath) throw err;
+  browser = await chromium.launch({ executablePath });
+}
 
 let problems = 0;
 const titles = new Map();
@@ -102,7 +125,10 @@ for (const route of ROUTES) {
       links: [...new Set([...document.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')))],
       blankNoRel: [...document.querySelectorAll('a[target="_blank"]')]
         .filter((a) => !(a.rel || '').includes('noopener')).map((a) => a.getAttribute('href')),
+      // Inline controls sitting in a line of text are exempt from the target
+      // size rule (WCAG 2.5.8 "inline"), which is what .linkish is.
       smallTargets: [...document.querySelectorAll('a.btn, button, .chip, .nav-toggle')]
+        .filter((el) => !el.classList.contains('linkish'))
         .filter((el) => { const r = el.getBoundingClientRect(); return r.width && (r.height < 44 || r.width < 44); })
         .map((el) => el.textContent.trim().slice(0, 24)),
       storage: (() => { try { return Object.keys(localStorage).length + Object.keys(sessionStorage).length; } catch { return -1; } })(),

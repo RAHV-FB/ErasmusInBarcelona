@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { SITE_URL, BASE_PATH, PROTOTYPE } from './src/layout.js';
+import { analytics } from './src/data/analytics.js';
 import * as data from './src/data/site-data.js';
 import { REDIRECTS } from './src/data/redirects.js';
 
@@ -127,3 +128,7 @@ fs.writeFileSync(path.join(DIST, '.nojekyll'), '');
 console.log(`${count} pages → ${DIST}/${BASE_PATH ? ` (base path ${BASE_PATH})` : ''}${PROTOTYPE ? ' [prototype: noindex]' : ''}`);
 console.log(`${urls.length} URLs in sitemap.xml · ${data.dates.length} course weeks · ` +
   `${data.courseAreas.length} subject areas`);
+console.log(analytics.websiteId
+  ? `analytics: ${analytics.provider}, website ${analytics.websiteId.slice(0, 8)}…, reporting only from ${analytics.domains}`
+  : 'analytics: no tracker in this build — set UMAMI_WEBSITE_ID to the website id from the ' +
+    'organisation\'s Umami Cloud account (see src/data/analytics.js)');

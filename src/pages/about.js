@@ -29,13 +29,12 @@ export default function about() {
         <h1>In Barcelona since 1997</h1>
         <p class="lede">${d.organisation.founders} founded SpainBcn to share the city, its language and its
           culture with international students. The school has taught here ever since.</p>
-        <p>Erasmus in Barcelona is run by SpainBcn-Programs. This site covers the courses and education programmes
-          we run in Barcelona; the full catalogue, including the other Spanish destinations, is on
-          <a href="${d.spainbcn.home}" rel="noopener">SpainBcn ↗</a>.</p>
+        <p>Erasmus in Barcelona is run by SpainBcn-Programs, founded in Barcelona in 1997.
+          <a href="${d.spainbcn.catalogue}" rel="noopener">Full SpainBcn catalogue ↗</a></p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.founders, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>${d.organisation.founders}, who started it, in 1997</figcaption>
+        <figcaption>${d.organisation.founders}, 1997</figcaption>
       </figure>
     </div>
   </section>
@@ -54,17 +53,15 @@ export default function about() {
   <section class="section section--powder">
     <div class="container cols cols--split">
       <div>
-        <h2>How we work</h2>
+        <h2>How the courses run</h2>
         <p>Groups stay small, and most weeks bring together educators from several European countries.
           Sessions combine explanation, exercises, discussion and classroom-focused activities.</p>
-        <p>Courses are taught by trainers working in their own subject areas, and the same Barcelona team
-          answers your email, registers you and sees you during the week.</p>
+        <p>Courses are taught by trainers working in their own subject areas.</p>
       </div>
       <div>
-        <h2>What participants say</h2>
-        <p>Reviews are published by the people who wrote them, on Google.</p>
-        <p><a class="link-strong" href="${d.reviews.url}" rel="noopener">${d.reviews.rating} from
-          ${d.reviews.count} reviews ↗</a></p>
+        <h2>Reviews</h2>
+        <p><a class="link-strong" href="${d.reviews.url}" rel="noopener">${d.reviews.rating}/5 from
+          ${d.reviews.count} Google reviews ↗</a></p>
       </div>
     </div>
   </section>

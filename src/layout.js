@@ -5,6 +5,7 @@
 // ============================================================
 
 import * as data from './data/site-data.js';
+import { analyticsTag } from './data/analytics.js';
 import manifest from './assets/images/manifest.json' with { type: 'json' };
 
 // Where the build will be published. The GitHub Pages prototype sets both
@@ -118,9 +119,56 @@ function footer() {
         <span>Erasmus+ OID ${organisation.oid}</span>
         <a href="/privacy/">Privacy</a>
         <a href="/cookies/">Cookies</a>
+        <button type="button" class="linkish" data-privacy-open>Privacy choices</button>
       </div>
     </div>
   </footer>`;
+}
+
+// The consent banner and the settings panel behind "Privacy choices".
+// Both ship on every page; the banner only shows itself when no choice
+// has been recorded yet.
+function privacyUi() {
+  return `<div class="privacy-banner" data-privacy-banner role="region" aria-label="Privacy choices" hidden>
+    <div class="privacy-banner__inner">
+      <div>
+        <p class="privacy-banner__title">Privacy choices</p>
+        <p>We use cookie-free Umami analytics to see how this site is used. The sign-up form is
+          provided by forms.app and loads only if you allow it; forms.app uses its own cookies.</p>
+      </div>
+      <div class="privacy-banner__actions">
+        <button type="button" class="btn btn--ghost" data-privacy-set="false">Necessary only</button>
+        <button type="button" class="btn" data-privacy-set="true">Allow sign-up form</button>
+        <a href="/privacy/">Privacy</a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="privacy-dialog" data-privacy-dialog aria-label="Privacy choices">
+    <h2>Privacy choices</h2>
+    <div class="privacy-dialog__row">
+      <div>
+        <h3>Sign-up form</h3>
+        <p class="meta">Provided by forms.app, which uses its own cookies. Loaded only with your
+          permission.</p>
+      </div>
+      <p class="privacy-dialog__state"><span data-privacy-state>Not allowed</span></p>
+    </div>
+    <div class="privacy-dialog__actions">
+      <button type="button" class="btn btn--ghost" data-privacy-set="false">Not allowed</button>
+      <button type="button" class="btn" data-privacy-set="true">Allowed</button>
+    </div>
+    <div class="privacy-dialog__row">
+      <div>
+        <h3>Umami analytics</h3>
+        <p class="meta">Cookie-free website analytics. No advertising, no cross-site tracking.</p>
+      </div>
+    </div>
+    <div class="privacy-dialog__actions">
+      <a class="link-strong" href="/privacy/">Privacy policy</a>
+      <button type="button" class="btn btn--ghost" data-privacy-close>Close</button>
+    </div>
+  </dialog>`;
 }
 
 function organisationSchema() {
@@ -195,7 +243,20 @@ ${meta.noindex || PROTOTYPE ? '<meta name="robots" content="noindex, follow">' :
 <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/site.css">
+<script>
+/* Read the visitor's forms.app choice before first paint, so an allowed
+   form never flashes its permission gate and the banner never appears
+   to someone who has already answered it. */
+try {
+  var p = JSON.parse(localStorage.getItem('eib-privacy-v1') || 'null');
+  if (p && typeof p.formsApp === 'boolean') {
+    document.documentElement.classList.add('privacy-decided');
+    if (p.formsApp) document.documentElement.classList.add('formsapp-allowed');
+  }
+} catch (e) {}
+</script>
 ${ld}
+${analyticsTag()}
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -204,6 +265,7 @@ ${header(meta.current)}
 ${body}
 </main>
 ${footer()}
+${privacyUi()}
 <script src="/assets/js/site.js" defer></script>
 </body>
 </html>

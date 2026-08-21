@@ -33,7 +33,7 @@ export default function bringAGroup() {
       </div>
       <figure class="media media--photo">
         ${img(d.images.ciutadella, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>A student group in Parc de la Ciutadella</figcaption>
+        <figcaption>Parc de la Ciutadella, Barcelona</figcaption>
       </figure>
     </div>
   </section>
@@ -64,18 +64,16 @@ export default function bringAGroup() {
     <div class="container cols cols--lead">
       <div data-planner>
         <h2>Plan your group</h2>
-        <p>Pick what you already know. Your answers travel with you to the enquiry, so you only say this once.</p>
+        <p>Start with what you know.</p>
         <div class="planner">
           ${planner}
         </div>
         <div class="btn-row">
           <a class="btn" href="/contact/" data-planner-cta>Send this to the Barcelona team</a>
         </div>
-        <p class="meta" style="margin-top:14px">Nothing is stored on your device — the answers travel in the link.</p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.seaGroup, { sizes: '(min-width: 860px) 35vw, 100vw' })}
-        <figcaption>An afternoon out with a student group</figcaption>
       </figure>
     </div>
   </section>
@@ -83,7 +81,7 @@ export default function bringAGroup() {
   <section class="section">
     <div class="container cols cols--split">
       <div>
-        <h2>What we can organise</h2>
+        <h2>Programme formats</h2>
         <ul>
           ${d.projectFormats.map((f) => `<li>${esc(f)}</li>`).join('\n          ')}
         </ul>
@@ -100,17 +98,7 @@ export default function bringAGroup() {
       </div>
     </div>
   </section>
-
-  <section class="section section--cobalt">
-    <div class="container">
-      <h2>Tell us about the group</h2>
-      <p class="lede">The group, the subject and the dates you have in mind are enough to start. ${d.contact.replyTime}</p>
-      <div class="btn-row">
-        <a class="btn" href="/contact/">Start the enquiry</a>
-        <a class="btn btn--ghost" href="/plan-a-mobility/">Organising a staff mobility instead?</a>
-      </div>
-    </div>
-  </section>`;
+`;
 
   return page({
     path: '/bring-a-group/',
