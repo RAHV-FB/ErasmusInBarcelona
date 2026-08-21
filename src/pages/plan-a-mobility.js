@@ -11,9 +11,8 @@ export default function planAMobility() {
   <section class="container hero hero--tight">
     <div style="max-width:54ch">
       <h1>Planning a mobility for your institution</h1>
-      <p class="lede">For Erasmus+ coordinators, school leadership and institutions arranging mobility
-        for their staff or students. Tell us the project and the Barcelona team builds and runs the
-        Spanish part.</p>
+      <p class="lede">What SpainBcn-Programs can host in Barcelona, which documents it issues and when,
+        how a quote and an invoice work, and the registration details your application needs.</p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Tell us about the project</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -37,7 +36,7 @@ export default function planAMobility() {
           <ul class="facts">
             <li><span class="facts__term">Course descriptions</span><span class="facts__value">Descriptions and programmes to attach to the application.</span></li>
             <li><span class="facts__term">Pre-registration</span><span class="facts__value">Pre-registration confirmation for KA1 applications.</span></li>
-            <li><span class="facts__term">Dates and fees</span><span class="facts__value">Confirmed in writing before you submit, so the Spanish part is costed.</span></li>
+            <li><span class="facts__term">Dates and fees</span><span class="facts__value">Confirmed in writing before you submit, so the Spain-based part of the budget is costed.</span></li>
           </ul>
         </div>
       </div>
@@ -63,12 +62,18 @@ export default function planAMobility() {
         <ul>
           ${formats}
         </ul>
-        <p class="meta">Need a different format? Tell us what your project requires.</p>
+        <p class="meta">Formats can be combined inside one programme — training in the mornings and job
+          shadowing later in the week, for instance.</p>
       </div>
       <div>
         <h2>Fees and invoicing</h2>
-        <p>Course fees are per person and are published on each subject-area page.
-          ${d.pricing.groups}</p>
+        <p>Course fees are per person and are published on each subject-area page: in Barcelona,
+          ${d.pricing.currency}${d.pricing.barcelona.hours20} for 20 hours and
+          ${d.pricing.currency}${d.pricing.barcelona.hours25} for 25. A private week or a group project
+          is quoted on participant numbers, length and content.</p>
+        <p>${d.booking.vat}</p>
+        <p>The contract and the invoice go to whoever is booking: your institution, or the participant
+          if they book privately. ${d.booking.payment}</p>
         <p class="meta">${d.pricing.travel}</p>
         <h2 style="margin-top:1.6em">Where it runs</h2>
         <p>Barcelona is the base: the office is in Gràcia and classes also run at Barceloneta.
@@ -78,11 +83,34 @@ export default function planAMobility() {
     </div>
   </section>
 
+  <section class="section section--rule">
+    <div class="container cols cols--split">
+      <div>
+        <h2>Registration details for your application</h2>
+        <ul class="facts">
+          <li><span class="facts__term">Erasmus+ OID</span><span class="facts__value">${d.organisation.oid}</span></li>
+          <li><span class="facts__term">In the participant portal</span><span class="facts__value">SpainBcn-Programs</span></li>
+          <li><span class="facts__term">Legal name</span><span class="facts__value">${d.organisation.legalName}</span></li>
+          <li><span class="facts__term">NIF</span><span class="facts__value">${d.organisation.nif}</span></li>
+          <li><span class="facts__term">Address</span><span class="facts__value">${d.contact.address}, Spain</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>When to get in touch</h2>
+        <p>Before you submit, if you can. The pre-registration confirmation and the course description
+          your application needs take a couple of working days to prepare, and we can confirm dates and
+          fees in writing so the Spanish part of the budget is costed rather than estimated.</p>
+        <p>After approval we act as the receiving partner: we deliver the programme, confirm every
+          arrangement in writing and issue the documents your grant administration needs.</p>
+        <p class="meta">If a participant has to withdraw: ${d.booking.cancellation.toLowerCase()}</p>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--cobalt">
     <div class="container">
       <h2>Tell us what your project needs</h2>
-      <p class="lede">The group, the objectives and the dates you have in mind. Asking is not a
-        commitment. ${d.contact.replyTime}</p>
+      <p class="lede">The group, the objectives and the dates you have in mind. ${d.contact.replyTime}</p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Start the conversation</a>
         <a class="btn btn--ghost" href="${d.spainbcn.projects}" rel="noopener">How projects work on SpainBcn ↗</a>

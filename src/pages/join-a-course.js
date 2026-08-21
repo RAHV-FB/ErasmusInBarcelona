@@ -32,13 +32,14 @@ export default function joinACourse() {
                 <span>${esc(w.course)}</span></a></li>`).join('\n              ')}
             </ul>
             <p class="area__more"><a href="/dates/">All Barcelona dates →</a></p>`
-      : `<p class="area__none">Dates on request</p>
-            <p class="area__more"><a href="/contact/">Ask about a week →</a></p>`;
+      : `<p class="area__none">No scheduled Barcelona week in the current calendar.</p>
+            <p class="area__more"><a href="/contact/">Ask us about your dates →</a></p>`;
 
     return `<article class="area" id="${a.id}">
           <div class="area__subject">
             <h3>${esc(a.label)}</h3>
             <p>${esc(a.desc)}</p>
+            <p class="area__lang">Taught in ${esc(a.language)}</p>
           </div>
           <div class="area__programmes">
             <ul>
@@ -58,12 +59,14 @@ export default function joinACourse() {
     <div class="cols cols--lead">
       <div>
         <h1>Courses in Barcelona</h1>
-        <p class="lede">Staff training for teachers and education professionals. Choose an area below,
-          then check the Barcelona weeks that match it.</p>
-        <div class="btn-row">
-          <a class="btn" href="/dates/">See all dates</a>
-          <a class="btn btn--ghost" href="/contact/">Ask about another week</a>
-        </div>
+        <p class="lede">Staff-training courses for teachers and education professionals. Each runs for
+          one week, Monday to Friday mornings, at 20 or 25 training hours. A few subjects also run as
+          a two-week intensive at 50 hours.</p>
+        <ul class="price price--inline">
+          <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
+          <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
+        </ul>
+        <p class="meta">Per person, per week, in Barcelona.</p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.spanishOffice, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
@@ -87,19 +90,17 @@ export default function joinACourse() {
   <section class="section section--powder">
     <div class="container cols cols--split">
       <div>
-        <h2>Barcelona course fee</h2>
-        <ul class="price">
-          <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours a week</span></li>
-          <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours a week</span></li>
+        <h2>Included in the course fee</h2>
+        <ul>
+          ${d.pricing.includesList.map((i) => `<li>${esc(i)}</li>`).join('\n          ')}
         </ul>
-        <p style="margin-top:16px">${d.pricing.includes}</p>
-        <p class="meta">${d.pricing.travel}</p>
+        <p class="meta">The fee is exempt from VAT as an educational service, so none is added and none
+          appears on the invoice.</p>
       </div>
       <div>
-        <h2>Documents for your mobility</h2>
-        <p>We provide the course description and programme, pre-registration and acceptance
-          documents, the invoice, and your certificate of attendance.</p>
-        <p><a class="link-strong" href="/plan-a-mobility/">Documents and project support →</a></p>
+        <h2>Travel and accommodation</h2>
+        <p>${d.pricing.travel}</p>
+        <p><a class="link-strong" href="/barcelona/">Where to stay and how to reach class →</a></p>
       </div>
     </div>
   </section>
@@ -112,9 +113,13 @@ export default function joinACourse() {
       <ul class="facts">
         <li><span class="facts__term">Length</span><span class="facts__value">One week, or two. ${d.schedule.twoWeeks}</span></li>
         <li><span class="facts__term">Hours</span><span class="facts__value">${d.schedule.hours}</span></li>
-        <li><span class="facts__term">Language</span><span class="facts__value">English, or Spanish for the Spanish programmes.</span></li>
+        <li><span class="facts__term">Levels</span><span class="facts__value">Most programmes run at an
+          introductory and an advanced level. Say which one you want when you enquire.</span></li>
+        <li><span class="facts__term">Language</span><span class="facts__value">English, except the Spanish
+          programmes, which are taught in Spanish.</span></li>
         <li><span class="facts__term">Group</span><span class="facts__value">${d.schedule.groupSize}</span></li>
         <li><span class="facts__term">Certificate</span><span class="facts__value">${d.schedule.certificate}, issued on the final day.</span></li>
+        <li><span class="facts__term">If plans change</span><span class="facts__value">${d.booking.cancellation}</span></li>
       </ul>
       <p style="margin-top:20px"><a class="link-strong" href="/your-week/">See a typical Barcelona week →</a></p>
     </div>
@@ -122,8 +127,8 @@ export default function joinACourse() {
 
   <section class="section section--cobalt">
     <div class="container">
-      <h2>Tell us the week you want</h2>
-      <p class="lede">Send the subject, your level and the dates you have in mind. ${d.contact.replyTime}</p>
+      <h2>Ask about a week</h2>
+      <p class="lede">Send the subject, the level and the dates you have in mind. ${d.contact.replyTime}</p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Ask about a course</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>

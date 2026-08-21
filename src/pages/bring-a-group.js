@@ -23,9 +23,8 @@ export default function bringAGroup() {
     <div class="cols cols--lead">
       <div>
         <h1>Bring your students to Barcelona</h1>
-        <p class="lede">Education programmes for secondary, high-school and VET groups, built around your dates,
-          your subject and the size of the group. Programmes can run in English or Spanish, with the accompanying
-          teachers involved throughout the week.</p>
+        <p class="lede">Programmes for secondary, high-school and VET groups, in English or Spanish,
+          with the accompanying teachers taking part alongside the students.</p>
         <div class="btn-row">
           <a class="btn" href="#plan">Plan your group</a>
           <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -33,29 +32,58 @@ export default function bringAGroup() {
       </div>
       <figure class="media media--photo">
         ${img(d.images.ciutadella, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>Parc de la Ciutadella, Barcelona</figcaption>
+        <figcaption>Parc de la Ciutadella</figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--tight">
     <div class="container">
       <div class="section-head">
-        <h2>How a group programme comes together</h2>
+        <h2>What we can build</h2>
       </div>
-      <div class="tiles">
-        <div>
-          <h3>Define the objectives</h3>
-          <p>Tell us what you want students to work on during the programme, and the dates you are looking at.</p>
-        </div>
-        <div>
-          <h3>We build the programme</h3>
-          <p>Classes, trainers, venue and cultural activities. ${d.pricing.groups}</p>
-        </div>
-        <div>
-          <h3>The group comes to Barcelona</h3>
-          <p>We run the agreed programme, and provide the agreed documentation afterwards.</p>
-        </div>
+      <ul class="facts">
+        <li><span class="facts__term">Who it is for</span><span class="facts__value">Secondary,
+          high-school and VET student groups, travelling with their own teachers.</span></li>
+        <li><span class="facts__term">Subjects</span><span class="facts__value">Any subject area in the
+          catalogue, on its own or combined across the week — most often language, AI and ICT, or
+          culture and citizenship. <a href="/join-a-course/">See the areas →</a></span></li>
+        <li><span class="facts__term">Language</span><span class="facts__value">English or Spanish.</span></li>
+        <li><span class="facts__term">Length</span><span class="facts__value">A week is the usual shape.
+          Two weeks and shorter programmes both run; tell us what your project allows.</span></li>
+        <li><span class="facts__term">Accompanying teachers</span><span class="facts__value">They stay
+          with the group through the week and take part in the sessions.</span></li>
+        <li><span class="facts__term">Beyond the classroom</span><span class="facts__value">Job shadowing
+          at Spanish schools and education organisations, and educational visits, on their own or mixed
+          into one programme.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cols cols--split">
+      <div>
+        <h2>What a group price covers</h2>
+        <p>A group programme is quoted rather than listed, because the three things that set the price
+          are yours to tell us: how many participants, how long, and what the programme contains.
+          Send those three and we come back with a figure and the invoicing arrangement in writing.</p>
+        <ul>
+          <li>Teaching and the trainers</li>
+          <li>Course materials</li>
+          <li>The course rooms</li>
+          <li>Agreed cultural activities, with a member of the team accompanying the group</li>
+          <li>Certificates and the documents your project needs</li>
+        </ul>
+        <p class="meta">The fee is exempt from VAT as an educational service.</p>
+      </div>
+      <div>
+        <h2>What your school arranges</h2>
+        <p>Travel to Spain and within it, accommodation, meals, local transport and insurance. We do not
+          book accommodation or act as a travel agency, and we do not supervise students outside the
+          programme hours and the agreed activities.</p>
+        <p>Under Erasmus+ those costs come from the grant's own budget lines rather than from what you
+          pay us.</p>
+        <p><a class="link-strong" href="/barcelona/">Where groups usually stay in Barcelona →</a></p>
       </div>
     </div>
   </section>
@@ -64,7 +92,7 @@ export default function bringAGroup() {
     <div class="container cols cols--lead">
       <div data-planner>
         <h2>Plan your group</h2>
-        <p>Start with what you know.</p>
+        <p>Start with what you already know.</p>
         <div class="planner">
           ${planner}
         </div>
@@ -78,23 +106,22 @@ export default function bringAGroup() {
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--rule">
     <div class="container cols cols--split">
       <div>
-        <h2>Programme formats</h2>
-        <ul>
-          ${d.projectFormats.map((f) => `<li>${esc(f)}</li>`).join('\n          ')}
-        </ul>
-        <p class="meta">If your project needs something this page does not name, ask us.</p>
+        <h2>What happens next</h2>
+        <ol class="steps">
+          <li>You send the group, the subject and the dates you are considering.</li>
+          <li>We propose the programme for the Spain-based part and quote it in writing.</li>
+          <li>When you accept, we confirm the arrangements and send the documents your project needs.</li>
+        </ol>
+        <p class="meta">${d.contact.replyTime} Asking is not a commitment.</p>
       </div>
       <div>
-        <h2>Practical points</h2>
-        <ul>
-          <li>Accompanying teachers stay with the group through the week.</li>
-          <li>${d.schedule.activities}</li>
-          <li>Travel, accommodation and meals are arranged by your school and are not part of the fee.</li>
-          <li>${d.schedule.certificate} for participants, issued on the final day.</li>
-        </ul>
+        <h2>If you are the coordinator</h2>
+        <p>The documents, the OID, the receiving-partner role and how invoicing works are set out for
+          institutions on their own page.</p>
+        <p><a class="link-strong" href="/plan-a-mobility/">Planning a mobility for your institution →</a></p>
       </div>
     </div>
   </section>
@@ -105,6 +132,6 @@ export default function bringAGroup() {
     current: 'group',
     crumb: 'Bring a group',
     title: 'Erasmus+ Student Group Programmes in Barcelona | SpainBcn-Programs',
-    description: 'Programmes in Barcelona for secondary, high-school and VET student groups, built around your dates, subject and group size, in English or Spanish.',
+    description: 'Programmes in Barcelona for secondary, high-school and VET student groups: what we build, what a group price covers, what your school arranges, and how a quote works.',
   }, body);
 }

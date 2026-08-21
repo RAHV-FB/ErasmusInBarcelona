@@ -54,6 +54,22 @@ eyebrows, day names, footer column headings. No coral full stop after headings. 
 for a link that leaves the site, and nowhere else. Numbered sections only where the sequence
 matters. Do not demonstrate the whole system on every page.
 
+## Usefulness
+
+Every section answers a question a visitor actually has. Before keeping a paragraph, ask what
+decision it helps someone make; if there isn't one, cut it. Do the research rather than deferring
+it: give the current fare, then say fares change and link the source — never the other way round.
+"Check", "ask us", "it depends" and "confirmed later" are answers only when nothing else is
+knowable, and then they say what will be confirmed and when.
+
+Volatile facts — fares, airport options, prices, dates, venues, contact details — live in
+`src/data/*.js` with the date they were checked and the page they came from. Never hard-code the
+same figure into two templates. Where a figure could not be confirmed from an official source, the
+data says so instead of carrying a guess.
+
+Guidance is allowed where the geography or the arithmetic supports it, and it is marked as guidance.
+Precision is not: give a range for a journey time, an exact figure for a regulated fare.
+
 ## Writing
 
 Explain the service, never the website. No sentence whose subject is this page, this site, this
@@ -66,7 +82,12 @@ a place, a date — and keep the alt text descriptive either way.
 Say something specific or say nothing. No marketing language, no conversational asides that
 announce their own honesty, no tricolons, no "designed to", no "not just X but Y", no
 "whether you're X or Y", no invented urgency or scarcity. If a sentence gives the reader nothing
-they did not already know, delete it.
+they did not already know, delete it — including facts they already assume, like an airport having
+transport or a city having a metro.
+
+No artificial authenticity: never "a real person replies", "actually local", "an honest list",
+"the same people". A subtitle that paraphrases its heading is deleted, not reworded. Superlatives —
+all, every, always, guaranteed, the best, perfect — only where literally true.
 
 ## Boundaries
 

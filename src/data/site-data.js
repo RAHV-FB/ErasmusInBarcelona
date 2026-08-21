@@ -34,8 +34,9 @@ export const contact = {
   postcode: '08025',
   city: 'Barcelona',
   get address() { return `${this.street}, ${this.postcode} ${this.city}`; },
-  officeNote: 'Five minutes on foot from the Sagrada Família. Metro L5 Sagrada Família, L4/L5 Verdaguer.',
-  venueNote: 'Classes also run at Barceloneta, by the sea. We confirm which venue your week uses with your registration.',
+  officeNote: 'Five minutes on foot from the Sagrada Família. Metro: Sagrada Família (L2, L5), Verdaguer (L4, L5).',
+  venueNote: 'Courses run in the Gràcia and Barceloneta areas, depending on the course, the week and '
+    + 'availability. Your course location is confirmed when you sign up.',
   replyTime: 'We normally reply within two working days.',
 };
 
@@ -95,9 +96,12 @@ export const formsApp = {
   },
 };
 
+// The office never moves. Course rooms do: which area a given week runs
+// in depends on the course, the week and what is free, and it is settled
+// at sign-up rather than published in advance.
 export const venues = [
-  { area: 'Gràcia', note: 'The office and course rooms, five minutes on foot from the Sagrada Família.' },
-  { area: 'Barceloneta', note: 'Classrooms by the sea, used for part of the programme depending on the week.' },
+  { area: 'Gràcia', note: 'Around the office, five minutes on foot from the Sagrada Família.' },
+  { area: 'Barceloneta', note: 'By the sea, on the L4 metro line.' },
 ];
 
 // Fees per person, Barcelona, from the subject-area pages on SpainBcn.
@@ -105,9 +109,34 @@ export const venues = [
 export const pricing = {
   currency: '€',
   barcelona: { hours20: 400, hours25: 450 },
-  includes: 'The fee covers the course, materials, the week\'s two cultural activities and your certificate of attendance.',
-  travel: 'Travel, accommodation and meals are arranged separately, by you or by your institution.',
+  includesList: ['The teaching', 'All course materials', 'The week\'s two cultural activities'],
+  includes: 'The fee covers the teaching, all course materials and the week\'s two cultural activities.',
+  travel: 'You arrange travel, accommodation and meals. Under Erasmus+ KA1 those come from the grant\'s '
+    + 'own travel and individual support lines, not from the course fee.',
   groups: 'A private programme or a group project is quoted for the group: tell us the group and we confirm the fee and the invoicing in writing before you commit.',
+};
+
+// Booking, money and cancellation, from SpainBcn's published terms
+// (spainbcn.com/terms.html, reviewed there 4 August 2026). These are the
+// questions a participant or a finance office actually asks, so the site
+// answers them rather than sending people to read the terms.
+export const booking = {
+  steps: [
+    'You write with the course and the week. We reply within two working days.',
+    'We send the pre-registration confirmation and the documents a KA1 application needs.',
+    'You sign up and confirm. We send an acceptance letter if your institution needs one.',
+    'We set out the fee, the dates and the invoicing in writing. That confirmation is the contract.',
+  ],
+  contractWith: 'The contract is with whoever is invoiced: your institution, or you if you book privately.',
+  vat: 'The fee is exempt from VAT as an educational service, so no VAT is added and none appears on '
+    + 'the invoice. If your finance office needs that in writing for a purchase order or a grant claim, ask.',
+  payment: 'There is no deposit and no payment schedule to agree before you enquire. Nothing is payable '
+    + 'until the invoicing arrangement is agreed in writing.',
+  cancellation: 'Cancel more than 14 days before the course and the fee is refunded in full. At 14 days '
+    + 'or less, half is refunded and the other half is held as credit towards another week, at any '
+    + 'SpainBcn destination. Illness, a family emergency, withdrawn funding or a problem at your '
+    + 'institution are treated as exceptions and not charged.',
+  changes: 'Changing the name of a participant, moving to another week or switching course costs nothing.',
 };
 
 export const schedule = {
@@ -157,7 +186,8 @@ export const courseAreas = [
     id: 'ai',
     label: 'AI and digital teaching',
     short: 'AI, digital tools and classroom technology.',
-    desc: 'Digital tools and AI for planning, materials, feedback and classroom work.',
+    desc: 'Artificial intelligence, digital teaching tools and practical classroom uses of ICT.',
+    language: 'English; the Language + ICT week also runs in Spanish',
     subjects: [{ name: 'AI & ICT in Education', url: SB + 'group-ai-ict.html' }],
     programmes: [
       { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
@@ -170,7 +200,8 @@ export const courseAreas = [
     id: 'english',
     label: 'English and communication',
     short: 'Language, methodology and presentation.',
-    desc: 'Your own English, teaching through it, and speaking in front of a room.',
+    desc: 'English language for teachers, teaching methodology, CLIL and public speaking.',
+    language: 'English',
     subjects: [
       { name: 'English', url: SB + 'group-english.html' },
       { name: 'Presentation & Communication', url: SB + 'group-presentation.html' },
@@ -187,7 +218,8 @@ export const courseAreas = [
     id: 'spanish',
     label: 'Spanish',
     short: 'Language, culture and teaching.',
-    desc: 'Spanish in a small group, with the city and its history as the material.',
+    desc: 'Spanish language by level, Spanish culture and history, and methodology for teaching Spanish.',
+    language: 'Spanish',
     subjects: [{ name: 'Spanish', url: SB + 'group-spanish.html' }],
     programmes: [
       { name: 'General Spanish by level', url: SB + 'group-spanish.html#general-spanish-by-level' },
@@ -199,7 +231,8 @@ export const courseAreas = [
     id: 'inclusion',
     label: 'Inclusion and special needs',
     short: 'SEN, inclusion and classroom support.',
-    desc: 'Special educational needs, and classrooms where a mixed group works.',
+    desc: 'Special educational needs, inclusive classrooms, integration and classroom management.',
+    language: 'English',
     subjects: [
       { name: 'Special Needs Education (SEN)', url: SB + 'group-sen.html' },
       { name: 'Inclusion & Diversity', url: SB + 'group-inclusion.html' },
@@ -215,7 +248,8 @@ export const courseAreas = [
     id: 'wellbeing',
     label: 'Wellbeing and classroom practice',
     short: 'Wellbeing, mindfulness and classroom management.',
-    desc: 'Staying well in the job, and the routines that keep a class calm and learning.',
+    desc: 'Teacher wellbeing and mental health, mindfulness, yoga and meditation in school.',
+    language: 'English',
     subjects: [
       { name: 'Wellbeing for Educators', url: SB + 'group-wellbeing.html' },
       { name: 'Classroom Management', url: SB + 'group-classroom.html' },
@@ -231,7 +265,8 @@ export const courseAreas = [
     id: 'creative',
     label: 'Creative and experiential learning',
     short: 'Art, outdoor learning, sustainability and citizenship.',
-    desc: 'Art, field work, sustainability and human rights as ways into other subjects.',
+    desc: 'Art in education, outdoor and experiential learning, sustainability and citizenship.',
+    language: 'English',
     subjects: [
       { name: 'Art & Creative Teaching', url: SB + 'group-art.html' },
       { name: 'Outdoor & Experiential Learning', url: SB + 'group-outdoor.html' },

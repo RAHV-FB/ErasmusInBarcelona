@@ -6,9 +6,8 @@ export default function contact() {
   <section class="container hero hero--tight">
     <div style="max-width:52ch">
       <h1>Tell us what you're planning</h1>
-      <p class="lede">A rough idea is enough. It helps to include your dates, the subject, the number
-        of participants and your institution.</p>
-      <p class="meta">A question is not a booking. ${d.contact.replyTime}</p>
+      <p class="lede">Include your possible dates, the subject and the number of participants.
+        ${d.contact.replyTime}</p>
     </div>
   </section>
 
@@ -28,11 +27,10 @@ export default function contact() {
         </ul>
 
         <h2 style="margin-top:2em">What happens next</h2>
-        <ol>
-          <li>You write with the course or the group and the dates you have in mind.</li>
-          <li>We confirm availability and the fee in writing.</li>
-          <li>When you sign up and confirm, we send an acceptance letter if your institution needs one.</li>
-          <li>Your ${d.schedule.certificate.toLowerCase()} is issued on the final day of the course.</li>
+        <ol class="steps">
+          <li>We check the course and the week.</li>
+          <li>We confirm availability, the level and the fee in writing.</li>
+          <li>If you register, we send the confirmation and the documents your project needs.</li>
         </ol>
       </div>
 
@@ -48,11 +46,7 @@ export default function contact() {
             <div class="form-gate__ask">
               <p>Provided by forms.app. Allow it to load here.</p>
               <button type="button" class="btn" data-privacy-set="true">Allow sign-up form</button>
-              <p class="meta">
-                <a href="${d.formsApp.privacy}" rel="noopener">forms.app privacy ↗</a> ·
-                <a href="${d.formsApp.cookies}" rel="noopener">cookies ↗</a> ·
-                <a href="${d.contact.emailHref}">use email instead</a>
-              </p>
+              <p class="meta"><a href="/privacy/">Privacy</a></p>
               <p class="form-gate__failed" data-form-failed hidden>The form couldn't be loaded. Email
                 <a href="${d.contact.emailHref}">${d.contact.email}</a> or message us on
                 <a href="${d.contact.whatsapp}" rel="noopener">WhatsApp ↗</a>.</p>

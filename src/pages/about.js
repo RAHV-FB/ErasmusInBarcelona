@@ -27,9 +27,10 @@ export default function about() {
     <div class="cols cols--lead">
       <div>
         <h1>In Barcelona since 1997</h1>
-        <p class="lede">${d.organisation.founders} founded SpainBcn to share the city, its language and its
-          culture with international students. The school has taught here ever since.</p>
-        <p>Erasmus in Barcelona is run by SpainBcn-Programs, founded in Barcelona in 1997.
+        <p class="lede">${d.organisation.founders} opened a Spanish school for international students in
+          1997. It has taught in Barcelona ever since, and now runs Erasmus+ courses for education staff
+          and programmes for student groups.</p>
+        <p>Erasmus in Barcelona is the Barcelona site of SpainBcn-Programs.
           <a href="${d.spainbcn.catalogue}" rel="noopener">Full SpainBcn catalogue ↗</a></p>
       </div>
       <figure class="media media--photo">
@@ -54,9 +55,9 @@ export default function about() {
     <div class="container cols cols--split">
       <div>
         <h2>How the courses run</h2>
-        <p>Groups stay small, and most weeks bring together educators from several European countries.
-          Sessions combine explanation, exercises, discussion and classroom-focused activities.</p>
-        <p>Courses are taught by trainers working in their own subject areas.</p>
+        <p>Most scheduled weeks bring together participants from more than one institution and more than
+          one country, rather than running as a lecture for a single large group. Trainers teach in their
+          own subject areas.</p>
       </div>
       <div>
         <h2>Reviews</h2>
@@ -70,7 +71,6 @@ export default function about() {
     <div class="container">
       <div class="section-head">
         <h2>The team</h2>
-        <p>Coordination and administration in Barcelona.</p>
       </div>
       <ul class="people">
         ${core}
@@ -89,9 +89,12 @@ export default function about() {
         <h2>Organisation</h2>
         <ul class="facts">
           <li><span class="facts__term">Registered as</span><span class="facts__value">${d.organisation.legalName}</span></li>
+          <li><span class="facts__term">NIF</span><span class="facts__value">${d.organisation.nif}</span></li>
           <li><span class="facts__term">Erasmus+ OID</span><span class="facts__value">${d.organisation.oid}</span></li>
           <li><span class="facts__term">Office</span><span class="facts__value">${d.contact.address}</span></li>
         </ul>
+        <p class="meta">The office address does not change. Course locations do —
+          <a href="/barcelona/">see where classes run →</a></p>
       </div>
       <div>
         <h2>Elsewhere in Spain</h2>
@@ -106,6 +109,6 @@ export default function about() {
     current: 'about',
     crumb: 'About',
     title: 'About SpainBcn-Programs in Barcelona | Erasmus in Barcelona',
-    description: 'A family-founded school in Barcelona since 1997, now running Erasmus+ courses and education programmes for staff and student groups from across Europe.',
+    description: 'SpainBcn-Programs has taught in Barcelona since 1997. The team, the trainers, the registered company and the Erasmus+ OID.',
   }, body);
 }

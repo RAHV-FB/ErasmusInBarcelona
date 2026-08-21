@@ -530,3 +530,64 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--ink-55); }
 .state { border-top: 2px solid var(--graphite); padding-top: 16px; }
 .state .eyebrow { color: var(--graphite); margin-bottom: .8rem; }
 .state .facts li:first-child { border-top: 0; padding-top: 0; }
+
+/* ---------- comparison tables ---------- */
+/* Wide on a desktop, stacked on a phone. The stacked form repeats each
+   column's heading from data-label, so no row has to be scrolled
+   sideways to be understood. */
+
+.table-wrap { overflow-x: auto; }
+
+.data {
+  width: 100%; border-collapse: collapse; text-align: left;
+  font-size: .95rem;
+}
+.data th, .data td {
+  padding: 14px 18px 14px 0; vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+.data thead th {
+  font-size: .78rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--ink-55); font-weight: 700; padding-bottom: 8px;
+  border-bottom: 1px solid var(--graphite);
+}
+.data tbody th { font-weight: 700; padding-right: 24px; }
+.data td:last-child, .data th:last-child { padding-right: 0; }
+.cell-note {
+  display: block; margin-top: 4px; font-weight: 400;
+  font-size: .85rem; color: var(--ink-55);
+}
+
+@media (max-width: 720px) {
+  .data, .data tbody, .data tr, .data th, .data td { display: block; width: 100%; }
+  .data thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .data tr { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .data tr:last-child { border-bottom: 0; }
+  .data th, .data td { border: 0; padding: 0 0 8px; }
+  .data tbody th { font-size: 1.05rem; margin-bottom: 4px; }
+  .data td:last-child { padding-bottom: 0; }
+  .data td[data-label]::before {
+    content: attr(data-label);
+    display: block; font-size: .74rem; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--ink-55); font-weight: 700; margin-bottom: 2px;
+  }
+}
+
+.callout {
+  margin-top: 24px; padding: 18px 20px;
+  background: var(--powder); border-left: 3px solid var(--cobalt);
+}
+.callout b { display: block; margin-bottom: .3rem; }
+
+.area__lang { font-size: .85rem; color: var(--ink-55); margin-top: .5rem; }
+.price--inline { display: flex; gap: 32px; margin: 22px 0 6px; }
+
+.steps { counter-reset: step; list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 14px; max-width: 78ch; }
+.steps li { counter-increment: step; position: relative; padding-left: 44px; }
+.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: 0;
+  width: 28px; height: 28px; display: grid; place-items: center;
+  background: var(--graphite); color: var(--white);
+  font: 700 .85rem/1 var(--sans);
+}

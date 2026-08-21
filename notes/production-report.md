@@ -357,3 +357,139 @@ request it now fails the check. Anything else leaving the page is still a failur
 
 Two test hits were recorded against the real website id while working out which region holds it —
 hostname `region-check.invalid`, url `/setup-region-check`. They are the only artificial traffic.
+
+
+---
+
+## 21 August 2026 — content rewrite and usefulness audit
+
+The site looked complete and stopped one sentence before the useful part. This pass replaced
+cautious, generic copy with researched answers, and moved every volatile figure into data that
+carries the date it was checked.
+
+### New: `src/data/barcelona-practical.js`
+
+Fares, airport options, metro lines, neighbourhoods and free-afternoon suggestions, each with the
+source it came from and one `checked` date for the file. Nothing here is written into a template.
+
+### Barcelona — rewritten around decisions, not description
+
+The page now answers what it used to gesture at. Before: Barcelona has an airport, there is a metro,
+there are tickets, check the fares, check the venue, summers are hot, Catalan and Spanish are
+official. After:
+
+- **Where classes run.** Gràcia and Barceloneta, with the metro lines and walking times for each,
+  and the office address separated from the course location — the office is always Carrer del Pare
+  Lainez; which area a week runs in depends on the course, the week and availability, and is settled
+  at sign-up.
+- **Where to stay.** Four areas compared on how long each takes to reach *both* course areas, with a
+  strategy for booking before your location is confirmed: stay on L4, which runs from the Sagrada
+  Família area down to Barceloneta, so either area is a direct ride. That recommendation is
+  geography, checked station by station on TMB's own pages.
+- **From the airport.** Four options compared on time, fare and how they work. Two findings worth
+  the research: metro L9 Sud does not reach the city centre — it ends at Zona Universitària — but it
+  meets L5 at Collblanc, and L5 runs straight to Verdaguer and Sagrada Família; and the R2 Nord
+  train reaches Passeig de Gràcia, which is on L2, L3 and L4.
+- **Which ticket.** A five-day course is about ten journeys, which is exactly one €13 T-casual.
+  Stated plainly, with the trap named in a callout: the single ticket and the T-casual are **not**
+  valid at the Aeroport T1/T2 metro stations, and arriving with one means buying the €5.90 airport
+  ticket at the barrier. ATM publishes that as an answer to its own FAQ.
+- Lunch, language, free afternoons by how long they take, and access — each two or three sentences.
+
+Deleted: the weather section, "Catalan and Spanish are both official", "check the current fares",
+"something near the venue".
+
+### Sources checked, 21 August 2026
+
+| Fact | Source |
+| --- | --- |
+| Single €2.90 · T-casual €13.00 (10 journeys, 1 zone, 3 changes in 75 min) · T-usual €22.80 · Airport ticket €5.90 | tmb.cat fares page, and the ATM T-casual page |
+| T-casual and single not valid at Aeroport T1/T2 on L9 Sud; the train and buses are unaffected | ATM, "Can I go to the Airport with a T-casual?" |
+| Hola Barcelona Travel Card, 1–5 days, from €12.50, airport metro both ways | tmb.cat, holabarcelona.com |
+| L9 Sud every 7 min; interchanges Torrassa (L1), Collblanc (L5), Zona Universitària (L3) | tmb.cat airport metro page |
+| L5 station order incl. Collblanc → Diagonal → Verdaguer → Sagrada Família; L4 incl. Barceloneta → Passeig de Gràcia → Verdaguer; L2 and L3 at Passeig de Gràcia | TMB's own station pages, enumerated |
+| Airport 16 km south, T1 and T2; Aerobús A1/A2 ~35 min, every 8–15 min; R2 Nord from T2, ~20 min to Sants, every ~30 min; bus 46 | Barcelona's tourism board, reviewed there June 2026 |
+| Taxi: €2.80 start, €1.35/km day, €1.66/km night and weekends, €4.60 airport supplement | AMB metropolitan taxi fares |
+| Barcelona fee €400 (20 h) / €450 (25 h); 20 or 25 hours, 50 over two weeks; introductory and advanced levels; English except Spanish programmes | spainbcn.com course pages, incl. their structured course data |
+| Fee covers teaching, all course materials, two cultural activities; VAT-exempt as an educational service | spainbcn.com terms |
+| Booking sequence, cancellation terms, free changes of name/week/course, no deposit | spainbcn.com terms |
+| Document names and what each is for; OID E10336106; registered as SPAINBCN-PROGRAMS IN BARCELONA S.L. | spainbcn.com projects and terms |
+| Any course can be requested for an unlisted Barcelona week | spainbcn.com Barcelona page |
+| Office address, and that course locations vary by week and are confirmed at registration | spainbcn.com contact page, confirmed by the owner |
+
+### Answers that replaced deferrals
+
+Facts that were on SpainBcn's terms page and nowhere a participant would look are now on the pages
+where the question arises: the four-step route from enquiry to confirmed place, who the invoice goes
+to, that there is no deposit, that the fee is VAT-exempt, and the cancellation terms — full refund
+beyond 14 days, half plus credit inside 14 days, exceptions for illness, family emergency, withdrawn
+funding or a problem at the sending institution, and no charge for changing a name, a week or a
+course.
+
+Groups: what we can build, who it is for, the language, the length, what a group price covers and
+what the school arranges — instead of three tiles ending in "contact us". The quote is explained
+rather than withheld: it depends on participant numbers, length and content, so send those three.
+
+Mobility: registration details a coordinator has to type into an application (OID, portal name,
+legal name, NIF, address), when to make contact and why, and what changes after approval.
+
+Dates: what "scheduled" means, stated once — in the calendar and open, not a confirmed place — and
+what to do when a week is not listed.
+
+Courses: fee stated as **Included in the course fee**, with travel and accommodation as their own
+positive heading rather than "what the fee does not cover". Areas now say what they teach in plain
+terms and which language they are taught in. Areas with no scheduled week say "No scheduled
+Barcelona week in the current calendar" and point at contact.
+
+### Copy removed
+
+The interface descriptions ("Six ways into the catalogue"), the AI register in the area
+descriptions ("tried on your own lessons", "with the city and its history as the material",
+"staying well in the job"), the marketing question that opened the home CTA, the team block on the
+home page that repeated About, and the group tiles that described a process instead of answering
+anything. A scan of the built HTML for 55 banned constructions returns no genuine hits.
+
+### Lengths
+
+| Page | Before | After |
+| --- | --- | --- |
+| Home | 768 | 638 |
+| Contact | 392 | 352 |
+| About | 647 | 664 |
+| Dates | 421 | 546 |
+| Courses | 763 | 894 |
+| Groups | 677 | 823 |
+| Mobility | 591 | 854 |
+| Your week | 609 | 835 |
+| Barcelona | 591 | 1349 |
+
+### Captions
+
+Five before, three after: "María Ángeles and Miriam, 1997", "Plaça de la Seu", "Parc de la
+Ciutadella". Each names something the photograph cannot tell you. Removed: "The classroom at Carrer
+del Pare Lainez 19" and "Barceloneta", both of which described what was visible. Alt text is
+unchanged.
+
+### QA
+
+`npm run check` passes on all 12 pages at eight widths. No page overflows horizontally at 390, 768
+or 1280, and no comparison table needs sideways scrolling at any of them — below 720px the tables
+restack into labelled rows. All 41 external links resolve. The privacy and network QA is 27 of 27,
+unchanged by the rewrite.
+
+### Needs owner confirmation
+
+1. **Class start and finish times.** Neither site publishes them. The page says classes run Monday to
+   Friday mornings at 20 or 25 hours and that the timetable is sent before the course. Real clock
+   times would be more useful.
+2. **Student group limits** — minimum and maximum group size, the age range accepted, and the
+   shortest programme you will run. The page currently says a week is the usual shape and invites the
+   three numbers; it does not state limits, because none are published.
+3. **The Barceloneta course location.** Only the neighbourhood is named. If an address can be
+   published, the page can give walking times as it does for Gràcia.
+4. **Aerobús fare.** Three different figures appear across the operator's site, the city's ticket
+   shop and its tourism pages, so no number is published — the row gives the times, frequency and
+   stops and says the fare is set by the operator.
+5. **Accessibility at each course area.** Currently answered as "tell us and we will confirm before
+   you commit". If step-free access is known for either area, it can be stated.
+6. **The Google reviews link** still points at a search, not a place listing.

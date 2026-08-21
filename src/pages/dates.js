@@ -18,9 +18,8 @@ export default function dates() {
   <section class="container hero">
     <div style="max-width:52ch">
       <h1>Course dates in Barcelona</h1>
-      <p class="lede">Every scheduled course week in Barcelona. Courses run Monday to Friday.
-        ${d.datesSource.note}</p>
-      <p class="meta">Groups are small — confirm your week before booking travel.</p>
+      <p class="lede">The ${d.dates.length} weeks in the current Barcelona calendar, Monday to Friday.
+        Any course can also be requested for a week that is not listed here.</p>
     </div>
   </section>
 
@@ -36,8 +35,25 @@ export default function dates() {
         ${rows}
       </div>
       <div class="board__foot">
-        <span class="meta">Exported from the course calendar on ${d.datesSource.importedOn}.</span>
+        <span class="meta">From the course calendar, ${d.datesSource.importedOn}.</span>
         <a class="link-strong" href="/contact/">Ask about another week →</a>
+      </div>
+
+      <div class="cols cols--split" style="margin-top:44px">
+        <div>
+          <h2>What "scheduled" means</h2>
+          <p>The week is in the current calendar and open for registration. It is not a confirmation
+            that you have a place: write to us and we will confirm your place, the level and the fee
+            in writing before you book travel.</p>
+        </div>
+        <div>
+          <h2>If your week is not listed</h2>
+          <p>Any course in the catalogue can be requested for another week in Barcelona, and a
+            second level can open in a week already listed. Two-week courses run as two adjacent
+            weeks at 50 hours.</p>
+          <p class="meta">Enquire as early as you can: the documents a KA1 application needs take a
+            couple of working days, and grant deadlines rarely move.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -45,12 +61,13 @@ export default function dates() {
   <section class="section section--powder">
     <div class="container cols cols--split">
       <div>
-        <h2>What a week costs</h2>
+        <h2>Barcelona course fee</h2>
         <ul class="price">
           <li><span class="price__amount">${d.pricing.currency}${d.pricing.barcelona.hours20}</span><span class="price__hours">20 hours a week</span></li>
           <li><span class="price__amount">${d.pricing.currency}${d.pricing.barcelona.hours25}</span><span class="price__hours">25 hours a week</span></li>
         </ul>
-        <p class="meta" style="margin-top:16px">Per person, per week. ${d.pricing.includes}</p>
+        <p style="margin-top:16px">Per person, per week. ${d.pricing.includes}</p>
+        <p class="meta">${d.pricing.travel}</p>
       </div>
       <div>
         <h2>Looking elsewhere in Spain?</h2>
