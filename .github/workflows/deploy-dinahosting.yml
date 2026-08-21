@@ -131,14 +131,22 @@ jobs:
           # dist/, so neither may be swept up by --delete.
           # --env-password keeps the password out of the process
           # list, where -u user,pass would put it.
+          #
+          # Transfers run one at a time. Four at once and the host
+          # starts refusing data connections part-way through, killing
+          # individual files with "max-retries exceeded" while their
+          # neighbours go up fine — a shared server limiting concurrent
+          # sessions, not a transport that does not work.
           lftp -u "$USER" --env-password "ftp://$HOST" <<LFTP
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
-          set net:max-retries 3
-          set net:timeout 20
+          set ftp:passive-mode true
+          set net:max-retries 5
+          set net:reconnect-interval-base 5
+          set net:timeout 30
           set cmd:fail-exit true
-          mirror -R --delete --parallel=4 --verbose=1 --exclude-glob .git* --exclude cgi-bin/ --exclude .well-known/ dist/ $DIR
+          mirror -R --delete --continue --verbose=1 --exclude-glob .git* --exclude cgi-bin/ --exclude .well-known/ dist/ $DIR
           bye
           LFTP
 
