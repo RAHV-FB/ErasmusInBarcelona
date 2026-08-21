@@ -137,18 +137,46 @@ jobs:
           # individual files with "max-retries exceeded" while their
           # neighbours go up fine — a shared server limiting concurrent
           # sessions, not a transport that does not work.
-          lftp -u "$USER" --env-password "ftp://$HOST" <<LFTP
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ssl:verify-certificate true
-          set ftp:passive-mode true
-          set net:max-retries 5
-          set net:reconnect-interval-base 5
-          set net:timeout 30
-          set cmd:fail-exit true
+          settings='
+            set ftp:ssl-force true
+            set ftp:ssl-protect-data true
+            set ssl:verify-certificate true
+            set ftp:passive-mode true
+            set net:max-retries 5
+            set net:reconnect-interval-base 5
+            set net:timeout 30
+          '
+
+          lftp -u "$USER" --env-password "ftp://$HOST" <<LFTP || echo "lftp exited $?"
+          $settings
           mirror -R --delete --continue --verbose=1 --exclude-glob .git* --exclude cgi-bin/ --exclude .well-known/ dist/ $DIR
           bye
           LFTP
+
+          # lftp's exit code has proved unreliable here — it reported
+          # failure after a run in which every file transferred and no
+          # error was printed. So the check is what actually landed:
+          # every file in dist/ has to come back in a remote listing.
+          # Anything extra on the server is fine (cgi-bin, .well-known);
+          # anything missing is not.
+          lftp -u "$USER" --env-password "ftp://$HOST" <<LFTP > /tmp/remote-raw.txt
+          $settings
+          cd $DIR
+          find
+          bye
+          LFTP
+
+          sed 's#^\./##' /tmp/remote-raw.txt | grep -v '/$' | sed '/^$/d' | sort -u > /tmp/remote.txt
+          ( cd dist && find . -type f | sed 's#^\./##' ) | sort -u > /tmp/local.txt
+          echo "dist/: $(wc -l < /tmp/local.txt) files · server: $(wc -l < /tmp/remote.txt) files"
+
+          missing=$(comm -23 /tmp/local.txt /tmp/remote.txt)
+          if [ -n "$missing" ]; then
+            echo "::error::These files never made it to the server:"
+            echo "$missing"
+            exit 1
+          fi
+          echo "every file in dist/ is on the server"
 
       # Against the real domain once it points here; against the
       # hosting's own name while it does not.

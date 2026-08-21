@@ -107,8 +107,11 @@ whatever is no longer in `dist/`, so the live site is exactly what this reposito
 except `cgi-bin/` and `.well-known/`, which belong to the server and are excluded. Credentials are
 repository secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`); the web root is the repository
 variable `DEPLOY_DIR`, defaulting to `/www/`. The workflow refuses to publish a prototype build or
-to mirror anywhere but the web root, and afterwards checks five pages, the 404 status and three
-legacy redirects against the live domain.
+to mirror anywhere but the web root; after uploading it lists the server and fails if any file in
+`dist/` is missing, then checks five pages, the 404 status and three legacy redirects over HTTP.
+
+Uploads run one file at a time. In parallel the host starts refusing data connections part-way
+through and individual files die while their neighbours succeed.
 
 `FTP_SERVER` must be the hosting's `<account>.espacioseguro.com` name, which the panel shows under
 FTP once FTP SSL is on — not `ftp.<domain>` and not the `hl####.dinaserver.com` server name. That
