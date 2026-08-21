@@ -54,7 +54,8 @@
     var apply = function (area) {
       var shown = 0;
       rows.forEach(function (row) {
-        var match = area === 'all' || row.getAttribute('data-area') === area;
+        var match = area === 'all'
+          || (' ' + row.getAttribute('data-area') + ' ').indexOf(' ' + area + ' ') > -1;
         row.hidden = !match;
         if (match) shown++;
       });
@@ -63,8 +64,8 @@
       });
       if (count) {
         count.textContent = shown === rows.length
-          ? shown + ' scheduled weeks'
-          : shown + ' of ' + rows.length + ' scheduled weeks';
+          ? shown + ' weeks'
+          : shown + ' of ' + rows.length + ' weeks';
       }
     };
 

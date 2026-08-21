@@ -25,8 +25,8 @@ export default function bringAGroup() {
         <h1>Bring your students to Barcelona</h1>
         <p class="lede">Programmes for secondary, high-school and VET student groups, in English or
           Spanish, with the accompanying teachers taking part alongside the students.</p>
-        <p class="meta">Looking for training for your staff rather than your students?
-          <a href="/join-a-course/">See the staff training courses →</a></p>
+        <p class="meta">Looking for training for your staff instead?
+          <a href="/join-a-course/">See the courses →</a></p>
         <div class="btn-row">
           <a class="btn" href="#plan">Plan your group</a>
           <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -47,17 +47,17 @@ export default function bringAGroup() {
       <ul class="facts">
         <li><span class="facts__term">Who it is for</span><span class="facts__value">Secondary,
           high-school and VET student groups, travelling with their own teachers.</span></li>
-        <li><span class="facts__term">Subjects</span><span class="facts__value">Any subject area in the
-          catalogue, on its own or combined across the week — most often language, AI and ICT, or
-          culture and citizenship. <a href="/join-a-course/">See the areas →</a></span></li>
+        <li><span class="facts__term">Subjects</span><span class="facts__value">Any subject in the
+          catalogue, on its own or combined across the week. Language, AI and ICT, and culture and
+          citizenship are the usual choices. <a href="/join-a-course/">See the areas →</a></span></li>
         <li><span class="facts__term">Language</span><span class="facts__value">English or Spanish.</span></li>
-        <li><span class="facts__term">Length</span><span class="facts__value">A week is the usual shape.
-          Two weeks and shorter programmes both run; tell us what your project allows.</span></li>
+        <li><span class="facts__term">Length</span><span class="facts__value">A week is usual. We also
+          run two-week and shorter programmes.</span></li>
         <li><span class="facts__term">Accompanying teachers</span><span class="facts__value">They stay
           with the group through the week and take part in the sessions.</span></li>
         <li><span class="facts__term">Beyond the classroom</span><span class="facts__value">Job shadowing
-          at Spanish schools and education organisations, and educational visits, on their own or mixed
-          into one programme.</span></li>
+          at Spanish schools and education organisations, and educational visits, on their own or as part
+          of the week.</span></li>
       </ul>
     </div>
   </section>
@@ -66,25 +66,22 @@ export default function bringAGroup() {
     <div class="container cols cols--split">
       <div>
         <h2>What a group price covers</h2>
-        <p>A group programme is quoted rather than listed, because the three things that set the price
-          are yours to tell us: how many participants, how long, and what the programme contains.
-          Send those three and we come back with a figure and the invoicing arrangement in writing.</p>
+        <p>Group prices depend on the number of participants, the length of the programme and what you
+          want to include. Send us those details and we'll quote the group in writing.</p>
         <ul>
-          <li>Teaching and the trainers</li>
+          <li>Teaching</li>
           <li>Course materials</li>
           <li>The course rooms</li>
-          <li>Agreed cultural activities, with a member of the team accompanying the group</li>
+          <li>Agreed cultural activities, with someone from the team along</li>
           <li>Certificates and the documents your project needs</li>
         </ul>
         <p class="meta">The fee is exempt from VAT as an educational service.</p>
       </div>
       <div>
-        <h2>What your school arranges</h2>
-        <p>Travel to Spain and within it, accommodation, meals, local transport and insurance. We do not
-          book accommodation or act as a travel agency, and we do not supervise students outside the
-          programme hours and the agreed activities.</p>
-        <p>Under Erasmus+ those costs come from the grant's own budget lines rather than from what you
-          pay us.</p>
+        <h2>Travel and accommodation</h2>
+        <p>Your school arranges travel, accommodation, meals, local transport and insurance. Students
+          are in our care during the programme hours and the agreed activities, and in yours the rest
+          of the time.</p>
         <p><a class="link-strong" href="/barcelona/">Where groups usually stay in Barcelona →</a></p>
       </div>
     </div>
@@ -117,12 +114,11 @@ export default function bringAGroup() {
           <li>We propose the programme and quote it in writing.</li>
           <li>When you accept, we confirm the arrangements and send the documents your project needs.</li>
         </ol>
-        <p class="meta">${d.contact.replyTime} Asking is not a commitment.</p>
+        <p class="meta">${d.contact.replyTime}</p>
       </div>
       <div>
         <h2>If you are the coordinator</h2>
-        <p>The documents, the OID, the receiving-partner role and how invoicing works are set out for
-          institutions on their own page.</p>
+        <p>The documents, the OID and how invoicing works are on the institutional page.</p>
         <p><a class="link-strong" href="/plan-a-mobility/">Institutional programmes →</a></p>
       </div>
     </div>

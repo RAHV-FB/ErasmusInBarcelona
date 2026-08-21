@@ -9,17 +9,18 @@ export default function dates() {
   const chips = filters.map((f, i) => `<button type="button" class="chip" data-filter="${f.id}"
           aria-pressed="${i === 0 ? 'true' : 'false'}">${esc(f.label)}</button>`).join('\n        ');
 
-  const rows = d.dates.map((w) => `<a class="board__row" href="/contact/" data-area="${w.area}">
+  const rows = d.weeks.map((w) => `<a class="board__row" href="/contact/"
+          data-area="${[...new Set(w.courses.map((c) => c.area))].join(' ')}">
           <span class="board__when">${w.label} <span class="board__month">${w.month}</span></span>
-          <span class="board__course">${esc(w.course)}</span>
+          <span class="board__course">${w.courses.map((c) => esc(c.course)).join(' · ')}</span>
         </a>`).join('\n        ');
 
   const body = `
   <section class="container hero">
     <div style="max-width:52ch">
       <h1>Staff training dates in Barcelona</h1>
-      <p class="lede">The ${d.dates.length} staff-training weeks in the current Barcelona calendar,
-        Monday to Friday. Any course can also be requested for a week that is not listed here.</p>
+      <p class="lede">Six course weeks are scheduled in Barcelona, Monday to Friday. We can also run a
+        course in a week that isn't listed.</p>
     </div>
   </section>
 
@@ -29,30 +30,27 @@ export default function dates() {
         <span class="filters__label meta">Filter by subject</span>
         ${chips}
       </div>
-      <p class="meta" data-dates-count>${d.dates.length} scheduled weeks</p>
-      <p class="visually-hidden">Every week listed below is a scheduled week.</p>
+      <p class="meta" data-dates-count>${d.weeks.length} weeks</p>
       <div class="board" data-dates>
         ${rows}
       </div>
       <div class="board__foot">
-        <span class="meta">From the course calendar, ${d.datesSource.importedOn}.</span>
-        <a class="link-strong" href="/contact/">Ask about another week →</a>
+        <span class="meta">From the course calendar, 20 August 2026.</span>
       </div>
 
       <div class="cols cols--split" style="margin-top:44px">
         <div>
           <h2>What "scheduled" means</h2>
-          <p>The week is in the current calendar and open for registration. It is not a confirmation
-            that you have a place: write to us and we will confirm your place, the level and the fee
-            in writing before you book travel.</p>
+          <p>The week is in the calendar and open for registration. It doesn't mean a place is being
+            held for you — write to us and we'll confirm your place, the level and the fee before you
+            book travel.</p>
         </div>
         <div>
-          <h2>If your week is not listed</h2>
-          <p>Any course in the catalogue can be requested for another week in Barcelona, and a
-            second level can open in a week already listed. Two-week courses run as two adjacent
-            weeks at 50 hours.</p>
-          <p class="meta">Enquire as early as you can: the documents a KA1 application needs take a
-            couple of working days, and grant deadlines rarely move.</p>
+          <h2>If your week isn't listed</h2>
+          <p>We can run any course in the catalogue in another week, and a second level can open in a
+            week that's already listed. A two-week course runs as two adjacent weeks.</p>
+          <p class="meta">Ask early if you can — the documents an Erasmus+ application needs take a
+            couple of working days to prepare.</p>
         </div>
       </div>
     </div>
@@ -67,12 +65,11 @@ export default function dates() {
           <li><span class="price__amount">${d.pricing.currency}${d.pricing.barcelona.hours25}</span><span class="price__hours">25 hours a week</span></li>
         </ul>
         <p style="margin-top:16px">Per person, per week. ${d.pricing.includes}</p>
-        <p class="meta">${d.pricing.travel}</p>
       </div>
       <div>
-        <h2>Looking elsewhere in Spain?</h2>
-        <p>This page lists Barcelona only. SpainBcn also runs weeks in Málaga, Mallorca, Gran Canaria, Tenerife
-          and Tarragona.</p>
+        <h2>Elsewhere in Spain</h2>
+        <p>SpainBcn also runs course weeks in Málaga, Mallorca, Gran Canaria, Tenerife and
+          Tarragona.</p>
         <p><a class="link-strong" href="${d.spainbcn.locations}" rel="noopener">See SpainBcn locations ↗</a></p>
       </div>
     </div>
@@ -83,6 +80,6 @@ export default function dates() {
     current: 'dates',
     crumb: 'Dates',
     title: 'Erasmus+ Staff Training Dates in Barcelona | SpainBcn-Programs',
-    description: `The ${d.dates.length} scheduled staff-training weeks in Barcelona, with the subject and dates of each. Other weeks and levels open on request.`,
+    description: `The ${d.weeks.length} scheduled staff-training weeks in Barcelona, with the courses running in each. Other weeks and levels on request.`,
   }, body);
 }

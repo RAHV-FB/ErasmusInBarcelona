@@ -27,9 +27,10 @@ export default function about() {
     <div class="cols cols--lead">
       <div>
         <h1>In Barcelona since 1997</h1>
-        <p class="lede">${d.organisation.founders} opened a Spanish school for international students in
-          1997. It has taught in Barcelona ever since, and now runs Erasmus+ KA1 staff training for
-          teachers and education staff, along with programmes for student groups and institutions.</p>
+        <p class="lede">${d.organisation.founders} started SpainBcn in ${d.organisation.founded},
+          originally with Spanish-language programmes for international students. Today we run
+          staff-training courses, student-group programmes and projects for schools and other
+          education organisations.</p>
         <p>Erasmus in Barcelona is the Barcelona site of SpainBcn-Programs.
           <a href="${d.spainbcn.catalogue}" rel="noopener">Full SpainBcn catalogue ↗</a></p>
       </div>
@@ -43,7 +44,7 @@ export default function about() {
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <h2>How the school changed</h2>
+        <h2>Our history</h2>
       </div>
       <ul class="timeline">
         ${timeline}
@@ -55,9 +56,8 @@ export default function about() {
     <div class="container cols cols--split">
       <div>
         <h2>How the courses run</h2>
-        <p>Most scheduled weeks bring together participants from more than one institution and more than
-          one country, rather than running as a lecture for a single large group. Trainers teach in their
-          own subject areas.</p>
+        <p>Groups are small and international: most weeks bring together participants from several
+          European countries. Trainers teach in their own subject areas.</p>
       </div>
       <div>
         <h2>Reviews</h2>

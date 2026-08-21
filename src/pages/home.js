@@ -7,11 +7,11 @@ const ROUTES = [
   { href: '/bring-a-group/', label: 'Student groups',
     note: 'Programmes for secondary, high-school and VET groups, arranged with the school.' },
   { href: '/plan-a-mobility/', label: 'Institutional programmes',
-    note: 'Private course weeks, job shadowing and educational visits for one institution.' },
+    note: 'Private course weeks, job shadowing and educational visits arranged for your institution.' },
 ];
 
 export default function home() {
-  const soon = d.dates.slice(0, 6);
+  const soon = d.weeks.slice(0, 4);
 
   const routes = ROUTES.map((r, i) => `<li>
           <a href="${r.href}">
@@ -25,7 +25,7 @@ export default function home() {
 
   const board = soon.map((w) => `<a class="board__row" href="/dates/">
           <span class="board__when">${w.label} <span class="board__month">${w.month}</span></span>
-          <span class="board__course">${esc(w.course)}</span>
+          <span class="board__course">${w.courses.map((c) => esc(c.course)).join(' · ')}</span>
         </a>`).join('\n        ');
 
   const areas = d.courseAreas.map((a) => `<div>
@@ -38,11 +38,11 @@ export default function home() {
     <div class="cols cols--lead">
       <div>
         <h1 class="hero__title">Staff training courses in Barcelona</h1>
-        <p class="lede hero__lede">${d.offer.ka1}</p>
-        <p>Erasmus+ funding is common, but it is not required to attend.</p>
+        <p class="lede hero__lede">One- and two-week courses for teachers and other people working in
+          education, with small international groups throughout the year.</p>
         <div class="btn-row">
           <a class="btn" href="/dates/">See course dates</a>
-          <a class="btn btn--ghost" href="/join-a-course/">Choose a course</a>
+          <a class="btn btn--ghost" href="/join-a-course/">Explore courses</a>
         </div>
         <p class="meta" style="margin-top:20px">Run by SpainBcn-Programs, in Barcelona since
           ${d.organisation.founded}.</p>
@@ -55,7 +55,6 @@ export default function home() {
 
   <section class="section section--cobalt">
     <div class="container">
-      <p class="eyebrow">Three things we run</p>
       <ul class="routes">
         ${routes}
       </ul>
@@ -65,15 +64,13 @@ export default function home() {
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <h2>Upcoming staff training weeks</h2>
-        <p>${d.dates.length} weeks are in the current Barcelona calendar. Any course can also be
-          requested for a week that is not listed.</p>
+        <h2>Upcoming weeks in Barcelona</h2>
       </div>
       <div class="board">
         ${board}
       </div>
       <div class="board__foot">
-        <a class="link-strong" href="/dates/">All ${d.dates.length} scheduled weeks →</a>
+        <a class="link-strong" href="/dates/">All ${d.weeks.length} weeks →</a>
         <span class="meta">Confirm your place before booking travel.</span>
       </div>
     </div>
@@ -87,7 +84,6 @@ export default function home() {
     <div class="container">
       <div class="section-head">
         <h2>Course areas</h2>
-        <p>${d.offer.staffScope} ${d.offer.funding}</p>
       </div>
       <div class="grid-cards grid-cards--three">
         ${areas}
@@ -126,11 +122,10 @@ export default function home() {
 
   <section class="section section--cobalt">
     <div class="container">
-      <h2>Tell us what you're planning</h2>
-      <p class="lede">Your possible dates, the subject and the number of participants.
-        ${d.contact.replyTime}</p>
+      <h2>Questions about a course or a group?</h2>
+      <p class="lede">${d.contact.replyTime}</p>
       <div class="btn-row">
-        <a class="btn" href="/contact/">Contact the Barcelona team</a>
+        <a class="btn" href="/contact/">Get in touch</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
       </div>
     </div>

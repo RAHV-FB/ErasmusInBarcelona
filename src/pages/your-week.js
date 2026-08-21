@@ -30,8 +30,8 @@ export default function yourWeek() {
     <div class="cols cols--lead">
       <div>
         <h1>A staff training week in Barcelona</h1>
-        <p class="lede">What is settled before you travel, what the five days look like, and what you
-          leave with.</p>
+        <p class="lede">From your first morning to the certificate on Friday, here's how a typical week
+          works.</p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.workingSession, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
@@ -47,7 +47,7 @@ export default function yourWeek() {
       <ol class="steps">
         ${steps}
       </ol>
-      <p class="meta">${d.booking.contractWith} ${d.booking.payment}</p>
+      <p class="meta">${d.booking.payment}</p>
     </div>
   </section>
 
@@ -61,10 +61,9 @@ export default function yourWeek() {
       <div class="week">
         ${week}
       </div>
-      <p class="meta" style="margin-top:16px">An example week. Which two cultural activities run
-        changes from week to week, and both are included in the fee and optional to attend. A tour is
-        occasionally moved or replaced, usually for weather; the teaching hours are delivered either way.</p>
-      <p class="meta">We send the timetable with the exact start and finish times before the course.</p>
+      <p class="meta" style="margin-top:16px">An example week. The cultural activities vary by week;
+        both are included in the fee and optional to attend. We send the final timetable before you
+        arrive.</p>
     </div>
   </section>
 
@@ -72,18 +71,17 @@ export default function yourWeek() {
     <div class="container cols cols--split">
       <div>
         <h2>Your first morning</h2>
-        <p>You go to the course location we confirmed when you signed up, not to the office —
-          ${d.contact.venueNote.toLowerCase()}</p>
+        <p>You go to the course location we confirmed when you signed up — Gràcia or Barceloneta, not
+          necessarily the office.</p>
         <p>${d.schedule.materials} ${d.schedule.groupSize}</p>
 
         <h2 style="margin-top:1.6em">What to bring</h2>
-        <p>A laptop for the AI and ICT courses, since the sessions are built around trying the tools on
-          your own material. For the other subjects a notebook is enough unless your trainer asks for
-          something specific.</p>
+        <p>Bring a laptop for the AI and ICT courses — you'll be trying the tools on your own material.
+          For other subjects a notebook is enough, unless your trainer asks for something specific.</p>
       </div>
       <div>
         <h2>Lunch and afternoons</h2>
-        <p>Lunch is not included and there is no canteen. Both course areas have cafés and restaurants
+        <p>There's no canteen, so lunch is on your own. Both course areas have cafés and restaurants
           within a few minutes' walk.</p>
         <p>Two afternoons are the week's cultural activities, and someone from the team goes with the
           group. The other three are yours.</p>
@@ -96,7 +94,7 @@ export default function yourWeek() {
     <div class="container cols cols--split">
       <div>
         <h2>Documents we provide</h2>
-        <p>Ask for any of these at any point and we send it. Your
+        <p>We can provide these documents when your institution needs them. Your
           ${d.schedule.certificate.toLowerCase()} is issued on the final day of the course.</p>
         <ul class="facts">
           ${documents}

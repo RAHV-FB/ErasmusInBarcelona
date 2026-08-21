@@ -35,8 +35,8 @@ export const contact = {
   city: 'Barcelona',
   get address() { return `${this.street}, ${this.postcode} ${this.city}`; },
   officeNote: 'Five minutes on foot from the Sagrada Família. Metro: Sagrada Família (L2, L5), Verdaguer (L4, L5).',
-  venueNote: 'Courses run in the Gràcia and Barceloneta areas, depending on the course, the week and '
-    + 'availability. Your course location is confirmed when you sign up.',
+  venueNote: 'Courses run in two parts of the city: Gràcia, around the office, and Barceloneta by the '
+    + 'sea. We confirm which one when you sign up.',
   replyTime: 'We normally reply within two working days.',
 };
 
@@ -111,8 +111,9 @@ export const pricing = {
   barcelona: { hours20: 400, hours25: 450 },
   includesList: ['The teaching', 'All course materials', 'The week\'s two cultural activities'],
   includes: 'The fee covers the teaching, all course materials and the week\'s two cultural activities.',
-  travel: 'You arrange travel, accommodation and meals. Under Erasmus+ KA1 those come from the grant\'s '
-    + 'own travel and individual support lines, not from the course fee.',
+  travel: 'You arrange travel, accommodation and meals.',
+  travelKa1: 'Under Erasmus+ KA1, travel and accommodation come from the grant\'s own budget lines '
+    + 'rather than from the course fee.',
   groups: 'A private programme or a group project is quoted for the group: tell us the group and we confirm the fee and the invoicing in writing before you commit.',
 };
 
@@ -120,36 +121,18 @@ export const pricing = {
 // (spainbcn.com/terms.html, reviewed there 4 August 2026). These are the
 // questions a participant or a finance office actually asks, so the site
 // answers them rather than sending people to read the terms.
-// ============================================================
-// What is being sold, and to whom. Stated in full once — on the home
-// page — and drawn on in shorter forms elsewhere. Every clause is
-// SpainBcn's own claim:
-//   "Erasmus+ staff mobility courses for teachers and staff of schools,
-//    VET centers, universities and other education organizations"
-//                                            — spainbcn.com
-//   "for schools, universities, VET and adult-education organizations"
-//                                            — spainbcn.com/about.html
-//   "Erasmus+ KA1 eligible"                  — spainbcn.com/courses.html
-//   Private booking, and invoicing the individual rather than an
-//   institution, is set out in spainbcn.com/terms.html.
+// What the site sells, for anyone editing the copy: Erasmus+ KA1 staff
+// training in Barcelona, for teachers and other people working in
+// education — schools, universities, VET centres, adult education. Both
+// teaching and non-teaching staff, depending on the course. Erasmus+ is
+// the usual funding route but people also book through their institution
+// or directly with us. Student groups and institutional programmes are
+// separate offers.
 //
-// The funding line must not suggest we rule on anyone's grant. Whether a
-// particular participant's Erasmus+ application is approved is a matter
-// for their national agency, not for us.
-// ============================================================
-export const offer = {
-  product: 'Staff training courses in Barcelona',
-  audience: 'teachers and education staff',
-  institutions: 'schools, universities, VET centres, adult education and other education organisations',
-  ka1: 'Erasmus+ KA1 courses for teachers and education staff from schools, universities, VET centres, '
-    + 'adult education and other education organisations.',
-  staffScope: 'Courses are for teaching and non-teaching staff alike: classroom teachers, school '
-    + 'leaders, trainers, coordinators, and administrative and support staff, where the course suits '
-    + 'the role.',
-  funding: 'Erasmus+ funding is not required. Courses are also open to participants funded directly '
-    + 'by their institution or privately.',
-  notStudents: 'Programmes for student groups are arranged separately, with the school.',
-};
+// That belongs in the page titles and descriptions, and in the booking
+// and institutional copy. It does not belong in the first four lines a
+// visitor reads, which is why there is no data field for it: writing it
+// out once, where it helps, beats interpolating a taxonomy everywhere.
 
 export const booking = {
   steps: [
@@ -158,34 +141,33 @@ export const booking = {
     'You sign up and confirm. We send an acceptance letter if your institution needs one.',
     'We set out the fee, the dates and the invoicing in writing. That confirmation is the contract.',
   ],
-  contractWith: 'The contract is with whoever is invoiced: your institution, or you if you book privately.',
+  contractWith: 'We invoice whoever is booking — your institution, or you directly.',
   vat: 'The fee is exempt from VAT as an educational service, so no VAT is added and none appears on '
     + 'the invoice. If your finance office needs that in writing for a purchase order or a grant claim, ask.',
-  payment: 'There is no deposit and no payment schedule to agree before you enquire. Nothing is payable '
-    + 'until the invoicing arrangement is agreed in writing.',
-  cancellation: 'Cancel more than 14 days before the course and the fee is refunded in full. At 14 days '
-    + 'or less, half is refunded and the other half is held as credit towards another week, at any '
-    + 'SpainBcn destination. Illness, a family emergency, withdrawn funding or a problem at your '
-    + 'institution are treated as exceptions and not charged.',
-  changes: 'Changing the name of a participant, moving to another week or switching course costs nothing.',
+  payment: 'There is no deposit, and nothing is payable until the arrangement is agreed in writing.',
+  cancellation: 'Cancel more than 14 days before the course and we refund the fee in full. At 14 days '
+    + 'or less we refund half and hold the rest as credit towards another week, at any SpainBcn '
+    + 'destination. We don\'t apply that if you have to cancel because of illness, a family emergency, '
+    + 'lost funding or a problem at your institution.',
+  changes: 'Changing a participant\'s name, moving to another week or switching course costs nothing.',
 };
 
 export const schedule = {
   pattern: 'Classes run Monday to Friday mornings.',
-  hours: 'You choose 20 or 25 hours a week when you book, and the fee follows it.',
-  twoWeeks: 'Two-week courses run to 50 hours.',
+  hours: 'You choose 20 or 25 hours a week when you book.',
+  twoWeeks: 'A two-week course is 50 hours.',
   activities: 'Two afternoons are given to the week\'s cultural activities. Both are included in the fee, both are optional, and someone from the team goes with the group.',
-  materials: 'Course materials are handed out on the first day, matched to the levels in the room.',
+  materials: 'Course materials are handed out on the first day.',
   certificate: 'Certificate of attendance',
   certificateNote: 'Issued on the final day of the course.',
-  groupSize: 'Small international groups. Participants usually come from several European countries in the same week.',
+  groupSize: 'Groups are small, usually with participants from several European countries.',
 };
 
 // Documents the organisation provides for Erasmus+ paperwork.
 export const documents = [
   { name: 'Invitation letter', note: 'For grant agreements and travel.' },
   { name: 'Pre-registration confirmation', note: 'For KA1 applications.' },
-  { name: 'Acceptance letter', note: 'When a participant signs up and confirms, if their institution needs one.' },
+  { name: 'Acceptance letter', note: 'Sent once a place is confirmed, where one is needed.' },
   { name: 'Course description and programme', note: 'With the contact hours and what the week covers.' },
   { name: 'Certificate of attendance', note: 'Issued on the final day.' },
   { name: 'Europass Mobility support', note: 'Course information, dates and confirmation.' },
@@ -194,11 +176,10 @@ export const documents = [
 
 // What we can host beyond a scheduled course week.
 export const projectFormats = [
-  'Scheduled course weeks your staff join',
-  'Private course weeks for one institution',
-  'Tailored training, with subject areas combined',
-  'Programmes for student groups',
-  'Job shadowing placements',
+  'A scheduled course week your staff join',
+  'A private course week for your institution alone',
+  'A week combining several subjects, scoped to what the project has to achieve',
+  'Job shadowing at Spanish schools and education organisations',
   'Educational visits',
 ];
 
@@ -350,6 +331,21 @@ export const dates = [
 // ============================================================
 // PEOPLE — names and roles as the organisation publishes them.
 // ============================================================
+// `dates` has one row per course, so several rows share a calendar week.
+// Anything that counts or lists weeks must go through here, or the site
+// says "12 weeks" when there are twelve courses across six.
+export const weeks = (() => {
+  const byWeek = new Map();
+  for (const row of dates) {
+    const key = `${row.start}|${row.end}`;
+    if (!byWeek.has(key)) {
+      byWeek.set(key, { start: row.start, end: row.end, label: row.label, month: row.month, courses: [] });
+    }
+    byWeek.get(key).courses.push({ course: row.course, area: row.area });
+  }
+  return [...byWeek.values()];
+})();
+
 export const team = {
   core: [
     { name: 'Miriam', role: 'Academic coordinator', img: 'team-miriam' },
@@ -370,8 +366,8 @@ export const team = {
 };
 
 export const history = [
-  { year: '1997', title: 'The beginning', text: 'María Ángeles and Miriam founded SpainBcn in Barcelona, to share the city, its language and its culture with international students.' },
-  { year: '2000s', title: 'Teaching Spanish', text: 'Students came from all over the world to learn Spanish, and saw Spain while they were here.' },
+  { year: '1997', title: 'The beginning', text: 'María Ángeles and Miriam founded SpainBcn in Barcelona, teaching Spanish to international students.' },
+  { year: '2000s', title: 'A language school', text: 'Students came from all over the world to learn Spanish in Barcelona.' },
   { year: '2010s', title: 'From language courses to European mobility', text: 'European teachers began arriving through Erasmus+ staff mobility, and the catalogue grew from language classes into professional training.' },
   { year: 'Today', title: 'Barcelona and five more destinations', text: 'Courses run in Barcelona, Málaga, Mallorca, Gran Canaria, Tenerife and Tarragona, for schools, universities, VET and adult-education organisations across Europe.' },
 ];

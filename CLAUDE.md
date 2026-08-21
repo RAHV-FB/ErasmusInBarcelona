@@ -62,11 +62,15 @@ and non-teaching alike. Erasmus+ funding is common but not required — institut
 also pay directly. Student groups and institutional programmes are two separate offers, never blended
 into "education programmes".
 
-State that in full once, on the home page, from `offer` in `site-data.js`; everywhere else use the
-short form. "Erasmus+ week", "Erasmus programme" and bare "programme" are too vague to name the
-product. Use KA1 where it establishes the offer or names a document's purpose, then plain words —
-staff training, course, week, participant. Never imply we decide whether someone's grant covers a
-course; that is their national agency's call.
+That belongs in page titles and descriptions, and in the booking and institutional copy. It does not
+belong in the first four lines a visitor reads: the hero names the product and who it is for, and
+nothing else. Explain funding once, in a booking context, as "you can book through your institution
+or directly with us" — never as an eligibility statement, and never imply we decide whether
+someone's grant covers a course; that is their national agency's call.
+
+"Erasmus+ week", "Erasmus programme" and bare "programme" are too vague to name the product. Use KA1
+where it establishes the offer or names a document's purpose, then plain words — staff training,
+course, week, participant.
 
 ## Usefulness
 
@@ -85,6 +89,12 @@ Guidance is allowed where the geography or the arithmetic supports it, and it is
 Precision is not: give a range for a journey time, an exact figure for a regulated fare.
 
 ## Writing
+
+Understand the fact first, then write the sentence a member of staff would actually say. Never
+expand a data field into prose, stack qualifiers to be exhaustive, or prove that every audience was
+considered. `dates` has one row per course, so anything counting weeks goes through `weeks`.
+
+## Writing style
 
 Explain the service, never the website. No sentence whose subject is this page, this site, this
 link, the form, the catalogue or where the answers travel. Technical and legal explanation belongs

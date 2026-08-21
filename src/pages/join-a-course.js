@@ -59,11 +59,8 @@ export default function joinACourse() {
     <div class="cols cols--lead">
       <div>
         <h1>Staff training courses in Barcelona</h1>
-        <p class="lede">Erasmus+ KA1 courses for teachers and education staff. Each runs for one week,
-          Monday to Friday mornings, at 20 or 25 training hours; a few subjects also run as a two-week
-          intensive at 50 hours.</p>
-        <p>${d.offer.staffScope}</p>
-        <p class="meta">${d.offer.funding}</p>
+        <p class="lede">One- and two-week courses for teachers and education staff. Most run Monday to
+          Friday with 20- or 25-hour options.</p>
         <ul class="price price--inline">
           <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
           <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
@@ -96,12 +93,14 @@ export default function joinACourse() {
         <ul>
           ${d.pricing.includesList.map((i) => `<li>${esc(i)}</li>`).join('\n          ')}
         </ul>
+        <p>You can book through your institution or directly with us. The courses are commonly used
+          for Erasmus+ KA1 staff mobility.</p>
         <p class="meta">The fee is exempt from VAT as an educational service, so none is added and none
           appears on the invoice.</p>
       </div>
       <div>
         <h2>Travel and accommodation</h2>
-        <p>${d.pricing.travel}</p>
+        <p>${d.pricing.travel} ${d.pricing.travelKa1}</p>
         <p><a class="link-strong" href="/barcelona/">Where to stay and how to reach class →</a></p>
       </div>
     </div>
@@ -113,9 +112,11 @@ export default function joinACourse() {
         <h2>Choosing a week</h2>
       </div>
       <ul class="facts">
-        <li><span class="facts__term">Length</span><span class="facts__value">One week, or two. ${d.schedule.twoWeeks}</span></li>
+        <li><span class="facts__term">Length</span><span class="facts__value">One or two weeks. ${d.schedule.twoWeeks}</span></li>
         <li><span class="facts__term">Hours</span><span class="facts__value">${d.schedule.hours}</span></li>
-        <li><span class="facts__term">Levels</span><span class="facts__value">Most programmes run at an
+        <li><span class="facts__term">Who comes</span><span class="facts__value">Courses are open to both
+          teaching and non-teaching staff, depending on the subject.</span></li>
+        <li><span class="facts__term">Levels</span><span class="facts__value">Most courses run at an
           introductory and an advanced level. Say which one you want when you enquire.</span></li>
         <li><span class="facts__term">Language</span><span class="facts__value">English, except the Spanish
           programmes, which are taught in Spanish.</span></li>
@@ -132,7 +133,7 @@ export default function joinACourse() {
       <h2>Ask about a week</h2>
       <p class="lede">Send the subject, the level and the dates you have in mind. ${d.contact.replyTime}</p>
       <div class="btn-row">
-        <a class="btn" href="/contact/">Ask about a course</a>
+        <a class="btn" href="/contact/">Ask about a week</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
       </div>
     </div>

@@ -144,7 +144,7 @@ export const staying = [
     area: 'Eixample Dreta, towards Passeig de Gràcia',
     forOffice: 'L4 or L5, 5–10 minutes',
     forSea: 'L4 direct, about 10 minutes',
-    note: 'The safest choice while your course location is still open: L4 runs from here to both '
+    note: 'The safest choice if your course location isn\'t confirmed yet: L4 runs from here to both '
       + 'areas, and the airport train stops at Passeig de Gràcia.',
   },
   {
@@ -161,10 +161,9 @@ export const staying = [
   },
 ];
 
-export const bookingAdvice = 'Courses run in the Gràcia and Barceloneta areas, and which one your week '
-  + 'uses is settled when you sign up. If you can, wait for that before booking accommodation you '
-  + 'cannot cancel. If you have to book earlier, choose somewhere on L4: it runs from the Sagrada '
-  + 'Família area down to Barceloneta, so either area is a direct ride with no changes.';
+export const bookingAdvice = 'If you can, wait until your course location is confirmed before booking '
+  + 'accommodation you cannot cancel. If you have to book before then, staying near L4 gives you a '
+  + 'direct line to both areas — it runs from the Sagrada Família area down to Barceloneta.';
 
 // Free afternoons, sorted by how much of one they take. Practical, not
 // a tour of the city: the two cultural activities are already arranged.

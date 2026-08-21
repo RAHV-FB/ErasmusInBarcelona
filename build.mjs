@@ -126,7 +126,7 @@ if (PROTOTYPE) {
 fs.writeFileSync(path.join(DIST, '.nojekyll'), '');
 
 console.log(`${count} pages → ${DIST}/${BASE_PATH ? ` (base path ${BASE_PATH})` : ''}${PROTOTYPE ? ' [prototype: noindex]' : ''}`);
-console.log(`${urls.length} URLs in sitemap.xml · ${data.dates.length} course weeks · ` +
+console.log(`${urls.length} URLs in sitemap.xml · ${data.weeks.length} weeks (${data.dates.length} courses) · ` +
   `${data.courseAreas.length} subject areas`);
 console.log(analytics.websiteId
   ? `analytics: ${analytics.provider} ${analytics.region}, website ${analytics.websiteId.slice(0, 8)}…, `

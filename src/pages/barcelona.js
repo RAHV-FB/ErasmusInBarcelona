@@ -53,14 +53,13 @@ export default function barcelona() {
             <li><span class="facts__term">${b.stations.sagradaFamilia.name}</span><span class="facts__value">${lines(b.stations.sagradaFamilia)} · about 5 minutes' walk</span></li>
             <li><span class="facts__term">${b.stations.verdaguer.name}</span><span class="facts__value">${lines(b.stations.verdaguer)} · about 10 minutes' walk</span></li>
           </ul>
-          <p class="meta">The office itself is always on Carrer del Pare Lainez, whichever area your
-            course runs in.</p>
+          <p class="meta">Wherever your course runs, the office stays here.</p>
         </div>
         <div>
           <h3>Barceloneta</h3>
           <p>By the sea, a few kilometres from the office. The neighbourhood is served by
             ${b.stations.barceloneta.name} on ${lines(b.stations.barceloneta)} — the same line that runs
-            back up to Verdaguer, which is why L4 is the useful one to be near.</p>
+            back up to Verdaguer.</p>
           <p class="meta">We send the address of your course location when you sign up.</p>
         </div>
       </div>
@@ -83,8 +82,8 @@ export default function barcelona() {
           </tbody>
         </table>
       </div>
-      <p class="meta" style="margin-top:16px">Travel times are for the metro, door to door, at ordinary
-        times of day. We do not book accommodation or hold rooms anywhere.</p>
+      <p class="meta" style="margin-top:16px">Metro times, door to door, at ordinary times of day. We
+        don't book accommodation.</p>
     </div>
   </section>
 
@@ -93,7 +92,7 @@ export default function barcelona() {
       <div class="section-head">
         <h2>From the airport</h2>
         <p>${b.airport.name} is ${b.airport.distanceKm} km south of the city, with terminals
-          ${b.airport.terminals}. Four ways in, and the best one depends on where you are staying.</p>
+          ${b.airport.terminals}. Which route suits you depends on where you're staying.</p>
       </div>
       <div class="table-wrap">
         <table class="data">
@@ -113,8 +112,8 @@ export default function barcelona() {
     <div class="container">
       <div class="section-head">
         <h2>Which ticket to buy</h2>
-        <p>A five-day course is about ten journeys if you travel to class and back and walk the rest.
-          That is exactly one T-casual.</p>
+        <p>If you're making roughly two public-transport trips a day, a T-casual will usually cover the
+          basic commute. If you expect to use transport more often, compare it with Hola Barcelona.</p>
       </div>
       <div class="table-wrap">
         <table class="data">
@@ -128,14 +127,15 @@ export default function barcelona() {
       </div>
       <div class="cols cols--split" style="margin-top:28px">
         <div>
-          <h3>If you are staying near your course</h3>
-          <p>A T-casual at €13 covers the week's commute, and two airport tickets at €5.90 cover the
-            arrival and the return. About €25 in total.</p>
+          <h3>Getting to and from the airport</h3>
+          <p>The R2 Nord train is covered by an integrated ticket, so a T-casual journey works. The L9
+            airport metro is not: there you need the €5.90 airport ticket, or a pass that includes the
+            airport stations.</p>
         </div>
         <div>
-          <h3>If you plan to move around every day</h3>
-          <p>Compare the Hola Barcelona Travel Card. It is unlimited for two to five days and includes
-            the airport metro in both directions, which the T-casual does not.</p>
+          <h3>If you'll be out most evenings</h3>
+          <p>The Hola Barcelona Travel Card is unlimited for two to five days and includes the airport
+            metro both ways.</p>
         </div>
       </div>
       <p class="meta" style="margin-top:18px">Fares checked ${b.checked} and they do change.

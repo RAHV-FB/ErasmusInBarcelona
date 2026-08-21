@@ -6,8 +6,8 @@ export default function contact() {
   <section class="container hero hero--tight">
     <div style="max-width:52ch">
       <h1>Tell us what you're planning</h1>
-      <p class="lede">Include your possible dates, the subject and the number of participants.
-        ${d.contact.replyTime}</p>
+      <p class="lede">Tell us the course or programme you're interested in, your possible dates and how
+        many people are coming. ${d.contact.replyTime}</p>
     </div>
   </section>
 

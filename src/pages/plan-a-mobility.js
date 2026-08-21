@@ -11,11 +11,10 @@ export default function planAMobility() {
   <section class="container hero hero--tight">
     <div style="max-width:54ch">
       <h1>Institutional programmes in Barcelona</h1>
-      <p class="lede">For coordinators arranging an Erasmus+ mobility: private course weeks for one
-        institution, job shadowing and educational visits, and the documents, quotes and registration
-        details your application needs.</p>
+      <p class="lede">Private course weeks, job shadowing and educational visits for schools and other
+        education organisations, with the documents your Erasmus+ application needs.</p>
       <p class="meta">Sending individual staff to a scheduled week instead?
-        <a href="/join-a-course/">See the staff training courses →</a></p>
+        <a href="/join-a-course/">See the courses →</a></p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Tell us about the project</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -30,7 +29,7 @@ export default function planAMobility() {
           <p class="eyebrow">You already have funding</p>
           <ul class="facts">
             <li><span class="facts__term">Programme</span><span class="facts__value">We build the week around the objectives, dates and group in your project.</span></li>
-            <li><span class="facts__term">Receiving partner</span><span class="facts__value">We act as the receiving partner in Spain and confirm every arrangement in writing.</span></li>
+            <li><span class="facts__term">Receiving partner</span><span class="facts__value">We act as the receiving partner in Spain.</span></li>
             <li><span class="facts__term">Documents</span><span class="facts__value">Invitation letter, acceptance letters, certificates and the invoice for your grant records.</span></li>
           </ul>
         </div>
@@ -39,7 +38,7 @@ export default function planAMobility() {
           <ul class="facts">
             <li><span class="facts__term">Course descriptions</span><span class="facts__value">Descriptions and programmes to attach to the application.</span></li>
             <li><span class="facts__term">Pre-registration</span><span class="facts__value">Pre-registration confirmation for KA1 applications.</span></li>
-            <li><span class="facts__term">Dates and fees</span><span class="facts__value">Confirmed in writing before you submit, so the Spain-based part of the budget is costed.</span></li>
+            <li><span class="facts__term">Dates and fees</span><span class="facts__value">We confirm the dates and fees in writing before you submit your application.</span></li>
           </ul>
         </div>
       </div>
@@ -65,23 +64,21 @@ export default function planAMobility() {
         <ul>
           ${formats}
         </ul>
-        <p class="meta">Formats can be combined inside one programme — training in the mornings and job
-          shadowing later in the week, for instance.</p>
+        <p class="meta">These can be combined: training in the mornings and job shadowing later in the
+          week, for example.</p>
       </div>
       <div>
         <h2>Fees and invoicing</h2>
-        <p>Course fees are per person and are published on each subject-area page: in Barcelona,
+        <p>Course fees are per person: in Barcelona,
           ${d.pricing.currency}${d.pricing.barcelona.hours20} for 20 hours and
           ${d.pricing.currency}${d.pricing.barcelona.hours25} for 25. A private week or a group project
-          is quoted on participant numbers, length and content.</p>
-        <p>${d.booking.vat}</p>
-        <p>The contract and the invoice go to whoever is booking: your institution, or the participant
-          if they book privately. ${d.booking.payment}</p>
-        <p class="meta">${d.pricing.travel}</p>
+          is quoted on numbers, length and content.</p>
+        <p>We invoice whoever is booking — your institution, or the participant directly.
+          ${d.booking.payment}</p>
+        <p class="meta">The fee is exempt from VAT as an educational service. ${d.pricing.travelKa1}</p>
         <h2 style="margin-top:1.6em">Where it runs</h2>
-        <p>Barcelona is the base: the office is in Gràcia and classes also run at Barceloneta.
-          Depending on the group and the dates, a project can also run at SpainBcn's other Spanish
-          destinations — <a href="${d.spainbcn.locations}" rel="noopener">see locations ↗</a>.</p>
+        <p>Barcelona, in the Gràcia and Barceloneta areas. A project can also run at SpainBcn's five
+          other Spanish destinations — <a href="${d.spainbcn.locations}" rel="noopener">see locations ↗</a>.</p>
       </div>
     </div>
   </section>
@@ -100,22 +97,21 @@ export default function planAMobility() {
       </div>
       <div>
         <h2>When to get in touch</h2>
-        <p>Before you submit, if you can. The pre-registration confirmation and the course description
-          your application needs take a couple of working days to prepare, and we can confirm dates and
-          fees in writing so the Barcelona side of the budget is costed rather than estimated.</p>
-        <p>After approval we act as the receiving partner: we deliver the programme, confirm every
-          arrangement in writing and issue the documents your grant administration needs.</p>
-        <p class="meta">If a participant has to withdraw: ${d.booking.cancellation.toLowerCase()}</p>
+        <p>If possible, contact us before you submit. We can prepare the course description,
+          pre-registration confirmation, dates and fees within a few working days.</p>
+        <h2 style="margin-top:1.6em">If a participant withdraws</h2>
+        <p>${d.booking.cancellation}</p>
       </div>
     </div>
   </section>
 
   <section class="section section--cobalt">
     <div class="container">
-      <h2>Tell us what your project needs</h2>
-      <p class="lede">The group, the objectives and the dates you have in mind. ${d.contact.replyTime}</p>
+      <h2>Where to start</h2>
+      <p class="lede">Send us the group, the objectives and the dates you have in mind.
+        ${d.contact.replyTime}</p>
       <div class="btn-row">
-        <a class="btn" href="/contact/">Start the conversation</a>
+        <a class="btn" href="/contact/">Email us</a>
         <a class="btn btn--ghost" href="${d.spainbcn.projects}" rel="noopener">How projects work on SpainBcn ↗</a>
       </div>
     </div>
