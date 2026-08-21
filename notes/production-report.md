@@ -300,3 +300,14 @@ Both third parties were intercepted locally so their real requests could be obse
 `npm run check` passes on all 12 pages: metadata, heading order, alt text, dead links, third-party
 requests on load, tap targets and horizontal overflow at 320, 375, 390, 430, 768, 1024, 1280 and
 1440 px. A scan of the built HTML for the 30 phrases this pass was asked to remove finds none.
+
+### Deployed and checked live
+
+Pushed to `claude/site-health-check-df5ie0`; the Actions workflow built and deployed it. On
+https://rahv-fb.github.io/ErasmusInBarcelona/ every route answers 200, an unknown path answers 404,
+the 22 legacy paths still redirect to their new pages, and every page carries `noindex` with
+robots.txt disallowing everything, because this is still a prototype build. The deployed HTML
+contains no tracker — `UMAMI_WEBSITE_ID` is not set — and no forms.app reference before consent.
+
+The same build was re-checked with `BASE_PATH=/ErasmusInBarcelona`, so the sub-path prefixing of
+links, images and `srcset` candidates is confirmed on the form the project site actually serves.
