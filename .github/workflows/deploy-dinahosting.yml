@@ -5,17 +5,20 @@
 # production .htaccess generated from src/data/redirects.js, and
 # mirrors the result into the hosting account's web root over FTPS.
 #
-# The transfer is FTPS driven by lftp, after the first attempt
-# timed out on the control socket. A probe from a runner found
-# port 21 open and AUTH TLS completing in about a second, so the
-# server was never the problem: it presents a valid certificate
-# issued for *.espacioseguro.com, which does not match the host
-# being dialled, and a client that verifies the hostname waits
-# there until it gives up.
+# The transfer is FTPS driven by lftp. The first attempt timed
+# out on the control socket, and a probe from a runner explained
+# why: port 21 is open and AUTH TLS completes in about a second,
+# but the server answers with a certificate for
+# *.espacioseguro.com. Dialled by any other name, a client that
+# verifies the hostname waits for a handshake that cannot finish.
 #
-# So the chain is still verified — ssl:verify-certificate stays
-# on — and only the hostname check is dropped, which is the one
-# thing that cannot succeed against a shared-hosting certificate.
+# The fix is to use the name the certificate is actually for.
+# With FTP SSL enabled, the panel's FTP section shows it —
+# <account>.espacioseguro.com — and FTP_SERVER must be set to
+# that, so TLS is verified in full rather than half-trusted. The
+# upload refuses to start against any other host, because the
+# failure it produces is a thirty-second silence rather than an
+# error worth reading.
 #
 # The mirror deletes files on the server that are no longer in
 # dist/, so the live site is always exactly what this repository
@@ -25,7 +28,7 @@
 # Credentials live in repository secrets and never appear here.
 # SSH and FTP share them on this host, so the FTP_* names still
 # fit:
-#   FTP_SERVER    the hosting account's host
+#   FTP_SERVER    the hosting's *.espacioseguro.com FTP host
 #   FTP_USERNAME  the account user
 #   FTP_PASSWORD  its password
 #
@@ -114,6 +117,13 @@ jobs:
           LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           DIR: ${{ vars.DEPLOY_DIR || '/www/' }}
         run: |
+          case "$HOST" in
+            *.espacioseguro.com) ;;
+            *)
+              echo "::error::FTP_SERVER must be the hosting's <account>.espacioseguro.com name, which the panel shows under FTP once FTP SSL is on. Any other name fails the certificate's hostname check, and fails it by hanging."
+              exit 1 ;;
+          esac
+
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
           # cgi-bin belongs to the server and .well-known is where
@@ -125,7 +135,6 @@ jobs:
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
-          set ssl:check-hostname no
           set net:max-retries 3
           set net:timeout 20
           set cmd:fail-exit true

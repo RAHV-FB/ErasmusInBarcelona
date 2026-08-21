@@ -110,9 +110,11 @@ variable `DEPLOY_DIR`, defaulting to `/www/`. The workflow refuses to publish a 
 to mirror anywhere but the web root, and afterwards checks five pages, the 404 status and three
 legacy redirects against the live domain.
 
-The hosting serves a certificate for `*.espacioseguro.com` on port 21, which cannot match the host
-being dialled, so the upload verifies the certificate chain but not the hostname. A client that
-checks the hostname simply hangs until it times out — which is what the first attempt did.
+`FTP_SERVER` must be the hosting's `<account>.espacioseguro.com` name, which the panel shows under
+FTP once FTP SSL is on — not `ftp.<domain>` and not the `hl####.dinaserver.com` server name. That
+is the name on the certificate the server presents on port 21, and dialling any other one fails the
+hostname check by hanging for thirty seconds rather than saying anything. The upload refuses to
+start against a host it knows cannot match.
 
 `tools/build-htaccess.mjs` writes the Apache configuration from `src/data/redirects.js` and
 `SITE_URL` — the same two sources `server.mjs` uses — so local and production behaviour cannot
