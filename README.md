@@ -11,6 +11,7 @@ npm start            # build, then serve on http://127.0.0.1:4173
 npm run build        # build dist/ only
 npm run check        # build, serve, and audit every page in a browser
 npm run links        # check every off-site link and anchor (hits real servers)
+npm run build:live   # build dist/ with the production .htaccess
 npm run images       # regenerate the images in src/assets/images
 ```
 
@@ -96,10 +97,24 @@ allows it. Their choice is stored as `eib-privacy-v1` in local storage and read 
 `/privacy/` and `/cookies/` describe exactly this. If either service changes, those pages change in
 the same commit — and the network behaviour gets re-checked, not assumed.
 
-## Before publishing
+## Publishing
+
+The live site is <https://www.erasmusinbarcelona.com>, hosted by Dinahosting and served by Apache.
+
+`.github/workflows/deploy-dinahosting.yml` builds the site on every push to `main`, generates
+`dist/.htaccess`, and mirrors `dist/` into the web root over FTPS. The mirror deletes whatever is
+no longer in `dist/`, so the live site is exactly what this repository builds. FTP credentials are
+repository secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`); the web root is the repository
+variable `FTP_SERVER_DIR`. The workflow refuses to upload a build carrying `noindex`, and checks
+four pages, the 404 status and one legacy redirect against the live domain afterwards.
+
+`tools/build-htaccess.mjs` writes the Apache configuration from `src/data/redirects.js` and
+`SITE_URL` — the same two sources `server.mjs` uses — so local and production behaviour cannot
+drift. Nothing is edited on the server: a change there is overwritten by the next deploy.
+
+Before publishing a change that touches any of this:
 
 - Confirm the hosting company named in `/privacy/` under "When you open a page".
 - Point `SITE_URL` in `src/layout.js` at the live domain if it is not
-  `https://www.erasmusinbarcelona.com`.
-- Reproduce the redirect table in `server.mjs` in the production server configuration.
-- Serve `404.html` with a 404 status.
+  `https://www.erasmusinbarcelona.com`; `tools/build-htaccess.mjs` follows it.
+- Add a legacy path to `src/data/redirects.js`, never to the server.

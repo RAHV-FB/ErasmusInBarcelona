@@ -2,10 +2,11 @@
   "name": "erasmusinbarcelona",
   "version": "1.0.0",
   "private": true,
-  "description": "ErasmusInBarcelona.com — Erasmus+ courses and education programmes in Barcelona, by SpainBcn-Programs",
+  "description": "ErasmusInBarcelona.com \u2014 Erasmus+ courses and education programmes in Barcelona, by SpainBcn-Programs",
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
+    "build:live": "node build.mjs && node tools/build-htaccess.mjs",
     "build:pages": "BASE_PATH=/ErasmusInBarcelona SITE_URL=https://rahv-fb.github.io/ErasmusInBarcelona PROTOTYPE=1 node build.mjs",
     "images": "node tools/build-images.mjs",
     "start": "node build.mjs && node server.mjs",

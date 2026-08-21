@@ -1,0 +1,126 @@
+# ============================================================
+# Build the site and publish it to erasmusinbarcelona.com.
+#
+# The runner builds dist/ exactly as `npm run build` does, adds the
+# production .htaccess generated from src/data/redirects.js, and
+# mirrors the result into the hosting account's web root over FTPS.
+#
+# The mirror deletes files on the server that are no longer in
+# dist/, so the live site is always exactly what this repository
+# builds. Anything the server keeps for itself is named in the
+# exclude list on the upload step.
+#
+# Credentials live in repository secrets and never appear here:
+#   FTP_SERVER    the hosting account's FTP host
+#   FTP_USERNAME  the FTP user
+#   FTP_PASSWORD  its password
+#
+# The FTP user lands in the account home, not the web root, so
+# server-dir is /www/ — the directory Apache serves. Mirroring
+# into the home directory would delete Maildir, logs and the rest
+# of the account, so the path is checked before anything uploads.
+# Repository variable FTP_SERVER_DIR overrides it; SITE_CHECK_URL
+# points the post-deploy check somewhere else (the hosting's own
+# *.dinaserver.com name, while the domain still answers elsewhere).
+# ============================================================
+name: Deploy to dinahosting
+
+on:
+  push:
+    branches:
+      - main
+      - claude/site-health-check-df5ie0
+  workflow_dispatch:
+
+# One deployment at a time, and let a running one finish rather
+# than leaving the web root half-written.
+concurrency:
+  group: dinahosting
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://www.erasmusinbarcelona.com/
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The build needs no dependencies — only Node's own modules.
+      # sharp and Playwright are for `npm run images` and `npm run
+      # check`, neither of which runs here.
+      - name: Build
+        run: |
+          node build.mjs
+          node tools/build-htaccess.mjs
+
+      # The upload deletes whatever is not in dist/, so the one
+      # thing that must never be wrong is where it points.
+      - name: Refuse to mirror outside the web root
+        run: |
+          dir='${{ vars.FTP_SERVER_DIR || '/www/' }}'
+          case "$dir" in
+            /www/*|/www/) ;;
+            *) echo "::error::FTP_SERVER_DIR is '$dir'. The deploy deletes whatever is not in dist/, so it may only target the web root."; exit 1 ;;
+          esac
+          echo "web root: $dir"
+
+      # A published page that says noindex would take the site out
+      # of the index, so fail before uploading rather than after.
+      - name: Refuse to publish a prototype build
+        run: |
+          if grep -rlq 'name="robots" content="noindex' dist/; then
+            echo "::error::dist/ contains noindex pages — this is a prototype build, not a publishable one."
+            exit 1
+          fi
+          grep -q 'https://www.erasmusinbarcelona.com/' dist/sitemap.xml \
+            || { echo "::error::sitemap.xml does not point at the live domain."; exit 1; }
+          test -f dist/.htaccess || { echo "::error::dist/.htaccess is missing."; exit 1; }
+
+      - name: Publish over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ${{ vars.FTP_SERVER_DIR || '/www/' }}
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .well-known/**
+            cgi-bin/**
+            stats/**
+            logs/**
+
+      # Against the real domain once it points here; against the
+      # hosting's own name while it does not.
+      - name: Check the site answers
+        env:
+          BASE: ${{ vars.SITE_CHECK_URL || 'https://www.erasmusinbarcelona.com' }}
+        run: |
+          sleep 10
+          echo "checking $BASE"
+          for path in / /join-a-course/ /dates/ /contact/ /your-week/; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --retry 3 --retry-delay 5 "$BASE$path")
+            echo "$code  $path"
+            [ "$code" = "200" ] || exit 1
+          done
+          code=$(curl -sS -o /dev/null -w '%{http_code}' "$BASE/no-such-page/")
+          echo "$code  /no-such-page/ (expected 404)"
+          [ "$code" = "404" ] || exit 1
+          for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/; do
+            from=${legacy%%:*}; to=${legacy##*:}
+            location=$(curl -sSI "$BASE$from" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r')
+            echo "$from → $location (expected $to)"
+            case "$location" in *"$to") ;; *) exit 1 ;; esac
+          done
