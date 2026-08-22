@@ -51,9 +51,11 @@ ErrorDocument 404 /404.html
   # The hosting's own *.dinaserver.com name is exempt, so the site can be
   # opened and checked there before the domain points here — without the
   # first request bouncing to whatever is currently live on the domain.
+  # HTTP_HOST carries the port when there is a non-default one, so the
+  # exemption has to allow for it or it silently stops applying.
   RewriteCond %{HTTPS} !=on [OR]
   RewriteCond %{HTTP_HOST} ${wantsWww ? '!^www\\.' : '^www\\.'} [NC]
-  RewriteCond %{HTTP_HOST} !\\.dinaserver\\.com$ [NC]
+  RewriteCond %{HTTP_HOST} !\\.dinaserver\\.com(:[0-9]+)?$ [NC]
   RewriteRule ^(.*)$ ${SITE_URL}/$1 [R=301,L]
 </IfModule>
 

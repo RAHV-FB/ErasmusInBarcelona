@@ -142,6 +142,11 @@ jobs:
             set ftp:ssl-protect-data true
             set ssl:verify-certificate true
             set ftp:passive-mode true
+            # Without -a the server lists no dotfiles, so .htaccess and
+            # .nojekyll are invisible to both the mirror and the check
+            # below — which then reports as missing two files that are
+            # sitting right there.
+            set ftp:list-options -a
             set net:max-retries 5
             set net:reconnect-interval-base 5
             set net:timeout 30
