@@ -23,8 +23,18 @@ const wantsWww = host.startsWith('www.');
 // RedirectMatch with an anchored pattern, not Redirect: Redirect matches
 // on prefix, so `/home` would also catch `/home/` and send it to `//`,
 // and any future path beginning with a legacy one would be swallowed too.
+//
+// The target is absolute, and that is not cosmetic. Apache expands a
+// relative Redirect target into an absolute Location using its own idea
+// of the scheme — and Varnish terminates TLS in front of it, so its own
+// idea is always http. A relative target therefore sends every legacy
+// URL to http://, which the scheme rule above then answers with a
+// second 301 to https://. Two hops, the first in the clear, for exactly
+// the URLs the old site had indexed. Measured on the live site on
+// 22 August 2026: /about-us/ and /program-information/ both handed back
+// http:// Locations. Writing SITE_URL in makes it one hop again.
 const redirects = Object.entries(REDIRECTS)
-  .map(([from, to]) => `  RedirectMatch 301 ^${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$ ${to}`)
+  .map(([from, to]) => `  RedirectMatch 301 ^${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$ ${SITE_URL}${to}`)
   .join('\n');
 
 const htaccess = `# ============================================================

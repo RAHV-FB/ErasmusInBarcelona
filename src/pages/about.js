@@ -26,7 +26,7 @@ export default function about() {
   <section class="container hero">
     <div class="cols cols--lead">
       <div>
-        <h1>In Barcelona since 1997</h1>
+        <h1>In Barcelona since ${d.organisation.founded}</h1>
         <p class="lede">${d.organisation.founders} started SpainBcn in ${d.organisation.founded},
           originally with Spanish-language programmes for international students. Today we run
           staff-training courses, student-group programmes and projects for schools and other
@@ -36,7 +36,7 @@ export default function about() {
       </div>
       <figure class="media media--photo">
         ${img(d.images.founders, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
-        <figcaption>${d.organisation.founders}, 1997</figcaption>
+        <figcaption>${d.organisation.founders}, ${d.organisation.founded}</figcaption>
       </figure>
     </div>
   </section>
@@ -109,6 +109,6 @@ export default function about() {
     current: 'about',
     crumb: 'About',
     title: 'About SpainBcn-Programs in Barcelona | Erasmus in Barcelona',
-    description: 'SpainBcn-Programs has taught in Barcelona since 1997. The team, the trainers, the registered company and the Erasmus+ OID.',
+    description: `SpainBcn-Programs has taught in Barcelona since ${d.organisation.founded}. The team, the trainers, the registered company and the Erasmus+ OID.`,
   }, body);
 }

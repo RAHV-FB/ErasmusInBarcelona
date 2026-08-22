@@ -73,21 +73,15 @@ command -v node >/dev/null || fail "node is not installed. The build needs Node 
 node build.mjs || fail "build failed"
 node tools/build-htaccess.mjs || fail ".htaccess generation failed"
 
-[ -f "$DIST/.htaccess" ] || fail "$DIST/.htaccess is missing — the server would lose its redirects and its 404."
-[ -f "$DIST/index.html" ] || fail "$DIST/index.html is missing."
+# Every guard lives in scripts/guards.mjs, which the GitHub workflow and
+# the pull-request check both run too — a prototype build, a sitemap that
+# disagrees with the build, an .htaccess that disagrees with
+# redirects.js, a course week that has already happened, a fact typed
+# into a template. One definition, so no two callers can enforce
+# different things.
+node scripts/guards.mjs || fail "guards failed — nothing was uploaded."
 
-if grep -q '^Disallow: /$' "$DIST/robots.txt"; then
-  fail "$DIST/robots.txt disallows everything. This is a PROTOTYPE=1 build; publishing it would remove the site from search results."
-fi
-
-stray=$(grep -rl 'content="noindex' "$DIST" --include='*.html' | grep -v "^$DIST/404\.html$" || true)
-[ -n "$stray" ] && fail "noindex on pages meant to be indexed:
-$stray"
-
-grep -q 'https://www.erasmusinbarcelona.com/' "$DIST/sitemap.xml" \
-  || fail "sitemap.xml does not point at the live domain. Check SITE_URL in src/layout.js."
-
-ok "$(find "$DIST" -type f | wc -l | tr -d ' ') files, $(du -sh "$DIST" | cut -f1) — robots.txt allows indexing, only 404.html is noindex"
+ok "$(find "$DIST" -type f | wc -l | tr -d ' ') files, $(du -sh "$DIST" | cut -f1) — built from source and past every guard"
 fi
 
 # ------------------------------------------------------------

@@ -102,11 +102,11 @@ file arrived, then checks the live site. Around nine minutes, most of it upload.
 
 ### Or from a terminal
 
-```bash
-bash upload-to-dinahosting.sh                # build, upload, verify
-bash upload-to-dinahosting.sh --dry-run      # list what would go, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-```
+| Command | What it does |
+|---|---|
+| `bash upload-to-dinahosting.sh` | build, upload, verify |
+| `bash upload-to-dinahosting.sh --dry-run` | list what would go, send nothing |
+| `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
 
 `curl` only, so nothing to install on a Mac. Three or four minutes, and it is the faster route
 when something is broken and you want it fixed now.
@@ -177,6 +177,26 @@ it silently stops applying.
 **404.html is `noindex`, correctly.** A guard that rejects any `noindex` page rejects every
 build. The prototype build is identified by its own markers instead: a `robots.txt` that
 disallows everything, and a redirecting stub at each legacy path.
+
+**The preview host carries `x-robots-tag: noindex, nofollow`, the live domain does not.**
+The hosting adds it to everything served on `*.dinaserver.com`, and nothing in `.htaccess` does
+— so before the cutover there was no way to tell whether it followed the preview hostname or
+the account. It follows the hostname: checked on 22 August 2026 after go-live,
+`https://www.erasmusinbarcelona.com/` returns no `x-robots-tag` and its markup says
+`index, follow`. Worth re-checking on the next domain rather than assuming, because the failure
+is silent — every build guard passes while the site is invisible.
+
+**macOS zsh does not strip `#` comments, so annotated commands cannot be pasted.** An
+interactive zsh treats `#` as an ordinary character unless `interactive_comments` is set, so
+pasting `bash upload-to-dinahosting.sh --verify-only  # check the live site` hands the script
+five extra arguments and it stops with `unknown option: #`. The same paste through `npm` is
+quieter and worse: npm appends them to the script and runs it anyway. Every command block in
+these documents is therefore comment-free, and the explanations sit beside them in tables.
+
+**`npm install` does not install the browser.** `npm run check` drives Chromium through
+Playwright, and the browser is a separate download: `npx playwright install chromium`, once per
+machine. Without it the check stops before it starts, and until recently it did so behind a
+Playwright banner wrapped in a Node stack trace. It now says the one line that matters.
 
 **Your browser caches these URLs hard.** Append a query string when checking anything.
 
