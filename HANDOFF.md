@@ -1,5 +1,11 @@
 # ErasmusInBarcelona.com — publishing, and what is left to do
 
+> **Before anything else: the registrant contact is unverified.** The panel warns
+> "Dominio pendiente de verificar el contacto registrante" and names **spainbcnmiriam@gmail.com**.
+> ICANN requires the domain be suspended if that email is not acted on, usually within 15 days
+> of the transfer. A suspended domain takes the site down whatever else is configured. Find that
+> email and click the link.
+
 **Status, 22 August 2026: the site is built, uploaded, serving correctly on the hosting, and
 approved by the owner for publication. The registrar transfer has completed — dinahosting is
 the registrar as of 07:42 UTC — but the domain still points at Webnode, because the
@@ -57,6 +63,8 @@ to the provider the domain has just left. Do not assume they keep answering for 
 | Preview URL | `erasmusinbarcelona.hl1639.dinaserver.com` |
 | Panel | <https://panel.dinahosting.com> |
 | Certificate | none yet — Let's Encrypt (`CERLET`) is free in the panel and must wait for DNS |
+| Domain expiry | 17/11/2027, auto-renew on |
+| dinahosting nameservers | `ns.dinahosting.com`, `ns2`, `ns3`, `ns4` |
 
 **DNS today** (authoritative: `ns1.register.it`, `ns2.register.it`):
 
@@ -144,17 +152,39 @@ through.
 
 ### 2. Point the nameservers at dinahosting, and build the zone
 
+```bash
+export DINA_USER=... DINA_PASS=...
+bash cutover.sh                # dry run — says what it would do
+bash cutover.sh --zone         # write the A records
+bash cutover.sh --switch-ns    # move the nameservers, after typing the domain to confirm
+bash cutover.sh --watch        # poll DNS, then tell you to issue the certificate
+```
+
 Zone first, nameservers second — the other order makes dinahosting authoritative for a domain
-it has no records for, and the site goes dark until somebody notices. Create:
+whose records still point at a parking IP, and the site goes dark until somebody notices.
+`cutover.sh` enforces that order.
+
+**dinahosting already has a zone for this domain, and it is wrong.** It was initialised on
+30 August 2018 and holds `A @` and `A www` both pointing at `82.98.135.43` — a dinahosting
+parking address, not this hosting. Those two records are what `--zone` rewrites. Nothing else
+is in that zone: no MX, no TXT.
+
+The zone should end up as:
 
 | Record | Value |
 |---|---|
 | `A @` | `82.98.164.84` |
 | `A www` | `82.98.164.84` |
-| `MX @` | `10 imap.mail.webnode.com` — unchanged, so mail is not part of this move |
-| `TXT @` | `v=spf1 a mx include:spfuser.webnode.com -all` — unchanged, matching the MX |
-| `CNAME _dmarc` | drop it; it points at Webnode, and nothing sends mail as this domain |
-| `autoconfig` | drop it — Register.it's, and meaningless here |
+| `MX` / `TXT` | not created — see below |
+
+`cutover.sh` writes no MX or TXT record. Nothing has ever sent or received mail on this domain,
+and the only zone command whose parameters are documented in a page readable from here is
+`Domain_Zone_UpdateTypeA`. Guessing parameter names for a DNS write is worse than leaving mail
+unconfigured, and leaving it unconfigured changes nothing in practice. If mail is ever wanted,
+add it in the panel and record it here.
+
+The `_dmarc` and `autoconfig` records simply cease to exist once the nameservers move; both
+belong to providers being left.
 
 **Lower the TTLs a day beforehand** if you can. The apex is currently 3600s, so without that
 there is up to an hour where some resolvers still send visitors to Webnode. Nothing breaks;

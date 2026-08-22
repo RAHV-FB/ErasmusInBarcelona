@@ -127,27 +127,20 @@ If that returns cleanly, everything below can be scripted.
 Three scripts. None of them is difficult; all of them touch a live domain, so each should
 support a dry run and refuse to continue on an unexpected response.
 
-### 1. `cutover.sh` — point the domain at this hosting
+### 1. `cutover.sh` — written, not yet run
 
-Preconditions to assert before doing anything: the domain resolves, the registrar is
-dinahosting, and the preview URL already serves this build.
+```bash
+export DINA_USER=... DINA_PASS=...
+bash cutover.sh                # dry run, the default
+bash cutover.sh --zone         # A @ and A www → 82.98.164.84
+bash cutover.sh --switch-ns    # nameservers → dinahosting, after typing the domain
+bash cutover.sh --watch        # poll DNS, then hand over to the certificate step
+```
 
-1. Build the zone at dinahosting: `A @ → 82.98.164.84`, `A www → 82.98.164.84`.
-2. Recreate mail as it is today, so nothing about mail changes in the same move:
-   `MX @ 10 imap.mail.webnode.com`, `TXT @ v=spf1 a mx include:spfuser.webnode.com -all`.
-   No mailbox on this domain has ever been created or used, so there is nothing to migrate and
-   nothing to lose — but changing hosting and mail in one step makes a failure twice as hard to
-   read. Drop the `_dmarc` and `autoconfig` records; both belong to providers being left.
-3. Only then `Domain_NameServer_Modify` to dinahosting's nameservers.
-4. Poll until the world agrees:
-   ```bash
-   until [ "$(dig +short www.erasmusinbarcelona.com @8.8.8.8)" = "82.98.164.84" ]; do sleep 60; done
-   ```
-5. `bash upload-to-dinahosting.sh --verify-only --check-url https://www.erasmusinbarcelona.com`
-
-The zone must exist **before** the nameservers move, or dinahosting's servers become
-authoritative for a domain they have no records for, and the site goes dark for as long as it
-takes to notice.
+It checks the credentials before anything else, treats any non-success response as fatal, and
+refuses to move the nameservers before the zone is written. It has **not been run against the
+live API** — this environment cannot reach dinahosting — so watch the first `--zone` run and
+confirm the result in the panel under Zonas DNS before going on to `--switch-ns`.
 
 ### 2. `issue-certificate.sh` — Let's Encrypt
 
