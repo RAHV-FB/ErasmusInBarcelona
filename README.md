@@ -128,6 +128,11 @@ start against a host it knows cannot match.
 `SITE_URL` — the same two sources `server.mjs` uses — so local and production behaviour cannot
 drift. Nothing is edited on the server: a change there is overwritten by the next deploy.
 
+[PUBLISHING.md](PUBLISHING.md) is the terminal-only runbook — the edit-to-live loop, the deploy
+script's flags and environment, and the dinahosting API for the DNS and certificate work that
+would otherwise mean a control panel. [HANDOFF.md](HANDOFF.md) records the state of the domain
+migration and the traps this hosting has.
+
 Before publishing a change that touches any of this:
 
 - Confirm the hosting company named in `/privacy/` under "When you open a page".

@@ -1,9 +1,16 @@
 # ErasmusInBarcelona.com — publishing, and what is left to do
 
-**Status, 22 August 2026: the site is built, uploaded and serving correctly on the hosting.
-It is not yet on the domain, because the domain still points at Webnode.** The registrar
-transfer completed on the morning of 22 August, so nothing is waiting on anyone else any more:
-[What is left](#what-is-left) starts at step 2, and every step of it is mechanical.
+> **Before anything else: the registrant contact is unverified.** The panel warns
+> "Dominio pendiente de verificar el contacto registrante" and names **spainbcnmiriam@gmail.com**.
+> ICANN requires the domain be suspended if that email is not acted on, usually within 15 days
+> of the transfer. A suspended domain takes the site down whatever else is configured. Find that
+> email and click the link.
+
+**Status, 22 August 2026: the site is built, uploaded, serving correctly on the hosting, and
+approved by the owner for publication. The registrar transfer has completed — dinahosting is
+the registrar as of 07:42 UTC — but the domain still points at Webnode, because the
+nameservers have not moved yet.** What remains is listed under [What is left](#what-is-left).
+[PUBLISHING.md](PUBLISHING.md) covers doing all of it from a terminal, without the panel.
 
 See it now: <http://erasmusinbarcelona.hl1639.dinaserver.com/?v=1>
 
@@ -26,19 +33,20 @@ mistake cost an hour.
 
 ## The situation in one paragraph
 
-`erasmusinbarcelona.com` is a live business site running on **Webnode**, with its DNS at
-**Register.it** and its mail at Webnode too. A dinahosting account for the domain already
-existed, paid to 21 November 2026, with an empty web root — nobody had ever published to it.
-A registrar transfer from Register.it to dinahosting was opened on 21 August 2026 at 15:12 and
-completed on 22 August at about 08:10 UTC — faster than the five days it was expected to take.
-The domain is now registered through Dinahosting S.L. and expires 17 November 2027. Its
-nameservers are still `ns1/ns2.register.it`, which is the normal state straight after a
-transfer and is why nothing has changed for a visitor. The new site sits on that dinahosting
-account and serves correctly there. Next the nameservers move to dinahosting, the zone is
-rebuilt there, and the domain starts answering from the new site.
+`erasmusinbarcelona.com` is a live business site running on **Webnode**, which was also its
+registrar until 22 August 2026 and is still its mail provider; the nameservers it uses are
+Register.it's. A dinahosting account for the domain already existed, paid to 21 November 2026,
+with an empty web root — nobody had ever published to it. The new site now sits on that
+account and serves correctly there, and the owner has approved it for publication.
 
-The old Webnode site stays up and untouched until that moment. There is no window where the
-domain serves nothing.
+The registrar transfer completed on **22 August 2026 at 07:42 UTC**: the registry lists
+Dinahosting s.l. (IANA 1262) and the status is `active`. **The nameservers are still
+`ns1.register.it` and `ns2.register.it`** — a registrar transfer does not move DNS. Until they
+move, the domain serves the old Webnode site, which is the correct state of affairs and not a
+problem to solve in a hurry.
+
+It is, however, the thing to do next, and not to leave indefinitely: those nameservers belong
+to the provider the domain has just left. Do not assume they keep answering for ever.
 
 ---
 
@@ -55,6 +63,8 @@ domain serves nothing.
 | Preview URL | `erasmusinbarcelona.hl1639.dinaserver.com` |
 | Panel | <https://panel.dinahosting.com> |
 | Certificate | none yet — Let's Encrypt (`CERLET`) is free in the panel and must wait for DNS |
+| Domain expiry | 17/11/2027, auto-renew on |
+| dinahosting nameservers | `ns.dinahosting.com`, `ns2`, `ns3`, `ns4` |
 
 **DNS today** (authoritative: `ns1.register.it`, `ns2.register.it`):
 
@@ -70,12 +80,14 @@ domain serves nothing.
 Nothing else resolves. There is no `ftp` record, which is why the FTP host the panel used to
 display (`ftp.erasmusinbarcelona.com`) does not work and the `espacioseguro.com` name does.
 
-The owner's decision on mail: **nobody uses `@erasmusinbarcelona.com`** — the site's contact
-address is `Hola@SpainBcn.com`, a different domain — so mail ends up at dinahosting with
-everything else. It does not get there in the same step as the website; see step 2 for why, and
-for the deadline that ordering creates. Before the Webnode plan is cancelled, somebody should
-open that mailbox once and confirm there is nothing in it worth keeping. That is the one step
-with no undo.
+Mail, settled by the owner on 22 August 2026: **no mailbox on this domain has ever been
+created or used.** The site's contact address is `Hola@SpainBcn.com`, on a different domain.
+So there is nothing to migrate and nothing that can be lost — the earlier caution about
+checking the mailbox before cancelling Webnode does not apply.
+
+The MX and SPF records are still recreated as-is at cutover anyway. Not to preserve mail, but
+because changing the web host and the mail records in one move makes any failure twice as hard
+to read. Move them separately, afterwards, or not at all.
 
 ---
 
@@ -123,34 +135,56 @@ at cutover** and the check falls back to `https://www.erasmusinbarcelona.com`.
 ## What is left
 
 In order. Nothing here needs judgement; the transfer that was blocking it is done.
-[PUBLISHING.md](PUBLISHING.md) covers the same ground for whoever is scripting it rather than
-clicking it.
 
-### 1. Wait for the registrar transfer — done
+### 1. Wait for the panel to catch up — done at the registry, pending in the panel
 
-Completed 22 August 2026, about 08:10 UTC. Confirmed at the registry rather than in the panel:
-RDAP for `erasmusinbarcelona.com` names Dinahosting S.L. as registrar and gives an expiry of
-17 November 2027.
+The transfer completed at the registry on 22 August 2026 at 07:42 UTC. dinahosting's own panel
+had not yet listed the domain under DOMINIOS as of 08:10 UTC, so there was no zone to edit and
+no nameserver field to change. That is provisioning lag, normally hours. Check with:
+
+```bash
+curl -s https://rdap.verisign.com/com/v1/domain/erasmusinbarcelona.com \
+  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['status'], [n['ldhName'] for n in d['nameservers']])"
+```
+
+If the panel still does not list it after a few hours, dinahosting's support chat can push it
+through.
 
 ### 2. Point the nameservers at dinahosting, and build the zone
 
-The domain is in the dinahosting account. Set its nameservers to dinahosting's and create:
+```bash
+export DINA_USER=... DINA_PASS=...
+bash cutover.sh                # dry run — says what it would do
+bash cutover.sh --zone         # write the A records
+bash cutover.sh --switch-ns    # move the nameservers, after typing the domain to confirm
+bash cutover.sh --watch        # poll DNS, then tell you to issue the certificate
+```
+
+Zone first, nameservers second — the other order makes dinahosting authoritative for a domain
+whose records still point at a parking IP, and the site goes dark until somebody notices.
+`cutover.sh` enforces that order.
+
+**dinahosting already has a zone for this domain, and it is wrong.** It was initialised on
+30 August 2018 and holds `A @` and `A www` both pointing at `82.98.135.43` — a dinahosting
+parking address, not this hosting. Those two records are what `--zone` rewrites. Nothing else
+is in that zone: no MX, no TXT.
+
+The zone should end up as:
 
 | Record | Value |
 |---|---|
 | `A @` | `82.98.164.84` |
 | `A www` | `82.98.164.84` |
-| `MX @` | `10 imap.mail.webnode.com` — copied, not changed |
-| `TXT @` | `v=spf1 a mx include:spfuser.webnode.com -all` — copied, not changed |
-| `CNAME _dmarc` | drop the Webnode CNAME; a plain `TXT _dmarc` with `v=DMARC1; p=none;` is fine |
-| `autoconfig` | drop it — Register.it's, and meaningless here |
+| `MX` / `TXT` | not created — see below |
 
-**Mail is copied across unchanged, not moved.** An earlier version of this step had mail
-moving to dinahosting at the same time; doing both at once makes a failure twice as hard to
-read, and there is nothing to gain from the haste — no mailbox on this domain has ever been
-created or used. The cost is that those two records name Webnode's servers, so they stop
-meaning anything the moment Webnode is cancelled. Moving mail to dinahosting is therefore its
-own change, and it has to happen **before** the cancellation in step 5, not after.
+`cutover.sh` writes no MX or TXT record. Nothing has ever sent or received mail on this domain,
+and the only zone command whose parameters are documented in a page readable from here is
+`Domain_Zone_UpdateTypeA`. Guessing parameter names for a DNS write is worse than leaving mail
+unconfigured, and leaving it unconfigured changes nothing in practice. If mail is ever wanted,
+add it in the panel and record it here.
+
+The `_dmarc` and `autoconfig` records simply cease to exist once the nameservers move; both
+belong to providers being left.
 
 **Lower the TTLs a day beforehand** if you can. The apex is currently 3600s, so without that
 there is up to an hour where some resolvers still send visitors to Webnode. Nothing breaks;
@@ -164,6 +198,11 @@ validates over HTTP on the domain itself, so issuing it earlier just fails. Ther
 notification in this account of exactly that going wrong for `summercampsbarcelona.com` in
 2021.
 
+`.well-known/` does not exist in the web root yet — it answered 404 on the preview host on
+22 August 2026. Issuance creates it; the deploy's prune exclusion keeps the next deploy from
+deleting it out from under a renewal, which is not the same as a promise that it is already
+there.
+
 Then turn on "Forzar HTTPS" if the panel offers it, and confirm `.well-known/` still exists
 in the web root — the deploy excludes it from the prune precisely so issuance is not
 interrupted.
@@ -174,12 +213,16 @@ interrupted.
 bash upload-to-dinahosting.sh --verify-only --check-url https://www.erasmusinbarcelona.com
 ```
 
-Eleven pages, the 404, four legacy redirects, `site.css` whole. Then check the response
-headers for `X-Robots-Tag`: the hosting adds `noindex, nofollow` to everything on the
-`*.dinaserver.com` preview name, and nothing in `dist/.htaccess` does that. If it turns out to
-follow the account rather than the preview hostname, the live site ships deindexed with every
-build guard still green. `curl -sSI https://www.erasmusinbarcelona.com/` settles it. Then check
-by hand that
+Eleven pages, the 404, four legacy redirects, `site.css` whole.
+
+**Then check the response headers for `X-Robots-Tag`.** The hosting adds `noindex, nofollow` to
+everything served on the `*.dinaserver.com` preview name — correctly, since a preview should not
+be indexed, and it is the host doing it: nothing in `dist/.htaccess` sets it. Whether it is bound
+to the preview hostname or to the account cannot be established until the domain answers here,
+and the difference matters: if it follows the account, the live site ships deindexed and every
+guard in the repository still passes. `curl -sSI https://www.erasmusinbarcelona.com/` settles it.
+
+Then check by hand that
 `http://erasmusinbarcelona.com/` reaches `https://www.erasmusinbarcelona.com/` in one hop —
 the canonical is **www**, chosen because every indexed URL of the old site is on www and
 switching would make each legacy redirect two hops for no gain.
@@ -188,7 +231,8 @@ Then delete the `SITE_CHECK_URL` repository variable so CI checks the real site.
 
 ### 5. Tidy up
 
-- Cancel Webnode, after the mailbox check above.
+- Cancel Webnode. It is paid to **September 2026**, so let the new site serve the live domain
+  for a while first. Nothing is gained by cancelling early.
 - Make the repository private (the owner asked). **Pages from a private repository needs a
   paid plan**, so remove `.github/workflows/deploy-pages.yml` at the same time or it will
   start failing on every push. The prototype it deploys has been superseded anyway.
@@ -200,15 +244,6 @@ Then delete the `SITE_CHECK_URL` repository variable so CI checks the real site.
 ## Traps
 
 Every one of these cost time. They are not hypothetical.
-
-**The host rate-limits bursts, and a 429 reads exactly like a broken page.** This is the one
-that cost the most: every deploy run up to and including 22 August 2026 went red on it, always
-*after* the upload had succeeded and every file had been verified on the server. The job died
-on the 404 check — the first request in the workflow with no retry behind it — and the site was
-correct the whole time. Measured on the hosting: a burst draws 429 from the fourth request
-onwards, three seconds apart gets four to six through before one is refused, and a 429 clears
-after about twenty seconds of quiet. Pacing alone is not enough; both checkers now pace
-themselves *and* wait a 429 out. Anything new must too.
 
 **The FTP host must be `erasmusinbarcelona-com.espacioseguro.com`.** The server presents a
 certificate for `*.espacioseguro.com` on port 21. Dial it as `hl1639.dinaserver.com` and a
@@ -252,6 +287,16 @@ against a non-standard port bounces to the live domain.
 **404.html is `noindex`, correctly.** A guard that rejects any `noindex` page rejects every
 build. The prototype build is identified by its own markers instead: a `robots.txt` that
 disallows everything, and a redirecting stub at each legacy path.
+
+**The host rate-limits, and answers 429.** Fire a dozen requests at it in a few seconds and it
+starts returning `429 Too Many Requests`, which looks exactly like a broken page — one deploy
+failed on `/no-such-page/` answering 429 instead of 404. Both checkers now space their
+requests out and wait a 429 out rather than believing it.
+
+**Every deploy re-uploads every file, and takes eight or nine minutes.** The server does not
+preserve the timestamps lftp sets, so the mirror sees every file as changed. It is left this
+way deliberately: comparing on size alone would skip a changed file that happened to keep its
+length, and the whole site is under 5 MB. Do not "optimise" it without thinking that through.
 
 **Your browser caches the preview URL hard.** Append a query string when checking.
 

@@ -73,11 +73,12 @@ command -v node >/dev/null || fail "node is not installed. The build needs Node 
 node build.mjs || fail "build failed"
 node tools/build-htaccess.mjs || fail ".htaccess generation failed"
 
-# Every guard lives in scripts/guards.mjs, which the GitHub workflow runs
-# too — a prototype build, a sitemap that disagrees with the build, an
-# .htaccess that disagrees with redirects.js, a course week that has
-# already happened, a fact typed into a template. One definition, so the
-# two deploy paths cannot enforce different things.
+# Every guard lives in scripts/guards.mjs, which the GitHub workflow and
+# the pull-request check both run too — a prototype build, a sitemap that
+# disagrees with the build, an .htaccess that disagrees with
+# redirects.js, a course week that has already happened, a fact typed
+# into a template. One definition, so no two callers can enforce
+# different things.
 node scripts/guards.mjs || fail "guards failed — nothing was uploaded."
 
 ok "$(find "$DIST" -type f | wc -l | tr -d ' ') files, $(du -sh "$DIST" | cut -f1) — built from source and past every guard"
@@ -226,63 +227,35 @@ fi   # end of upload stage
 # ------------------------------------------------------------
 bold "4. Checking $CHECK_URL"
 
-# The host rate-limits bursts. Six requests inside two seconds and it
-# starts answering 429, which reads exactly like a broken page — that is
-# what failed every deploy so far, on the 404 check, while the upload
-# itself had succeeded. Measured against the hosting on 22 August 2026:
-# a burst draws 429 from the fourth request onwards; at three seconds
-# apart four to six get through before one is refused; a 429 clears
-# after about twenty seconds of quiet. So pacing alone is not enough —
-# the checks below are paced *and* wait a 429 out rather than reporting
-# it as a broken page.
-CHECK_PACE="${CHECK_PACE:-3}"
-CHECK_RETRIES="${CHECK_RETRIES:-4}"
-CHECK_BACKOFF="${CHECK_BACKOFF:-20}"
-
-# One request, paced, retried for as long as the host is rate-limiting.
-# Prints the status code and the Location header, one per line. A proxy
-# that answers CONNECT adds a status line of its own, so the last one
-# wins.
-head_of() {
-  local url="$1" attempt=0 headers code
-  while :; do
-    headers=$(curl -sS -o /dev/null -D - --max-time 30 "$url" 2>/dev/null | tr -d '\r')
-    code=$(printf '%s\n' "$headers" | awk '/^HTTP\//{c=$2} END{print c}')
-    [ "$code" != "429" ] && break
-    attempt=$((attempt + 1))
-    [ "$attempt" -gt "$CHECK_RETRIES" ] && break
-    printf '  … rate-limited, waiting %ss\n' "$((CHECK_BACKOFF * attempt))" >&2
-    sleep "$((CHECK_BACKOFF * attempt))"
+# The host rate-limits. A fast run of requests starts coming back 429,
+# which is this script being impatient rather than the site being
+# wrong, so a 429 is waited out rather than believed.
+http() {
+  local i out
+  for i in 1 2 3 4; do
+    out=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$1")
+    [ "$out" = "429" ] || { printf '%s' "$out"; return; }
+    sleep 20
   done
-  sleep "$CHECK_PACE"
-  printf '%s\n' "${code:-000}"
-  printf '%s\n' "$headers" | awk 'tolower($1)=="location:"{print $2}'
+  printf '%s' "$out"
 }
 
-# The stylesheet check needs the bytes, not the status, so it cannot go
-# through head_of.
-paced_body() {
-  local url="$1" attempt=0 tmp code
-  tmp=$(mktemp)
-  while :; do
-    code=$(curl -sS -o "$tmp" -w '%{http_code}' --max-time 30 "$url")
-    [ "$code" != "429" ] && break
-    attempt=$((attempt + 1))
-    [ "$attempt" -gt "$CHECK_RETRIES" ] && break
-    sleep "$((CHECK_BACKOFF * attempt))"
+loc() {
+  local i headers out
+  for i in 1 2 3 4; do
+    headers=$(curl -sI --max-time 30 "$1")
+    out=$(printf '%s' "$headers" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r')
+    printf '%s' "$headers" | grep -qi '^HTTP/[0-9.]* 429' || { printf '%s' "$out"; return; }
+    sleep 20
   done
-  sleep "$CHECK_PACE"
-  cat "$tmp"
-  rm -f "$tmp"
+  printf '%s' "$out"
 }
-
-http() { head_of "$1" | sed -n 1p; }
-loc()  { head_of "$1" | sed -n 2p; }
 
 bad=0
 for path in / /join-a-course/ /dates/ /contact/ /your-week/ /about/ /barcelona/ /bring-a-group/ /plan-a-mobility/ /privacy/ /cookies/; do
   code=$(http "$CHECK_URL$path")
   [ "$code" = "200" ] && ok "200 $path" || { echo "  ✗ $code $path"; bad=1; }
+  sleep 2
 done
 
 code=$(http "$CHECK_URL/no-such-page/")
@@ -295,9 +268,10 @@ for pair in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you
     *"$to") ok "$from → $to" ;;
     *) echo "  ✗ $from went to '${where:-nowhere}', should be $to"; bad=1 ;;
   esac
+  sleep 2
 done
 
-size=$(paced_body "$CHECK_URL/assets/css/site.css" | wc -c | tr -d ' ')
+size=$(curl -s --max-time 30 "$CHECK_URL/assets/css/site.css" | wc -c | tr -d ' ')
 want=$(wc -c < "$DIST/assets/css/site.css" | tr -d ' ')
 [ "$size" = "$want" ] && ok "site.css served whole ($want bytes)" || { echo "  ✗ site.css served $size bytes, built $want"; bad=1; }
 

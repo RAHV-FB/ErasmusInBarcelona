@@ -89,11 +89,12 @@ jobs:
           echo "web root: $dir"
 
       # Every guard lives in scripts/guards.mjs, which the shell deploy
-      # runs too, so the two paths cannot enforce different things. It
-      # refuses a prototype build, a sitemap that disagrees with what was
-      # built, an .htaccess that disagrees with redirects.js, a course
-      # week that has already happened, and a fact typed into a template
-      # instead of read from src/data/.
+      # and the pull-request check both run, so no two callers can
+      # enforce different things. It refuses a prototype build, a
+      # sitemap that disagrees with what was built, an .htaccess that
+      # disagrees with redirects.js, a course week that has already
+      # happened, and a fact typed into a template instead of read from
+      # src/data/.
       - name: Guards
         run: node scripts/guards.mjs
 
@@ -173,61 +174,58 @@ jobs:
       # Against the real domain once it points here; against the
       # hosting's own name while it does not.
       #
-      # The host rate-limits bursts, and a 429 reads exactly like a
-      # broken page. It is what failed every deploy up to run 8: the
-      # upload had succeeded, every file was verified on the server, and
-      # then the 404 check — the first request here without a --retry —
-      # got a 429 and the job went red.
-      #
-      # Measured against the hosting on 22 August 2026: a burst draws
-      # 429 from the fourth request onwards; at three seconds apart four
-      # to six get through before one is refused; a 429 clears after
-      # about twenty seconds of quiet. Pacing alone is therefore not
-      # enough, so every request below goes through one helper that
-      # paces itself and also waits a 429 out. --retry is not enough on
-      # its own either: it gives up on its own schedule and says nothing
-      # about why.
+      # The host rate-limits: a fast run of requests starts coming back
+      # 429, which is the checker being impatient rather than the site
+      # being wrong. So requests are spaced out and a 429 is waited out
+      # rather than believed.
       - name: Check the site answers
         env:
           BASE: ${{ vars.SITE_CHECK_URL || 'https://www.erasmusinbarcelona.com' }}
-          PACE: '3'
-          BACKOFF: '20'
-          RETRIES: '4'
         run: |
           sleep 10
           echo "checking $BASE"
 
-          # Prints the status code, then the Location header. Retries for
-          # as long as the host is rate-limiting, then paces itself.
-          head_of() {
-            local url="$1" attempt=0 headers code
-            while :; do
-              headers=$(curl -sS -o /dev/null -D - --max-time 30 "$url" 2>/dev/null | tr -d '\r')
-              code=$(printf '%s\n' "$headers" | awk '/^HTTP\//{c=$2} END{print c}')
-              [ "$code" != "429" ] && break
-              attempt=$((attempt + 1))
-              [ "$attempt" -gt "$RETRIES" ] && break
-              echo "  rate-limited, waiting $((BACKOFF * attempt))s" >&2
-              sleep "$((BACKOFF * attempt))"
+          code() {
+            local url="$1" i out
+            for i in 1 2 3 4; do
+              out=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$url")
+              [ "$out" = "429" ] || { printf '%s' "$out"; return; }
+              sleep 20
             done
-            sleep "$PACE"
-            printf '%s\n' "${code:-000}"
-            printf '%s\n' "$headers" | awk 'tolower($1)=="location:"{print $2}'
+            printf '%s' "$out"
           }
 
+          location() {
+            local url="$1" i out headers
+            for i in 1 2 3 4; do
+              headers=$(curl -sSI --max-time 30 "$url")
+              out=$(printf '%s' "$headers" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r')
+              printf '%s' "$headers" | grep -qi '^HTTP/[0-9.]* 429' || { printf '%s' "$out"; return; }
+              sleep 20
+            done
+            printf '%s' "$out"
+          }
+
+          bad=0
           for path in / /join-a-course/ /dates/ /contact/ /your-week/; do
-            code=$(head_of "$BASE$path" | sed -n 1p)
-            echo "$code  $path"
-            [ "$code" = "200" ] || exit 1
+            got=$(code "$BASE$path")
+            echo "$got  $path"
+            [ "$got" = "200" ] || bad=1
+            sleep 2
           done
 
-          code=$(head_of "$BASE/no-such-page/" | sed -n 1p)
-          echo "$code  /no-such-page/ (expected 404)"
-          [ "$code" = "404" ] || exit 1
+          got=$(code "$BASE/no-such-page/")
+          echo "$got  /no-such-page/ (expected 404)"
+          [ "$got" = "404" ] || bad=1
+          sleep 2
 
           for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/; do
             from=${legacy%%:*}; to=${legacy##*:}
-            location=$(head_of "$BASE$from" | sed -n 2p)
-            echo "$from -> $location (expected $to)"
-            case "$location" in *"$to") ;; *) exit 1 ;; esac
+            where=$(location "$BASE$from")
+            echo "$from → ${where:-nowhere} (expected $to)"
+            case "$where" in *"$to") ;; *) bad=1 ;; esac
+            sleep 2
           done
+
+          [ "$bad" = 0 ] || { echo "::error::the site is not answering correctly"; exit 1; }
+          echo "the site answers correctly"
