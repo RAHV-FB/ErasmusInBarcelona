@@ -1,9 +1,10 @@
 # ErasmusInBarcelona.com — publishing, and what is left to do
 
-**Status, 21 August 2026: the site is built, uploaded and serving correctly on the hosting.
-It is not yet on the domain, because the domain still points at Webnode.** Everything that
-can be done before DNS moves has been done. What remains is listed under
-[What is left](#what-is-left) and is mechanical once the registrar transfer completes.
+**Status, 22 August 2026: the site is built, uploaded, serving correctly on the hosting, and
+approved by the owner for publication. The registrar transfer has completed — dinahosting is
+the registrar as of 07:42 UTC — but the domain still points at Webnode, because the
+nameservers have not moved yet.** What remains is listed under [What is left](#what-is-left).
+[PUBLISHING.md](PUBLISHING.md) covers doing all of it from a terminal, without the panel.
 
 See it now: <http://erasmusinbarcelona.hl1639.dinaserver.com/?v=1>
 
@@ -26,20 +27,20 @@ mistake cost an hour.
 
 ## The situation in one paragraph
 
-`erasmusinbarcelona.com` is a live business site running on **Webnode**, which is also its
-**registrar** and its mail provider; the nameservers it uses are Register.it's. A dinahosting
-account for the domain already existed, paid to 21 November 2026, with an empty web root —
-nobody had ever published to it. A registrar transfer to dinahosting was opened on 21 August
-2026 and **approved by the owner**, so it completes on or before **26 August 2026**. The new
-site now sits on that dinahosting account and serves correctly there. When the transfer
-completes, the nameservers move to dinahosting, the zone is rebuilt there, and the domain
-starts answering from the new site.
+`erasmusinbarcelona.com` is a live business site running on **Webnode**, which was also its
+registrar until 22 August 2026 and is still its mail provider; the nameservers it uses are
+Register.it's. A dinahosting account for the domain already existed, paid to 21 November 2026,
+with an empty web root — nobody had ever published to it. The new site now sits on that
+account and serves correctly there, and the owner has approved it for publication.
 
-The old Webnode site stays up and untouched until that moment. There is no window where the
-domain serves nothing — provided step 2 below is done promptly. **Webnode is the losing
-registrar and the current DNS and mail provider all at once**, so do not assume its
-nameservers keep answering indefinitely after the domain leaves. The site is ready and
-verified, so there is no reason to wait: move the nameservers as soon as the transfer lands.
+The registrar transfer completed on **22 August 2026 at 07:42 UTC**: the registry lists
+Dinahosting s.l. (IANA 1262) and the status is `active`. **The nameservers are still
+`ns1.register.it` and `ns2.register.it`** — a registrar transfer does not move DNS. Until they
+move, the domain serves the old Webnode site, which is the correct state of affairs and not a
+problem to solve in a hurry.
+
+It is, however, the thing to do next, and not to leave indefinitely: those nameservers belong
+to the provider the domain has just left. Do not assume they keep answering for ever.
 
 ---
 
@@ -71,13 +72,14 @@ verified, so there is no reason to wait: move the nameservers as soon as the tra
 Nothing else resolves. There is no `ftp` record, which is why the FTP host the panel used to
 display (`ftp.erasmusinbarcelona.com`) does not work and the `espacioseguro.com` name does.
 
-The owner's decision on mail: **nobody uses `@erasmusinbarcelona.com`** — the site's contact
-address is `Hola@SpainBcn.com`, a different domain — so mail moves to dinahosting with
-everything else. Two cautions. Before the Webnode plan is cancelled, somebody should open that
-mailbox once and confirm there is nothing in it worth keeping; that is the one step with no
-undo. And **do not point MX at dinahosting before a mailbox exists there** — mail to the
-domain would bounce rather than sit unread. Moving the web records and leaving MX on Webnode
-for a few days is perfectly fine.
+Mail, settled by the owner on 22 August 2026: **no mailbox on this domain has ever been
+created or used.** The site's contact address is `Hola@SpainBcn.com`, on a different domain.
+So there is nothing to migrate and nothing that can be lost — the earlier caution about
+checking the mailbox before cancelling Webnode does not apply.
+
+The MX and SPF records are still recreated as-is at cutover anyway. Not to preserve mail, but
+because changing the web host and the mail records in one move makes any failure twice as hard
+to read. Move them separately, afterwards, or not at all.
 
 ---
 
@@ -126,22 +128,32 @@ at cutover** and the check falls back to `https://www.erasmusinbarcelona.com`.
 
 In order. Nothing here needs judgement; it needs the transfer to finish.
 
-### 1. Wait for the registrar transfer
+### 1. Wait for the panel to catch up — done at the registry, pending in the panel
 
-Panel → DOMINIOS → the "traslados pendientes" banner. It auto-completes about five days from
-21 August 2026, or immediately if the admin contact approves the mail Register.it sends.
+The transfer completed at the registry on 22 August 2026 at 07:42 UTC. dinahosting's own panel
+had not yet listed the domain under DOMINIOS as of 08:10 UTC, so there was no zone to edit and
+no nameserver field to change. That is provisioning lag, normally hours. Check with:
+
+```bash
+curl -s https://rdap.verisign.com/com/v1/domain/erasmusinbarcelona.com \
+  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['status'], [n['ldhName'] for n in d['nameservers']])"
+```
+
+If the panel still does not list it after a few hours, dinahosting's support chat can push it
+through.
 
 ### 2. Point the nameservers at dinahosting, and build the zone
 
-Once the domain is in the dinahosting account, set its nameservers to dinahosting's and create:
+Zone first, nameservers second — the other order makes dinahosting authoritative for a domain
+it has no records for, and the site goes dark until somebody notices. Create:
 
 | Record | Value |
 |---|---|
 | `A @` | `82.98.164.84` |
 | `A www` | `82.98.164.84` |
-| `MX @` | **leave on Webnode for now** — see the mail caution above. Move it once a dinahosting mailbox exists. |
-| `TXT @` | the SPF that matches wherever MX points. While MX stays on Webnode, keep the Webnode include. |
-| `CNAME _dmarc` | drop the Webnode CNAME when mail moves; a plain `TXT _dmarc` with `v=DMARC1; p=none;` is fine |
+| `MX @` | `10 imap.mail.webnode.com` — unchanged, so mail is not part of this move |
+| `TXT @` | `v=spf1 a mx include:spfuser.webnode.com -all` — unchanged, matching the MX |
+| `CNAME _dmarc` | drop it; it points at Webnode, and nothing sends mail as this domain |
 | `autoconfig` | drop it — Register.it's, and meaningless here |
 
 **Lower the TTLs a day beforehand** if you can. The apex is currently 3600s, so without that
@@ -175,7 +187,8 @@ Then delete the `SITE_CHECK_URL` repository variable so CI checks the real site.
 
 ### 5. Tidy up
 
-- Cancel Webnode, after the mailbox check above.
+- Cancel Webnode. It is paid to **September 2026**, so let the new site serve the live domain
+  for a while first. Nothing is gained by cancelling early.
 - Make the repository private (the owner asked). **Pages from a private repository needs a
   paid plan**, so remove `.github/workflows/deploy-pages.yml` at the same time or it will
   start failing on every push. The prototype it deploys has been superseded anyway.
