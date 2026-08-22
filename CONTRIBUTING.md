@@ -56,8 +56,8 @@ One trap: `npm run check` rebuilds `dist/` with `node build.mjs`, which does **n
 | `course week(s) already over` | a stale export from the dates sheet | re-export. `ALLOW_STALE_DATES=1` publishes anyway |
 | `has "…" typed in` | a fact copied into a template | render it from `src/data/` |
 
-The guards run in CI on every push and pull request, and again in both deploy paths. They are
-the same file in all three places.
+The guards run in CI on every pull request and on every push to a branch that deploys, and
+again inside both deploy paths. They are the same file in all three places.
 
 ---
 

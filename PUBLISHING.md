@@ -35,11 +35,11 @@ git commit -am "…"
 git push origin <your-branch>
 ```
 
-`.github/workflows/check.yml` runs the build, the guards and the browser audit on every push
-and every pull request, on any branch. It publishes nothing and uses no secrets, so it is safe
-on branches the deploy ignores — and it is the only thing that looks at a change before the
-decision to publish it. [CONTRIBUTING.md](CONTRIBUTING.md) is the guide to making the change
-itself.
+`.github/workflows/check.yml` runs the build, the guards and the browser audit on every pull
+request, and on every push to a branch that deploys. It publishes nothing and uses no secrets,
+so it is safe on branches the deploy ignores — and it is the only thing that looks at a change
+before the decision to publish it. [CONTRIBUTING.md](CONTRIBUTING.md) is the guide to making
+the change itself.
 
 The push is the deploy — but only from a branch the workflow watches.
 `.github/workflows/deploy-dinahosting.yml` triggers on `main` and

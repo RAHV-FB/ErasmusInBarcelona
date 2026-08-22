@@ -1,5 +1,6 @@
 # ============================================================
-# Build the site and audit it, on every push and every pull request.
+# Build the site and audit it, on every pull request and on every
+# push to a branch that deploys.
 #
 # Until this existed nothing validated a change before it went out. The
 # deploy workflow builds and uploads; its guards run after the decision
@@ -19,8 +20,16 @@
 # ============================================================
 name: Check
 
+# A pull request covers a branch on its way in; a push covers the
+# branches that deploy, where a change can land without one. Listing
+# `push:` bare as well would run the whole thing twice for every push to
+# a branch that has a pull request open — which is exactly what it did
+# the first time.
 on:
   push:
+    branches:
+      - main
+      - claude/site-health-check-df5ie0
   pull_request:
   workflow_dispatch:
 
