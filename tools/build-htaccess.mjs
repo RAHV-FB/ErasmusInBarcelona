@@ -46,16 +46,26 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # One canonical origin: ${SITE_URL}
+  # One canonical origin: ${SITE_URL}, in two separate rules.
   #
-  # The hosting's own *.dinaserver.com name is exempt, so the site can be
-  # opened and checked there before the domain points here — without the
-  # first request bouncing to whatever is currently live on the domain.
+  # The scheme rule has to consult X-Forwarded-Proto, not just HTTPS.
+  # Varnish sits in front of Apache and terminates TLS, so %{HTTPS} is
+  # always "off" here however the visitor arrived. Testing it alone
+  # sends every HTTPS request a redirect to HTTPS, which the proxy
+  # answers by forwarding plain HTTP again: ERR_TOO_MANY_REDIRECTS, and
+  # a site that is completely unreachable rather than merely wrong.
+  #
+  # The hosting's own *.dinaserver.com name is exempt from both, so the
+  # site can be opened and checked there before the domain points here.
   # HTTP_HOST carries the port when there is a non-default one, so the
   # exemption has to allow for it or it silently stops applying.
-  RewriteCond %{HTTPS} !=on [OR]
-  RewriteCond %{HTTP_HOST} ${wantsWww ? '!^www\\.' : '^www\\.'} [NC]
   RewriteCond %{HTTP_HOST} !\\.dinaserver\\.com(:[0-9]+)?$ [NC]
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^(.*)$ ${SITE_URL}/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} !\\.dinaserver\\.com(:[0-9]+)?$ [NC]
+  RewriteCond %{HTTP_HOST} ${wantsWww ? '!^www\\.' : '^www\\.'} [NC]
   RewriteRule ^(.*)$ ${SITE_URL}/$1 [R=301,L]
 </IfModule>
 

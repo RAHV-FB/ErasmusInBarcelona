@@ -284,6 +284,14 @@ preserve the timestamps lftp sets, so the mirror sees every file as changed. It 
 way deliberately: comparing on size alone would skip a changed file that happened to keep its
 length, and the whole site is under 5 MB. Do not "optimise" it without thinking that through.
 
+**Varnish terminates TLS, so `%{HTTPS}` is always `off` inside Apache.** A rule that forces
+HTTPS by testing `%{HTTPS}` alone redirects every HTTPS request to HTTPS; the proxy forwards
+plain HTTP again and the browser gives up with `ERR_TOO_MANY_REDIRECTS`. The site is then
+completely unreachable, not merely misconfigured. The scheme rule has to consult
+`%{HTTP:X-Forwarded-Proto}` as well — and the two canonical rules are kept separate, one for
+scheme and one for host, because a single rule cannot express "either of these, but not on the
+preview host".
+
 **Your browser caches the preview URL hard.** Append a query string when checking.
 
 ---
