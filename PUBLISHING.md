@@ -27,12 +27,19 @@ cd ErasmusInBarcelona
 
 npm run build:live        # dist/ plus the production .htaccess
 npm start                 # serve it at http://127.0.0.1:4173 and look
+npm run guards            # the publish guards — no browser, a second or two
 npm install               # first run only — Playwright and sharp
 npm run check             # browser audit of every page
 
 git commit -am "…"
 git push origin <your-branch>
 ```
+
+`.github/workflows/check.yml` runs the build, the guards and the browser audit on every push
+and every pull request, on any branch. It publishes nothing and uses no secrets, so it is safe
+on branches the deploy ignores — and it is the only thing that looks at a change before the
+decision to publish it. [CONTRIBUTING.md](CONTRIBUTING.md) is the guide to making the change
+itself.
 
 The push is the deploy — but only from a branch the workflow watches.
 `.github/workflows/deploy-dinahosting.yml` triggers on `main` and
@@ -44,7 +51,8 @@ watched branch, add yours to the `branches:` list, or publish by hand:
 bash upload-to-dinahosting.sh
 ```
 
-Both build from source, run the same pre-flight guards, and refuse a prototype build. They do
+Both build from source and run `scripts/guards.mjs` — one file, so the two paths cannot
+enforce different things. They do
 not verify equally afterwards: the workflow checks that every file in `dist/` came back in a
 remote listing, then five pages, the 404 and three redirects. The shell script reads every
 file's size back off the server, then checks eleven pages, the 404, four redirects and

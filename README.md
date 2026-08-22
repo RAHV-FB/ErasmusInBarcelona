@@ -9,11 +9,15 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 npm install          # Playwright and sharp, both dev-only
 npm start            # build, then serve on http://127.0.0.1:4173
 npm run build        # build dist/ only
+npm run build:live   # build dist/ with the production .htaccess
+npm run guards       # the publish guards — no browser, a second or two
 npm run check        # build, serve, and audit every page in a browser
 npm run links        # check every off-site link and anchor (hits real servers)
-npm run build:live   # build dist/ with the production .htaccess
 npm run images       # regenerate the images in src/assets/images
 ```
+
+Changing something? [CONTRIBUTING.md](CONTRIBUTING.md) has the recipe for each of the usual
+jobs, what will stop you and why, how it gets published and how to undo it.
 
 ### The GitHub Pages prototype
 
@@ -46,6 +50,7 @@ build.mjs                 renders src/pages → dist/
 server.mjs                static server: clean URLs, legacy redirects, real 404
 tools/build-images.mjs    originals → resized WebP with descriptive names
 scripts/health-check.mjs  the browser audit behind `npm run check`
+scripts/guards.mjs        the publish guards, shared by CI and both deploy paths
 uploads/, source-photos/  the untouched original photographs; never published
 notes/                    the live-site audit and the production report
 ```
