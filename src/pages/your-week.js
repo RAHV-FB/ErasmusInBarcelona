@@ -55,8 +55,7 @@ export default function yourWeek() {
     <div class="container">
       <div class="section-head">
         <h2>The five days</h2>
-        <p>${d.schedule.pattern} ${d.schedule.hours} Two-week courses run to 50 hours across two
-          adjacent weeks.</p>
+        <p>${d.schedule.pattern} ${d.schedule.hours} ${esc(d.schedule.twoWeeks)}</p>
       </div>
       <div class="week">
         ${week}

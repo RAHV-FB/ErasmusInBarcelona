@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REDIRECTS } from '../src/data/redirects.js';
+import { REDIRECTS, GONE } from '../src/data/redirects.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -20,11 +20,29 @@ const { protocol, host } = new URL(SITE_URL);
 if (protocol !== 'https:') throw new Error(`SITE_URL must be https: ${SITE_URL}`);
 const wantsWww = host.startsWith('www.');
 
-// RedirectMatch with an anchored pattern, not Redirect: Redirect matches
-// on prefix, so `/home` would also catch `/home/` and send it to `//`,
-// and any future path beginning with a legacy one would be swallowed too.
+// Anchored patterns, not prefixes: `/home` must not also catch `/home/`
+// and send it to `//`, nor swallow any future path beginning with a
+// legacy one. In per-directory context the pattern sees the path with
+// no leading slash.
+//
+// The target is written absolute. Varnish terminates TLS in front of
+// Apache, so Apache expands a relative redirect target against plain
+// http:// — every legacy redirect then bounced https → http → https,
+// two hops with an insecure middle. The absolute https URL answers in
+// one hop from any scheme or host the request arrived on.
+//
+// NE keeps a #fragment in the target unescaped. Targets carrying a
+// fragment also discard the query string (QSD): Apache appends the
+// query after the fragment, which would corrupt both.
+const escapePath = (p) => p.replace(/^\//, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const redirects = Object.entries(REDIRECTS)
-  .map(([from, to]) => `  RedirectMatch 301 ^${from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$ ${to}`)
+  .map(([from, to]) => {
+    const flags = to.includes('#') ? 'R=301,L,NE,QSD' : 'R=301,L';
+    return `  RewriteRule ^${escapePath(from)}$ ${SITE_URL}${to} [${flags}]`;
+  })
+  .join('\n');
+const gone = GONE
+  .map((from) => `  RewriteRule ^${escapePath(from)}$ - [R=410,L]`)
   .join('\n');
 
 const htaccess = `# ============================================================
@@ -42,9 +60,18 @@ Options -Indexes
 DirectoryIndex index.html
 DirectorySlash On
 ErrorDocument 404 /404.html
+ErrorDocument 410 /404.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Legacy paths from the previous site, first: whatever scheme or host
+  # the request arrived on, the answer is the final https URL in one
+  # hop. One hop only — no chains.
+${redirects}
+
+  # Legacy paths with no successor.
+${gone}
 
   # One canonical origin: ${SITE_URL}, in two separate rules.
   #
@@ -67,11 +94,6 @@ ErrorDocument 404 /404.html
   RewriteCond %{HTTP_HOST} !\\.dinaserver\\.com(:[0-9]+)?$ [NC]
   RewriteCond %{HTTP_HOST} ${wantsWww ? '!^www\\.' : '^www\\.'} [NC]
   RewriteRule ^(.*)$ ${SITE_URL}/$1 [R=301,L]
-</IfModule>
-
-# Legacy paths from the previous site. One hop only — no chains.
-<IfModule mod_alias.c>
-${redirects}
 </IfModule>
 
 <IfModule mod_headers.c>
@@ -98,4 +120,4 @@ ${redirects}
 `;
 
 fs.writeFileSync(path.join(DIST, '.htaccess'), htaccess);
-console.log(`dist/.htaccess → ${host} canonical · ${Object.keys(REDIRECTS).length} legacy redirects`);
+console.log(`dist/.htaccess → ${host} canonical · ${Object.keys(REDIRECTS).length} legacy redirects · ${GONE.length} gone`);

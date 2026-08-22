@@ -10,6 +10,7 @@ npm install          # Playwright and sharp, both dev-only
 npm start            # build, then serve on http://127.0.0.1:4173
 npm run build        # build dist/ only
 npm run check        # build, serve, and audit every page in a browser
+npm run guards       # build, then verify the migration invariants (no legacy values or links)
 npm run links        # check every off-site link and anchor (hits real servers)
 npm run build:live   # build dist/ with the production .htaccess
 npm run images       # regenerate the images in src/assets/images
