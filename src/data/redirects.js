@@ -11,7 +11,7 @@ export const REDIRECTS = {
   '/home': '/',
   '/home/': '/',
   '/school-teachers/': '/join-a-course/',
-  '/universities/': '/join-a-course/',
+  '/english-courses/': '/universities/#english',
   '/english-courses-for-teachers/': '/join-a-course/#english',
   '/course-catalogue/': '/join-a-course/',
   '/program-information/': '/your-week/',

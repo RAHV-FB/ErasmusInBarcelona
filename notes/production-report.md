@@ -563,3 +563,81 @@ Dates and Your Week — each time naming the application a document is for, neve
 
 12 pages healthy at eight widths, no horizontal overflow at 390 or 1280, 41 external links resolve,
 privacy and network QA 27 of 27.
+
+---
+
+## 22 August 2026 — post-launch audit, and the university page
+
+The site went live in the morning; this pass crawled it in the afternoon. Every page answers
+200 and is byte-identical to what this repository builds; robots.txt, sitemap.xml, the 404 and
+the canonical host/scheme redirects all behave. One OID, one address, one email, one fee pair
+across all pages. A sweep of the built HTML for the banned marketing constructions, absolute
+eligibility wording ("eligible for a grant", "EU approved") and legacy identifiers
+(E10139423, PIC 933769240, Erasmus@SpainBcn.com, 08024) finds none.
+
+### Two gaps the search index exposed
+
+Searching `site:erasmusinbarcelona.com` still returns the old Webnode pages, which is expected
+days after cutover — but it surfaced two things the redirect map had missed:
+
+1. **`/english-courses/` ("English Courses For Unversity Staff", sic) answered 404.** It was
+   not in the old site's navigation audit, but it is indexed. Now redirected to
+   `/universities/#english`.
+2. **`/universities/` redirected to a page that never says "university".** The old page is
+   indexed under its own title, and the redirect landed its visitors on /join-a-course/, which
+   addresses "teachers and education staff" and named no institution type. Meanwhile SpainBcn's
+   rebuilt catalogue now carries a programme this site never linked: **University AI & ICT**
+   (`group-ai-ict.html#university-ai-and-ict`), whose published audience is university teaching,
+   research and administrative staff and nobody else.
+
+### The university page
+
+`/universities/` is a page again, not a redirect: Erasmus+ staff training in Barcelona for
+university teaching, research and administrative staff. Every programme it links names
+university staff in its published audience on SpainBcn — checked programme by programme on
+22 August 2026, and `npm run links` verifies the anchors:
+
+- University AI & ICT (the dedicated higher-education programme, linked first, with its
+  audience in the anchor text)
+- Artificial Intelligence in Education · Innovative teaching methods with ICT
+- General English by level · Culture & History in English · Presentation Skills · Advanced
+  Presentation Skills
+- General Spanish by level · Culture & History in Spanish
+
+Teaching Methodology (English and Spanish) and CLIL are deliberately absent: their published
+audiences name school staff, not university staff. The page renders fee, schedule, certificate
+and booking lines from the same data fields the other pages use, and lists the next Barcelona
+weeks in the AI, English and Spanish areas from `dates`.
+
+New data: `universityProgrammes` in `site-data.js`. "University AI & ICT" also joined the AI
+area's programme list on /join-a-course/, whose hero now links the university page. Navigation
+and the footer gained "Universities" / "University staff".
+
+### Also in this pass
+
+- **The footer year is computed at build time** rather than typed, so © 1997–2026 cannot go
+  stale in January.
+- **`npm run check` reads its route list from the built sitemap** instead of its own copy, so a
+  page added to `build.mjs` cannot silently skip the audit. (This pass's new page did exactly
+  that on the first run.)
+- Legacy-redirect behaviour measured live: every hop lands, but through an `http://` first hop —
+  the two-hop problem the guards branch (PR #1) fixes in `tools/build-htaccess.mjs`. Not
+  duplicated here.
+
+### Blind retrieval, 22 August 2026
+
+Searched without naming the organisation. "Erasmus+ staff training courses Barcelona": this
+domain appears (still under its old indexed title), alongside competitors (ShipCon, Euromentor,
+DOREA) and two Adam Mickiewicz University pages describing SpainBcn's staff weeks — those AMU
+pages link spainbcn.com directly. University queries: the old /universities/ page still ranks;
+its replacement now answers the intent it ranks for. AI queries: competitors and the European
+School Education Platform listings appear; neither domain ranks yet under its new content —
+recrawl will tell. English-for-staff queries: spainbcn.com and three old URLs of this domain
+appear, including the /english-courses/ 404 now redirected.
+
+### Needs a human (new items)
+
+7. **AMU's pages quote 2024 prices** (€350) against SpainBcn's name. Their content, their CMS —
+   worth asking the international office to refresh the figures next time they are in contact.
+8. **Google still holds the Webnode titles.** Nothing to do but let it recrawl; the sitemap and
+   redirects are in place. Re-check `site:erasmusinbarcelona.com` in a few weeks.

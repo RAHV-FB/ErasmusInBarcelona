@@ -9,7 +9,22 @@ terminal, and [README.md](README.md) is how the site is built from source.
 > **One outstanding risk: the registrant contact may still be unverified.** After the transfer,
 > dinahosting warned "Dominio pendiente de verificar el contacto registrante" and named
 > **spainbcnmiriam@gmail.com**. ICANN requires suspension if that email is never acted on, and a
-> suspended domain is down no matter how correct everything else is. Check from a terminal:
+> suspended domain is down no matter how correct everything else is.
+>
+> Checked 22 August 2026, the evening after the transfer: the public registry (RDAP) shows only
+> the two normal registrar locks — **no `clientHold` or `serverHold`**, the statuses a failed
+> verification produces — so nothing is wrong *yet*. Three things about this trap:
+>
+> - **A verification link from Webnode does not count.** Verification is per registrar; clicking
+>   Webnode's email verified the contact with the old registrar, the day before the transfer
+>   away from it completed. If dinahosting requires its own round, that is a separate email.
+> - **The email goes to spainbcnmiriam@gmail.com, not to whoever runs the site.** "Nothing in my
+>   inbox" proves nothing — the message would be sitting in that mailbox, from dinahosting,
+>   subject along the lines of "verificación del contacto registrante".
+> - **The window is about 15 days from the transfer** (2013 RAA), so if it applies at all it
+>   runs out in early September 2026.
+>
+> The definitive answer is one API call, from any terminal, with the dinahosting panel login:
 >
 > ```bash
 > curl -sS https://dinahosting.com/special/api.php \
@@ -18,6 +33,12 @@ terminal, and [README.md](README.md) is how the site is built from source.
 >   --data-urlencode "domain=erasmusinbarcelona.com" \
 >   --data-urlencode "responseType=Json"
 > ```
+>
+> If it answers verified (or that no verification is pending), delete this whole block. If it
+> answers pending, get into spainbcnmiriam@gmail.com and click dinahosting's link. To re-check
+> the public side without credentials:
+> `curl -sS https://rdap.verisign.com/com/v1/domain/erasmusinbarcelona.com | grep -o '"status":[^]]*]'`
+> — any status containing `hold` means suspended.
 
 ---
 
@@ -115,9 +136,46 @@ Either way: **look at the site afterwards.** The checks confirm that pages answe
 is a real 404, that legacy URLs still land and that the stylesheet arrives whole. They cannot
 tell you the price is wrong.
 
----
+### Refreshing the course weeks, then publishing — the whole loop
 
-## What is still open
+The recurring job. `dates` in `src/data/site-data.js` is a snapshot of the DATES-SPAINBCN
+sheet's Barcelona rows, and it goes stale: the first listed week ends, the site keeps calling it
+upcoming, and eventually the list runs out. `tools/refresh-dates.mjs` re-reads the sheet — the
+same one named in `datesSource`, over its public CSV export — keeps the Barcelona weeks that
+have not ended, and rewrites the array in place. Nothing else in the file is touched.
+
+From a terminal, start to finish:
+
+```bash
+# Once per machine: get the source and the dev dependencies.
+git clone https://github.com/RAHV-FB/ErasmusInBarcelona.git ~/ErasmusInBarcelona
+cd ~/ErasmusInBarcelona
+git checkout claude/site-health-check-df5ie0   # the branch that publishes (until it is renamed main)
+npm install
+
+# Every refresh:
+cd ~/ErasmusInBarcelona
+git pull
+npm run dates                    # sheet → src/data/site-data.js; prints every week it wrote
+git diff src/data/site-data.js   # read what changed before you ship it
+npm run check                    # every page in a real browser; a minute or two
+bash upload-to-dinahosting.sh    # build, upload, verify — asks for the FTP password, stores nothing
+git commit -am "Refresh course weeks from the sheet"
+git push
+```
+
+The FTP password is the hosting account's (user `erasmusinbarcelona`, host
+`erasmusinbarcelona-com.espacioseguro.com` — both are the script's defaults, so only the
+password is asked for). The push at the end also triggers the GitHub deploy, which uploads the
+same bytes again — harmless, and it keeps the repository and the server telling the same story.
+Pushing *without* running the upload script works too; it is just the slower nine-minute route.
+
+What the script refuses to do, by design: write anything when the sheet has a course label it
+does not recognise (add it to `COURSES` in `tools/refresh-dates.mjs` with its subject area),
+when a date does not parse, or when no upcoming Barcelona week remains. `npm run dates -- --dry-run`
+prints what would be written without touching the file. Rows for the other destinations are
+ignored — they are SpainBcn's. If the sheet's sharing is ever tightened off "anyone with the
+link", the CSV export stops answering and the script says so; nothing breaks silently.
 
 - **Delete the `SITE_CHECK_URL` repository variable.** It was pointing CI's post-deploy check at
   the preview URL during the migration. With the domain live, deleting it makes CI check
