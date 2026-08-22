@@ -18,10 +18,12 @@
 # and are never written to disk.
 #
 # Every write is checked: the response is read, and anything that is not
-# a success stops the script. Only Domain_Zone_UpdateTypeA's parameters
-# are documented in a page this repository could read, so that is the
-# only zone command used. MX and TXT are deliberately left out — see
-# --help output and HANDOFF.md.
+# a success stops the script, and the nameservers are read back after
+# being set rather than taken on trust.
+#
+# MX and TXT are deliberately left out. Nothing has ever sent or received
+# mail on this domain; Domain_Zone_AddTypeMX and Domain_Zone_AddTypeTXT
+# exist if that ever changes.
 # ============================================================
 set -uo pipefail
 
@@ -119,12 +121,23 @@ if [ "$DO_NS" = 1 ]; then
   read -r typed
   [ "$typed" = "$DOMAIN" ] || fail "not confirmed — nothing changed"
 
-  args=("domain=$DOMAIN")
-  i=1
-  for ns in "${NS[@]}"; do args+=("nameserver$i=$ns"); i=$((i + 1)); done
-  resp=$(api Domain_NameServer_Modify "${args[@]}")
+  # Domain_Dnss_Set, not Domain_NameServer_Modify. The NameServer
+  # family registers glue records — it wants a hostname and an IP, and
+  # says so if you hand it anything else. Dnss is the one that decides
+  # which nameservers a domain uses, and it takes them comma separated.
+  list=$(IFS=,; printf '%s' "${NS[*]}")
+  resp=$(api Domain_Dnss_Set "domain=$DOMAIN" "dnss=$list")
   check "$resp" "changing the nameservers"
-  ok "nameservers set to ${NS[*]}"
+
+  # Read it back rather than trusting the write.
+  resp=$(api Domain_Dnss_Get "domain=$DOMAIN")
+  check "$resp" "reading the nameservers back"
+  for ns in "${NS[@]}"; do
+    printf '%s' "$resp" | grep -q "$ns" \
+      || fail "the API accepted the change but does not report $ns. It says:
+$resp"
+  done
+  ok "nameservers set to ${NS[*]}, confirmed by reading them back"
   echo
   note "Registry and resolver propagation takes minutes to an hour."
   note "Run with --watch to wait for it and verify the site."
