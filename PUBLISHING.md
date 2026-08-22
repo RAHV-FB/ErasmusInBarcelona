@@ -108,18 +108,25 @@ Commands are `Area_Thing_Verb`. Confirmed to exist:
 
 | Command | For |
 |---|---|
-| `Domain_Zone_UpdateTypeA` | change an A record — `domain`, `hostname`, `ip`, optional `oldIp` |
-| `Domain_Zone_AddTypeMX` | add an MX record |
-| `Domain_Zone_UpdateTypeAAAA` | change an AAAA record |
-| `Domain_Zone_DeleteTypeSRV` | delete an SRV record |
-| `Domain_NameServer_Modify` | change the domain's nameservers |
-| `System_GetRequestTypes` | a harmless call for checking credentials |
+| `Domain_Dnss_Set` | **which nameservers a domain uses** — `domain`, `dnss` (comma separated) |
+| `Domain_Dnss_Get` | read them back |
+| `Domain_Zone_GetAll` | the whole zone — `domain` |
+| `Domain_Zone_UpdateTypeA` | change an A record — `domain`, `hostname` (`@` for the apex), `ip`, optional `oldIp` |
+| `Domain_Zone_AddTypeMX`, `Domain_Zone_AddTypeTXT` | mail records, if ever needed |
+| `Domain_Contacts_GetRegistrantVerificationInfo` | whether the registrant email has been verified |
+| `Domain_NameServer_*` | **not** the above — this family registers glue records, and wants a hostname and an IP |
+| `System_GetRequestTypes` | transport types; useful only as an auth check |
 
-Only `Domain_Zone_UpdateTypeA`'s parameters are recorded here because that is the only one
-whose documentation page could be read from this environment; the rest are blocked to
-automated fetching. **Read each command's page before calling it rather than guessing its
-parameters** — a DNS write with a wrong parameter name is not a typo you find out about
-politely.
+**The full command list is in the documentation sidebar under "LIST OF COMMANDS", grouped by
+area.** It needs JavaScript, so a plain fetch returns the marketing page instead — open it in a
+browser and expand the group. Twenty-one plausible names were guessed before that list was
+read, and every one of them came back "Unknown command." Read the list.
+
+Two things about simulation mode. `SIMULATE=true` is safe for checking whether a command
+exists — an unknown one still answers "Unknown command." But **it returns fabricated sample
+data for read commands**: `Domain_Zone_GetAll` under simulate reports a zone that is not yours,
+which looks exactly like evidence that something has gone badly wrong. Never read state through
+it.
 
 Start by confirming the credentials work and the domain is visible:
 
