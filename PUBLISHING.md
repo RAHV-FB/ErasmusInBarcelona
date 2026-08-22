@@ -1,9 +1,8 @@
 # Publishing from a terminal
 
-Everything here runs in a shell. Nothing needs a browser, a control panel or a person
-clicking. Written for whoever automates the next stage — read
-[What still needs writing](#what-still-needs-writing) for the specific scripts, and
-[HANDOFF.md](HANDOFF.md) for why the hosting behaves the way it does.
+Everything here runs in a shell. Nothing needs a browser, a control panel or a person clicking.
+[HANDOFF.md](HANDOFF.md) describes what the site *is* — hosting, domain, DNS, and the traps this
+hosting has. This is how to work on it.
 
 The one thing a terminal cannot decide is whether the site is *correct*. The build guards catch
 a prototype build and a broken redirect table; they cannot catch a wrong price. That judgement
@@ -135,44 +134,30 @@ If that returns cleanly, everything below can be scripted.
 
 ---
 
-## What still needs writing
+## `cutover.sh` — done, and reusable
 
-Three scripts. None of them is difficult; all of them touch a live domain, so each should
-support a dry run and refuse to continue on an unexpected response.
-
-### 1. `cutover.sh` — written, not yet run
+This moved the domain on 22 August 2026 and ran clean end to end. It is kept because the same
+account holds eight other domains, and every one of them will need the same three steps.
 
 ```bash
 export DINA_USER=... DINA_PASS=...
-bash cutover.sh                # dry run, the default
-bash cutover.sh --zone         # A @ and A www → 82.98.164.84
+DOMAIN=other.com NEW_IP=1.2.3.4 OLD_IP=<whatever is there now> bash cutover.sh
+bash cutover.sh --zone         # A @ and A www → NEW_IP
 bash cutover.sh --switch-ns    # nameservers → dinahosting, after typing the domain
-bash cutover.sh --watch        # poll DNS, then hand over to the certificate step
+bash cutover.sh --watch        # poll public DNS until it agrees
 ```
 
-It checks the credentials before anything else, treats any non-success response as fatal, and
-refuses to move the nameservers before the zone is written. It has **not been run against the
-live API** — this environment cannot reach dinahosting — so watch the first `--zone` run and
-confirm the result in the panel under Zonas DNS before going on to `--switch-ns`.
+The default is a dry run. It verifies credentials before anything else, treats any non-success
+response as fatal, reads the nameservers back after setting them, and will not move nameservers
+before the zone is written — that order is what keeps a domain from going dark.
 
-### 2. `issue-certificate.sh` — Let's Encrypt
+**The certificate is still a panel step**, and the only one: CERTIFICADOS → the domain →
+Certificado Let's Encrypt → Instalar, *after* `dig` shows the new IP. Validation runs over HTTP
+on the domain itself, so doing it earlier simply fails. `.well-known/` is excluded from the
+deploy's prune so issuance cannot be interrupted by a deploy landing at the wrong moment.
 
-Only once `dig` shows `82.98.164.84`. Validation is over HTTP on the domain itself, so issuing
-it earlier fails — there is a 2021 failure of exactly this kind still sitting in this account's
-notifications. Confirm `.well-known/` is present and writable first; the deploy excludes it
-from the prune precisely so issuance cannot be interrupted.
-
-Afterwards, assert `https://www.erasmusinbarcelona.com/` answers 200 with a valid certificate,
-and that `http://` reaches it in one redirect.
-
-### 3. `finish.sh` — the tidying
-
-- Delete the `SITE_CHECK_URL` repository variable so CI checks the real domain.
-- Remove `.github/workflows/deploy-pages.yml`. The GitHub Pages prototype it deploys has been
-  superseded, and Pages from a private repository needs a paid plan.
-- Make the repository private. **After** the workflow above is removed, not before.
-- Cancel Webnode. It is paid to **September 2026**, so there is no hurry and no reason to
-  cancel before the new site has been serving the live domain for a while.
+If a future domain needs this scripted too, look for a `Ssl_` or `Certificate_` group in the
+command list rather than guessing names.
 
 ---
 
