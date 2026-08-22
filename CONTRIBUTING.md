@@ -1,8 +1,11 @@
 # Making a change
 
-For whoever picks this up next. [README.md](README.md) says how the site is built,
-[PUBLISHING.md](PUBLISHING.md) how it reaches the server, and [HANDOFF.md](HANDOFF.md) why the
-hosting behaves the way it does. This one is about the day you have to change something.
+For whoever picks this up next. [HANDOFF.md](HANDOFF.md) says what the site *is* — it has been
+live at <https://www.erasmusinbarcelona.com> since 22 August 2026 — [PUBLISHING.md](PUBLISHING.md)
+how to work on it from a terminal, and [README.md](README.md) how it is built from source. This
+one is about the day you have to change something.
+
+It is a live business site now. A bad deploy is not a broken preview.
 
 ---
 
@@ -55,6 +58,8 @@ One trap: `npm run check` rebuilds `dist/` with `node build.mjs`, which does **n
 | `redirect chain` | a legacy URL pointing at another legacy URL | point it at the real page. One hop only |
 | `course week(s) already over` | a stale export from the dates sheet | re-export. `ALLOW_STALE_DATES=1` publishes anyway |
 | `has "…" typed in` | a fact copied into a template | render it from `src/data/` |
+| `forces HTTPS on %{HTTPS} alone` | the scheme rule lost its `X-Forwarded-Proto` condition | put it back. This one takes the site **down**, not just wrong — see below |
+| `preview host is exempted in N RewriteCond line(s)` | the `*.dinaserver.com` exemption dropped from a rule | both rules need it, or a preview check bounces to the live domain |
 
 The guards run in CI on every pull request and on every push to a branch that deploys, and
 again inside both deploy paths. They are the same file in all three places.
@@ -122,6 +127,13 @@ workflows already trigger on `main`, so the rename is the whole change.
 There is no snapshot. The deploy mirrors `dist/` into the web root and deletes whatever is not
 in it, so the live site is always exactly what the repository last built — which means a bad
 change is undone by making the repository right and deploying again, not by restoring anything.
+
+**A bad `.htaccess` can make the site unreachable rather than merely wrong**, and that is the
+case where this matters. Varnish terminates TLS in front of Apache, so `%{HTTPS}` is always
+`off` inside `.htaccess`; a scheme rule that tests it alone redirects HTTPS to HTTPS for ever.
+It happened minutes after the domain went live. `npm run check` cannot reproduce it — it serves
+`dist/` with no proxy in front — so `npm run guards` reads the generated file instead. If the
+site ever goes unreachable after a deploy, look at the rewrite rules first.
 
 ```bash
 git revert <the bad commit>

@@ -1,52 +1,53 @@
-# ErasmusInBarcelona.com — publishing, and what is left to do
+# ErasmusInBarcelona.com — how it is set up, and how to publish
 
-> **Before anything else: the registrant contact is unverified.** The panel warns
-> "Dominio pendiente de verificar el contacto registrante" and names **spainbcnmiriam@gmail.com**.
-> ICANN requires the domain be suspended if that email is not acted on, usually within 15 days
-> of the transfer. A suspended domain takes the site down whatever else is configured. Find that
-> email and click the link.
+**Live at <https://www.erasmusinbarcelona.com> since 22 August 2026.** Valid certificate, every
+page answering, legacy URLs redirecting, the old Webnode site no longer in the path.
 
-**Status, 22 August 2026: the site is built, uploaded, serving correctly on the hosting, and
-approved by the owner for publication. The registrar transfer has completed — dinahosting is
-the registrar as of 07:42 UTC — but the domain still points at Webnode, because the
-nameservers have not moved yet.** What remains is listed under [What is left](#what-is-left).
-[PUBLISHING.md](PUBLISHING.md) covers doing all of it from a terminal, without the panel.
+This document is what the site *is*. [PUBLISHING.md](PUBLISHING.md) is how to work on it from a
+terminal, and [README.md](README.md) is how the site is built from source.
 
-See it now: <http://erasmusinbarcelona.hl1639.dinaserver.com/?v=1>
-
-Add a query string. Without one you will very likely get a cached copy of dinahosting's
-placeholder page from before the first upload, and conclude nothing has been deployed. That
-mistake cost an hour.
+> **One outstanding risk: the registrant contact may still be unverified.** After the transfer,
+> dinahosting warned "Dominio pendiente de verificar el contacto registrante" and named
+> **spainbcnmiriam@gmail.com**. ICANN requires suspension if that email is never acted on, and a
+> suspended domain is down no matter how correct everything else is. Check from a terminal:
+>
+> ```bash
+> curl -sS https://dinahosting.com/special/api.php \
+>   --data-urlencode "AUTH_USER=$DINA_USER" --data-urlencode "AUTH_PWD=$DINA_PASS" \
+>   --data-urlencode "command=Domain_Contacts_GetRegistrantVerificationInfo" \
+>   --data-urlencode "domain=erasmusinbarcelona.com" \
+>   --data-urlencode "responseType=Json"
+> ```
 
 ---
 
 ## Contents
 
-1. [The situation in one paragraph](#the-situation-in-one-paragraph)
+1. [The shape of it](#the-shape-of-it)
 2. [Hosting and domain](#hosting-and-domain)
-3. [Two ways to publish](#two-ways-to-publish)
-4. [What is left](#what-is-left)
+3. [How to publish](#how-to-publish)
+4. [What is still open](#what-is-still-open)
 5. [Traps](#traps)
-6. [How the site is built](#how-the-site-is-built)
+6. [How the migration went](#how-the-migration-went)
 
 ---
 
-## The situation in one paragraph
+## The shape of it
 
-`erasmusinbarcelona.com` is a live business site running on **Webnode**, which was also its
-registrar until 22 August 2026 and is still its mail provider; the nameservers it uses are
-Register.it's. A dinahosting account for the domain already existed, paid to 21 November 2026,
-with an empty web root — nobody had ever published to it. The new site now sits on that
-account and serves correctly there, and the owner has approved it for publication.
+Static HTML, built from one data file, served by Apache on shared hosting behind Varnish. No
+database, no PHP, no framework. The repository is the source of truth for every byte in the web
+root: both deploy paths rebuild from source and mirror the result, deleting anything on the
+server that the build no longer produces.
 
-The registrar transfer completed on **22 August 2026 at 07:42 UTC**: the registry lists
-Dinahosting s.l. (IANA 1262) and the status is `active`. **The nameservers are still
-`ns1.register.it` and `ns2.register.it`** — a registrar transfer does not move DNS. Until they
-move, the domain serves the old Webnode site, which is the correct state of affairs and not a
-problem to solve in a hurry.
+```
+GitHub (source)  ──push──▶  Actions ──FTPS──▶  ~/www/  ◀──FTPS──  upload-to-dinahosting.sh
+                                                  │
+                                            Apache + Varnish
+                                                  │
+                                    https://www.erasmusinbarcelona.com
+```
 
-It is, however, the thing to do next, and not to leave indefinitely: those nameservers belong
-to the provider the domain has just left. Do not assume they keep answering for ever.
+Nothing is ever edited on the server. The next deploy would overwrite it.
 
 ---
 
@@ -54,276 +55,160 @@ to the provider the domain has just left. Do not assume they keep answering for 
 
 | Item | Value |
 |---|---|
-| Hosting | dinahosting, Hosting Profesional Linux (erasmusinbarcelona.com), expires 21/11/2026 |
+| Live URL | <https://www.erasmusinbarcelona.com> — apex redirects to www |
+| Hosting | dinahosting, Hosting Profesional Linux, expires 21/11/2026 |
 | Server | `hl1639.dinaserver.com`, IP `82.98.164.84`, Debian 11 |
-| Stack | Apache, PHP 7.4, MariaDB 11.8, Varnish in front |
+| Stack | Apache, **Varnish in front**, PHP 7.4, MariaDB 11.8 |
 | **Web root** | **`~/www/`** — one level below where FTP and SSH land |
-| **FTP host** | **`erasmusinbarcelona-com.espacioseguro.com`**, user `erasmusinbarcelona` |
-| SSH | same host and credentials; enabled; the panel has a web terminal that logs in with no password |
-| Preview URL | `erasmusinbarcelona.hl1639.dinaserver.com` |
+| **FTP host** | **`erasmusinbarcelona-com.espacioseguro.com`**, user `erasmusinbarcelona`, FTPS |
+| SSH | same host and credentials; the panel also has a web terminal that needs no password |
+| Preview URL | `erasmusinbarcelona.hl1639.dinaserver.com` — bypasses the canonical redirect |
+| Registrar | dinahosting (IANA 1262) since 22/08/2026; domain expires 17/11/2027, auto-renew on |
+| Nameservers | `ns.dinahosting.com`, `ns2`, `ns3`, `ns4` |
+| Certificate | Let's Encrypt, issued 22/08/2026 through the panel |
 | Panel | <https://panel.dinahosting.com> |
-| Certificate | none yet — Let's Encrypt (`CERLET`) is free in the panel and must wait for DNS |
-| Domain expiry | 17/11/2027, auto-renew on |
-| dinahosting nameservers | `ns.dinahosting.com`, `ns2`, `ns3`, `ns4` |
 
-**DNS today** (authoritative: `ns1.register.it`, `ns2.register.it`):
-
-| Record | Value | Whose |
-|---|---|---|
-| `A @` | `3.73.27.108`, `3.125.172.46` | Webnode |
-| `CNAME www` | `erasmus-in-barcelona5.webnode.page` | Webnode |
-| `MX @` | `10 imap.mail.webnode.com` | Webnode |
-| `TXT @` | `v=spf1 a mx include:spfuser.webnode.com -all` | Webnode |
-| `CNAME _dmarc` | `_dmarc-user.webnode.com` (→ `v=DMARC1; p=none;`) | Webnode |
-| `CNAME autoconfig` | `tb-wb.securemail.pro` | Register.it, left over |
-
-Nothing else resolves. There is no `ftp` record, which is why the FTP host the panel used to
-display (`ftp.erasmusinbarcelona.com`) does not work and the `espacioseguro.com` name does.
-
-Mail, settled by the owner on 22 August 2026: **no mailbox on this domain has ever been
-created or used.** The site's contact address is `Hola@SpainBcn.com`, on a different domain.
-So there is nothing to migrate and nothing that can be lost — the earlier caution about
-checking the mailbox before cancelling Webnode does not apply.
-
-The MX and SPF records are still recreated as-is at cutover anyway. Not to preserve mail, but
-because changing the web host and the mail records in one move makes any failure twice as hard
-to read. Move them separately, afterwards, or not at all.
-
----
-
-## Two ways to publish
-
-Both build from source and both refuse to upload a build that should not be published. Use
-either; they produce the same result.
-
-### From a terminal
-
-```bash
-bash upload-to-dinahosting.sh              # build, upload, verify
-bash upload-to-dinahosting.sh --dry-run    # say what would change, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-```
-
-`curl` only — macOS ships it, so there is nothing to install. Four stages, stopping at the
-first failure:
-
-1. **Pre-flight.** Rebuilds `dist/` from source and runs the guards, so a stale build can
-   never reach the server.
-2. **Login.** Password typed hidden, never stored. TLS on the control channel. The web root
-   is confirmed to exist before anything is written.
-3. **Upload,** retrying each file up to three times, then reading every file's size back off
-   the server, then pruning what the site no longer contains.
-4. **Verification over HTTP,** because "the bytes uploaded" is not "the site works": eleven
-   pages, a real 404, four legacy redirects, and `site.css` served whole.
-
-Point stage 4 somewhere else with `--check-url https://www.erasmusinbarcelona.com` once the
-domain is live.
-
-### From GitHub
-
-`.github/workflows/deploy-dinahosting.yml` does the same on every push to `main` or
-`claude/site-health-check-df5ie0`, using `lftp`. Credentials are repository secrets
-(`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`); `DEPLOY_DIR` and `SITE_CHECK_URL` are
-repository variables.
-
-`SITE_CHECK_URL` is currently `http://erasmusinbarcelona.hl1639.dinaserver.com` so the
-post-deploy check tests the hosting rather than the old Webnode site. **Delete that variable
-at cutover** and the check falls back to `https://www.erasmusinbarcelona.com`.
-
----
-
-## What is left
-
-In order. Nothing here needs judgement; the transfer that was blocking it is done.
-
-### 1. Wait for the panel to catch up — done at the registry, pending in the panel
-
-The transfer completed at the registry on 22 August 2026 at 07:42 UTC. dinahosting's own panel
-had not yet listed the domain under DOMINIOS as of 08:10 UTC, so there was no zone to edit and
-no nameserver field to change. That is provisioning lag, normally hours. Check with:
-
-```bash
-curl -s https://rdap.verisign.com/com/v1/domain/erasmusinbarcelona.com \
-  | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['status'], [n['ldhName'] for n in d['nameservers']])"
-```
-
-If the panel still does not list it after a few hours, dinahosting's support chat can push it
-through.
-
-### 2. Point the nameservers at dinahosting, and build the zone
-
-```bash
-export DINA_USER=... DINA_PASS=...
-bash cutover.sh                # dry run — says what it would do
-bash cutover.sh --zone         # write the A records
-bash cutover.sh --switch-ns    # move the nameservers, after typing the domain to confirm
-bash cutover.sh --watch        # poll DNS, then tell you to issue the certificate
-```
-
-Zone first, nameservers second — the other order makes dinahosting authoritative for a domain
-whose records still point at a parking IP, and the site goes dark until somebody notices.
-`cutover.sh` enforces that order.
-
-**dinahosting already has a zone for this domain, and it is wrong.** It was initialised on
-30 August 2018 and holds `A @` and `A www` both pointing at `82.98.135.43` — a dinahosting
-parking address, not this hosting. Those two records are what `--zone` rewrites. Nothing else
-is in that zone: no MX, no TXT.
-
-The zone should end up as:
+**The DNS zone**, at dinahosting:
 
 | Record | Value |
 |---|---|
 | `A @` | `82.98.164.84` |
 | `A www` | `82.98.164.84` |
-| `MX` / `TXT` | not created — see below |
 
-`cutover.sh` writes no MX or TXT record. Nothing has ever sent or received mail on this domain,
-and the only zone command whose parameters are documented in a page readable from here is
-`Domain_Zone_UpdateTypeA`. Guessing parameter names for a DNS write is worse than leaving mail
-unconfigured, and leaving it unconfigured changes nothing in practice. If mail is ever wanted,
-add it in the panel and record it here.
+That is the whole zone. There is deliberately **no MX and no TXT**: no mailbox on this domain has
+ever been created or used, and the site's contact address is `Hola@SpainBcn.com`, on a different
+domain. Mail sent to `@erasmusinbarcelona.com` goes nowhere, which is what it did in practice
+before as well. If mail is ever wanted, `Domain_Zone_AddTypeMX` and `Domain_Zone_AddTypeTXT`
+exist, and whatever gets added belongs in this table.
 
-The `_dmarc` and `autoconfig` records simply cease to exist once the nameservers move; both
-belong to providers being left.
+**Webnode** hosted the old site, the old mail and the domain registration until 22 August 2026.
+It is paid up to **September 2026** and can be cancelled after that. Nothing depends on it now.
 
-**Lower the TTLs a day beforehand** if you can. The apex is currently 3600s, so without that
-there is up to an hour where some resolvers still send visitors to Webnode. Nothing breaks;
-they just see the old site for a while.
+---
 
-### 3. Issue the certificate
+## How to publish
 
-Panel → CERTIFICADOS → domain `erasmusinbarcelona.com` → **Certificado Let's Encrypt**
-(`CERLET`, free) → Instalar. **Only after DNS resolves to `82.98.164.84`** — Let's Encrypt
-validates over HTTP on the domain itself, so issuing it earlier just fails. There is a stale
-notification in this account of exactly that going wrong for `summercampsbarcelona.com` in
-2021.
+Both routes build from source, run the same guards, and verify the result. Use either.
 
-`.well-known/` does not exist in the web root yet — it answered 404 on the preview host on
-22 August 2026. Issuance creates it; the deploy's prune exclusion keeps the next deploy from
-deleting it out from under a renewal, which is not the same as a promise that it is already
-there.
-
-Then turn on "Forzar HTTPS" if the panel offers it, and confirm `.well-known/` still exists
-in the web root — the deploy excludes it from the prune precisely so issuance is not
-interrupted.
-
-### 4. Verify against the real domain
+### Push to GitHub
 
 ```bash
-bash upload-to-dinahosting.sh --verify-only --check-url https://www.erasmusinbarcelona.com
+git commit -am "…"
+git push origin claude/site-health-check-df5ie0
 ```
 
-Eleven pages, the 404, four legacy redirects, `site.css` whole.
+`.github/workflows/deploy-dinahosting.yml` builds, mirrors over FTPS with `lftp`, checks every
+file arrived, then checks the live site. Around nine minutes, most of it upload.
 
-**Then check the response headers for `X-Robots-Tag`.** The hosting adds `noindex, nofollow` to
-everything served on the `*.dinaserver.com` preview name — correctly, since a preview should not
-be indexed, and it is the host doing it: nothing in `dist/.htaccess` sets it. Whether it is bound
-to the preview hostname or to the account cannot be established until the domain answers here,
-and the difference matters: if it follows the account, the live site ships deindexed and every
-guard in the repository still passes. `curl -sSI https://www.erasmusinbarcelona.com/` settles it.
+### Or from a terminal
 
-Then check by hand that
-`http://erasmusinbarcelona.com/` reaches `https://www.erasmusinbarcelona.com/` in one hop —
-the canonical is **www**, chosen because every indexed URL of the old site is on www and
-switching would make each legacy redirect two hops for no gain.
+```bash
+bash upload-to-dinahosting.sh                # build, upload, verify
+bash upload-to-dinahosting.sh --dry-run      # list what would go, send nothing
+bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
+```
 
-Then delete the `SITE_CHECK_URL` repository variable so CI checks the real site.
+`curl` only, so nothing to install on a Mac. Three or four minutes, and it is the faster route
+when something is broken and you want it fixed now.
 
-### 5. Tidy up
+Either way: **look at the site afterwards.** The checks confirm that pages answer, that the 404
+is a real 404, that legacy URLs still land and that the stylesheet arrives whole. They cannot
+tell you the price is wrong.
 
-- Cancel Webnode. It is paid to **September 2026**, so let the new site serve the live domain
-  for a while first. Nothing is gained by cancelling early.
-- Make the repository private (the owner asked). **Pages from a private repository needs a
-  paid plan**, so remove `.github/workflows/deploy-pages.yml` at the same time or it will
-  start failing on every push. The prototype it deploys has been superseded anyway.
-- Consider renaming the default branch to `main`; the deploy workflow already triggers on
-  both.
+---
+
+## What is still open
+
+- **Delete the `SITE_CHECK_URL` repository variable.** It was pointing CI's post-deploy check at
+  the preview URL during the migration. With the domain live, deleting it makes CI check
+  `https://www.erasmusinbarcelona.com` instead.
+- **Make the repository private,** as the owner asked. `deploy-pages.yml` has already been
+  removed, so nothing will start failing when you do — Pages from a private repository needs a
+  paid plan.
+- **Cancel Webnode** once September comes round.
+- **Consider renaming the default branch to `main`.** The deploy workflow already triggers on
+  both names.
 
 ---
 
 ## Traps
 
-Every one of these cost time. They are not hypothetical.
+Every one of these cost real time, and two of them took the site down.
+
+**Varnish terminates TLS, so `%{HTTPS}` is always `off` inside Apache.** A rule that forces HTTPS
+by testing `%{HTTPS}` alone redirects every HTTPS request to HTTPS; the proxy forwards plain HTTP
+again and the browser stops with `ERR_TOO_MANY_REDIRECTS`. The site is then unreachable, not
+merely misconfigured — this happened, minutes after the domain went live. The scheme rule must
+also require `%{HTTP:X-Forwarded-Proto} != https`, and the canonical-host rule is kept separate,
+because one `RewriteCond` chain cannot express "either of these, but never on the preview host".
+A local Apache with no proxy in front cannot reproduce this. Neither can the preview URL, which
+is exempt from the rule.
 
 **The FTP host must be `erasmusinbarcelona-com.espacioseguro.com`.** The server presents a
-certificate for `*.espacioseguro.com` on port 21. Dial it as `hl1639.dinaserver.com` and a
-client that verifies the hostname waits for a handshake that cannot finish — the failure is a
-thirty-second silence reported as "Timeout (control socket)", which reads like the server
-being unreachable. It is not: port 21 is open and AUTH TLS completes in about a second.
+certificate for `*.espacioseguro.com` on port 21. Dial it as `hl1639.dinaserver.com` and a client
+that verifies the hostname waits for a handshake that cannot finish — reported as "Timeout
+(control socket)", which reads like the server being unreachable when it is answering fine.
 
-**The web root is `~/www/`, not where FTP lands.** FTP and SSH land in the account home,
-which also contains `Maildir`, `logs` and the rest of the account. A mirror with `--delete`
-pointed there would take all of it. Both deploy paths refuse to target anything but `www/`.
+**The web root is `~/www/`, not where FTP lands.** FTP and SSH land in the account home, which
+also holds `Maildir`, `logs` and the rest of the account. A mirror with `--delete` pointed there
+would take all of it. Both deploy paths refuse any target but `www/`.
 
 **Dotfiles are invisible unless you ask for them.** `set ftp:list-options -a` in lftp, or the
-server lists no `.htaccess` and no `.nojekyll` and a completeness check reports two files
-missing that are sitting right there. `curl --list-only` has the same blind spot, so the
-shell script's prune cannot see dotfiles either — harmless, since both are uploaded every
-time, but do not be surprised by it.
+server lists no `.htaccess` and no `.nojekyll`, and a completeness check reports two files
+missing that are sitting right there.
 
 **Upload one file at a time.** Four in parallel and the host starts refusing data connections
-part-way through; individual files die with "max-retries exceeded" while their neighbours
-succeed. The whole site is under 5 MB, so sequential costs a few minutes.
+part-way through; files die with "max-retries exceeded" while their neighbours succeed.
 
-**Do not trust lftp's exit code.** It has returned 1 twice after runs whose logs show every
-file transferring and no error at all. Both deploy paths therefore verify the result — file
-sizes on the server, then the site over HTTP — rather than asking the tool whether it thinks
-it succeeded.
+**Do not trust lftp's exit code.** It has returned 1 twice after runs whose logs show every file
+transferring and no error at all. Both deploy paths verify the result instead — file sizes on the
+server, then the site over HTTP.
 
-**A protected FTPS data channel truncates files at exactly 16,384 bytes on some networks.**
-Seen on the sibling spainbcn.com project; not reproducible from GitHub's runners, where every
-file arrives byte-exact. The shell script uses `--ftp-ssl-control` (login encrypted, data in
-the clear — the files are a public website) and reads every size back, so if it ever happens
-the deploy stops rather than publishing half a stylesheet.
+**The host rate-limits, and answers 429.** A dozen quick requests and it starts refusing, which
+looks exactly like a broken page. Both checkers space their requests and wait a 429 out.
 
 **`Redirect` in Apache matches on prefix.** `Redirect 301 /home /` also catches `/home/` and
-sends it to `//`. Every legacy redirect uses anchored `RedirectMatch` for this reason. Add new
-ones to `src/data/redirects.js` and rebuild — never to the server.
+sends it to `//`. Every legacy redirect uses anchored `RedirectMatch`. Add new ones to
+`src/data/redirects.js` and rebuild — never to the server.
 
-**`%{HTTP_HOST}` includes the port.** The rule exempting the preview host from the canonical
-redirect has to allow for `:8080` and friends, or it silently stops applying and every check
-against a non-standard port bounces to the live domain.
+**`%{HTTP_HOST}` includes the port**, so the preview-host exemption has to allow for `:8080` or
+it silently stops applying.
 
 **404.html is `noindex`, correctly.** A guard that rejects any `noindex` page rejects every
 build. The prototype build is identified by its own markers instead: a `robots.txt` that
 disallows everything, and a redirecting stub at each legacy path.
 
-**The host rate-limits, and answers 429.** Fire a dozen requests at it in a few seconds and it
-starts returning `429 Too Many Requests`, which looks exactly like a broken page — one deploy
-failed on `/no-such-page/` answering 429 instead of 404. Both checkers now space their
-requests out and wait a 429 out rather than believing it.
+**The preview host carries `x-robots-tag: noindex, nofollow`, the live domain does not.**
+The hosting adds it to everything served on `*.dinaserver.com`, and nothing in `.htaccess` does
+— so before the cutover there was no way to tell whether it followed the preview hostname or
+the account. It follows the hostname: checked on 22 August 2026 after go-live,
+`https://www.erasmusinbarcelona.com/` returns no `x-robots-tag` and its markup says
+`index, follow`. Worth re-checking on the next domain rather than assuming, because the failure
+is silent — every build guard passes while the site is invisible.
 
-**Every deploy re-uploads every file, and takes eight or nine minutes.** The server does not
-preserve the timestamps lftp sets, so the mirror sees every file as changed. It is left this
-way deliberately: comparing on size alone would skip a changed file that happened to keep its
-length, and the whole site is under 5 MB. Do not "optimise" it without thinking that through.
-
-**Your browser caches the preview URL hard.** Append a query string when checking.
+**Your browser caches these URLs hard.** Append a query string when checking anything.
 
 ---
 
-## How the site is built
+## How the migration went
 
-Plain static HTML from one data file. `README.md` covers it properly; the short version:
+Recorded because the same account holds eight other domains, and the next one will hit the same
+things.
 
-```
-src/data/site-data.js     every fact the site states
-src/pages/*.js            one module per page
-src/data/redirects.js     the legacy URL map — used by server.mjs AND the production .htaccess
-build.mjs                 renders src/pages → dist/
-tools/build-htaccess.mjs  renders src/data/redirects.js + SITE_URL → dist/.htaccess
-server.mjs                local static server that behaves like production
-```
+The site was built and uploaded to the hosting first, and checked on the preview URL, while the
+domain still served Webnode. That part was uneventful once the FTPS certificate mismatch was
+understood. The registrar transfer from Webnode completed on the morning of 22 August; a registrar
+transfer does **not** move DNS, so the nameservers stayed at Register.it until they were changed
+explicitly.
 
-```bash
-npm run build:live   # dist/ plus the production .htaccess
-npm start            # build and serve on http://127.0.0.1:4173
-npm run check        # browser audit of every page (needs `npm install` first)
-```
+The cutover itself was: write the zone, then move the nameservers, then issue the certificate,
+then verify — in that order, each step confirmed before the next. The order matters. Nameservers
+before the zone would have made dinahosting authoritative for a domain whose records still
+pointed at a 2018 parking address. The certificate before DNS cannot validate at all; there is a
+2021 failure of exactly that still sitting in this account's notifications.
 
-`dist/` is not committed. Both deploy paths build it themselves, so what reaches the server is
-always what the source says.
-
-The canonical origin is `https://www.erasmusinbarcelona.com`, set as `SITE_URL` in
-`src/layout.js`. `tools/build-htaccess.mjs` follows it — change it in one place and the
-canonical tags, the sitemap and the redirect all agree.
+What went wrong was the thing that could not be tested in advance: DNS propagated in minutes
+rather than the expected hour, and the redirect loop described above took the site down until a
+corrected `.htaccess` was deployed. If there is a lesson for the next domain, it is that a
+staging URL exempt from the canonical redirect cannot exercise the canonical redirect, and the
+proxy in front of Apache changes what that rule sees.

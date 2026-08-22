@@ -146,6 +146,54 @@ if (buildable) {
 }
 
 // ------------------------------------------------------------
+// The canonical redirect, and the condition that keeps the site up.
+//
+// Varnish sits in front of Apache and terminates TLS, so %{HTTPS} is
+// always "off" inside .htaccess however the visitor arrived. A scheme
+// rule that tests %{HTTPS} alone therefore redirects every HTTPS
+// request to HTTPS, the proxy forwards plain HTTP again, and the
+// browser gives up: ERR_TOO_MANY_REDIRECTS. Not a misconfigured site,
+// an unreachable one. That happened, minutes after the domain went
+// live on 22 August 2026.
+//
+// Nothing else in the repository can catch it. `npm run check` serves
+// dist/ through server.mjs with no proxy in front, and the preview host
+// is exempt from the rule, so neither can reproduce what the live site
+// sees. So the generated file is read here instead.
+// ------------------------------------------------------------
+if (buildable) {
+  const htaccess = read('.htaccess');
+  const scheme = htaccess.split('\n').findIndex((l) => /RewriteCond\s+%\{HTTPS\}/.test(l));
+  if (scheme === -1) {
+    fail('.htaccess has no scheme rule — the canonical redirect to HTTPS is missing.');
+  } else {
+    // The X-Forwarded-Proto condition has to sit in the same RewriteCond
+    // chain as the %{HTTPS} test: one intervening RewriteRule and it is
+    // guarding a different rule.
+    const rest = htaccess.split('\n').slice(scheme + 1);
+    const chain = rest.slice(0, rest.findIndex((l) => /RewriteRule/.test(l)) + 1);
+    if (!chain.some((l) => /X-Forwarded-Proto/i.test(l))) {
+      fail('.htaccess forces HTTPS on %{HTTPS} alone, with no X-Forwarded-Proto condition.\n'
+        + '      Varnish terminates TLS, so %{HTTPS} is always "off" and this redirects\n'
+        + '      https to https — ERR_TOO_MANY_REDIRECTS, and the site is unreachable.\n'
+        + '      See tools/build-htaccess.mjs, and "Traps" in HANDOFF.md.');
+    }
+  }
+
+  // The preview host has to stay exempt, or checking the build there
+  // bounces to the live domain and tests nothing. It has to be exempt in
+  // a RewriteCond, not merely mentioned — the comment above the rule
+  // names it too, and a comment exempts nothing.
+  const exemptions = htaccess.split('\n')
+    .filter((l) => /^\s*RewriteCond/.test(l) && /dinaserver/i.test(l)).length;
+  if (exemptions < 2) {
+    fail(`the *.dinaserver.com preview host is exempted in ${exemptions} RewriteCond line(s), not 2.\n`
+      + '      Both the scheme rule and the canonical-host rule need it, or checking a\n'
+      + '      build on the preview URL bounces to the live domain and tests nothing.');
+  }
+}
+
+// ------------------------------------------------------------
 // Course weeks that have already happened.
 //
 // `dates` is a hand export from the DATES-SPAINBCN sheet and no page
