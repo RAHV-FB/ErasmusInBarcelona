@@ -126,9 +126,23 @@ if (buildable) {
   );
 
   for (const [from, to] of Object.entries(REDIRECTS)) {
-    if (!rules.has(from)) fail(`redirect missing from .htaccess: ${from}`);
-    else if (rules.get(from) !== to) {
-      fail(`redirect disagrees: ${from} → ${to} in redirects.js, ${rules.get(from)} in .htaccess`);
+    if (!rules.has(from)) { fail(`redirect missing from .htaccess: ${from}`); continue; }
+    const target = rules.get(from);
+
+    // The target has to be absolute and https, not the bare path that
+    // redirects.js holds. Apache expands a relative Redirect target using
+    // its own idea of the scheme, and Varnish terminates TLS in front of
+    // it, so its own idea is always http — which the scheme rule then
+    // answers with a second 301. Two hops for every URL the old site had
+    // indexed, the first of them in the clear. Measured on the live site
+    // on 22 August 2026 before this was fixed.
+    if (!target.startsWith(`${LIVE_ORIGIN}/`)) {
+      fail(`${from} redirects to "${target}" in .htaccess — it must be absolute and start\n`
+        + `      ${LIVE_ORIGIN}/, or Apache hands back an http:// Location behind Varnish\n`
+        + '      and every legacy URL takes two hops. See tools/build-htaccess.mjs.');
+    } else if (target.slice(LIVE_ORIGIN.length) !== to) {
+      fail(`redirect disagrees: ${from} → ${to} in redirects.js, `
+        + `${target.slice(LIVE_ORIGIN.length)} in .htaccess`);
     }
   }
   for (const from of rules.keys()) {
