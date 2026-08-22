@@ -124,9 +124,15 @@ if [ "$DO_NS" = 1 ]; then
   # Domain_Dnss_Set, not Domain_NameServer_Modify. The NameServer
   # family registers glue records — it wants a hostname and an IP, and
   # says so if you hand it anything else. Dnss is the one that decides
-  # which nameservers a domain uses, and it takes them comma separated.
-  list=$(IFS=,; printf '%s' "${NS[*]}")
-  resp=$(api Domain_Dnss_Set "domain=$DOMAIN" "dnss=$list")
+  # which nameservers a domain uses.
+  #
+  # It takes a repeated dnss[] parameter, PHP array style. The
+  # documentation says "comma separated values", which the API rejects
+  # as invalid syntax — tested both url-encoded and raw, with two
+  # nameservers and with four. Believe the API over its own docs.
+  args=("domain=$DOMAIN")
+  for ns in "${NS[@]}"; do args+=("dnss[]=$ns"); done
+  resp=$(api Domain_Dnss_Set "${args[@]}")
   check "$resp" "changing the nameservers"
 
   # Read it back rather than trusting the write.

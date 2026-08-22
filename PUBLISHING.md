@@ -95,7 +95,7 @@ Commands are `Area_Thing_Verb`. Confirmed to exist:
 
 | Command | For |
 |---|---|
-| `Domain_Dnss_Set` | **which nameservers a domain uses** — `domain`, `dnss` (comma separated) |
+| `Domain_Dnss_Set` | **which nameservers a domain uses** — `domain`, and a repeated `dnss[]` per nameserver |
 | `Domain_Dnss_Get` | read them back |
 | `Domain_Zone_GetAll` | the whole zone — `domain` |
 | `Domain_Zone_UpdateTypeA` | change an A record — `domain`, `hostname` (`@` for the apex), `ip`, optional `oldIp` |
@@ -103,6 +103,12 @@ Commands are `Area_Thing_Verb`. Confirmed to exist:
 | `Domain_Contacts_GetRegistrantVerificationInfo` | whether the registrant email has been verified |
 | `Domain_NameServer_*` | **not** the above — this family registers glue records, and wants a hostname and an IP |
 | `System_GetRequestTypes` | transport types; useful only as an auth check |
+
+`Domain_Dnss_Set` is worth a second look, because its documentation is wrong. It describes
+`dnss` as "comma separated values"; the API answers `Param "dnss" value syntax is not valid` to
+that, url-encoded or raw, with two nameservers or four. It wants `dnss[]=ns1&dnss[]=ns2`,
+repeated. **Where the docs and the API disagree, the API is right** — and simulation mode is
+how you find out which without changing anything.
 
 **The full command list is in the documentation sidebar under "LIST OF COMMANDS", grouped by
 area.** It needs JavaScript, so a plain fetch returns the marketing page instead — open it in a
