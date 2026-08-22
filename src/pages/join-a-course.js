@@ -119,7 +119,8 @@ export default function joinACourse() {
         <li><span class="facts__term">Levels</span><span class="facts__value">Most courses run at an
           introductory and an advanced level. Say which one you want when you enquire.</span></li>
         <li><span class="facts__term">Language</span><span class="facts__value">English, except the Spanish
-          programmes, which are taught in Spanish.</span></li>
+          programmes, which are taught in Spanish. The Language + ICT week runs in English or
+          Spanish.</span></li>
         <li><span class="facts__term">Group</span><span class="facts__value">${d.schedule.groupSize}</span></li>
         <li><span class="facts__term">Certificate</span><span class="facts__value">${d.schedule.certificate}, issued on the final day.</span></li>
         <li><span class="facts__term">If plans change</span><span class="facts__value">${d.booking.cancellation}</span></li>
@@ -131,7 +132,7 @@ export default function joinACourse() {
   <section class="section section--cobalt">
     <div class="container">
       <h2>Ask about a week</h2>
-      <p class="lede">Send the subject, the level and the dates you have in mind. ${d.contact.replyTime}</p>
+      <p class="lede">Send the subject, the level and the dates you have in mind.</p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Ask about a week</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -144,6 +145,6 @@ export default function joinACourse() {
     current: 'join',
     crumb: 'Staff training',
     title: 'Erasmus+ KA1 Staff Training Courses in Barcelona | SpainBcn-Programs',
-    description: `Erasmus+ KA1 staff training in Barcelona for teachers and education staff, with the next scheduled week for each subject. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25. Erasmus+ funding is not required.`,
+    description: `The six subject areas taught in Barcelona, with the next scheduled Erasmus+ KA1 week for each. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25. Erasmus+ funding is not required.`,
   }, body);
 }

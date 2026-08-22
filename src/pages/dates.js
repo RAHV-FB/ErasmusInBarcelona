@@ -51,8 +51,8 @@ export default function dates() {
           <p>We can run any course in the catalogue in another week, and a second level can open in a
             week that's already listed. The two-week AI &amp; ICT Intensive runs as two adjacent
             weeks.</p>
-          <p class="meta">Ask early if you can — the documents an Erasmus+ application needs take a
-            couple of working days to prepare.</p>
+          <p class="meta">Ask early if you can, so the documents your Erasmus+ application needs are
+            ready in time.</p>
         </div>
       </div>
     </div>
