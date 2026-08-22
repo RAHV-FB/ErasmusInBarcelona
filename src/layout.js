@@ -48,6 +48,7 @@ export function portrait(person, size = 'people') {
 
 const NAV = [
   { href: '/join-a-course/', label: 'Staff training', key: 'join' },
+  { href: '/universities/', label: 'Universities', key: 'universities' },
   { href: '/bring-a-group/', label: 'Student groups', key: 'group' },
   { href: '/dates/', label: 'Dates', key: 'dates' },
   { href: '/your-week/', label: 'Your week', key: 'week' },
@@ -88,6 +89,7 @@ function footer() {
           <h2>Pages</h2>
           <ul>
             <li><a href="/join-a-course/">Staff training courses</a></li>
+            <li><a href="/universities/">University staff</a></li>
             <li><a href="/bring-a-group/">Student groups</a></li>
             <li><a href="/plan-a-mobility/">Institutional programmes</a></li>
             <li><a href="/dates/">Dates</a></li>
@@ -115,7 +117,7 @@ function footer() {
         </div>
       </div>
       <div class="footer__legal">
-        <span>© ${organisation.founded}–2026 ${organisation.legalName}</span>
+        <span>© ${organisation.founded}–${new Date().getFullYear()} ${organisation.legalName}</span>
         <span>Erasmus+ OID ${organisation.oid}</span>
         <a href="/privacy/">Privacy</a>
         <a href="/cookies/">Cookies</a>

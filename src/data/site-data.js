@@ -204,6 +204,7 @@ export const courseAreas = [
     programmes: [
       { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
       { name: 'School AI & ICT', url: SB + 'group-ai-ict.html#school-ai-and-ict' },
+      { name: 'University AI & ICT', url: SB + 'group-ai-ict.html#university-ai-and-ict' },
       { name: 'AI for Language Teaching', url: SB + 'group-ai-ict.html#ai-for-language-teaching' },
       { name: 'AI & ICT Intensive (two weeks)', url: SB + 'group-ai-ict.html#ai-and-ict-intensive-two-weeks' },
     ],
@@ -295,6 +296,53 @@ export const courseAreas = [
   },
 ];
 
+
+// ============================================================
+// UNIVERSITY STAFF
+//
+// The programmes whose published audience on SpainBcn names
+// university staff, for /universities/. University AI & ICT is the
+// one written for higher education alone — its audience is
+// university teaching, research and administrative staff, nobody
+// else. Audiences checked programme by programme on the SpainBcn
+// subject-area pages, 2026-08-22.
+// ============================================================
+export const universityProgrammes = {
+  dedicated: {
+    name: 'University AI & ICT',
+    url: SB + 'group-ai-ict.html#university-ai-and-ict',
+    audience: 'university teaching, research and administrative staff',
+    desc: 'Digital tools for lectures, seminars and research support, and where AI fits academic work.',
+  },
+  groups: [
+    {
+      label: 'AI and digital teaching',
+      areaId: 'ai',
+      items: [
+        { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
+        { name: 'Innovative teaching methods with ICT', url: SB + 'group-ai-ict.html#innovative-teaching-methods-with-ict' },
+      ],
+    },
+    {
+      label: 'English and communication',
+      areaId: 'english',
+      items: [
+        { name: 'General English by level', url: SB + 'group-english.html#general-english-by-level' },
+        { name: 'Culture & History in English', url: SB + 'group-english.html#culture-and-history-in-english' },
+        { name: 'Presentation Skills', url: SB + 'group-presentation.html#presentation-skills' },
+        { name: 'Advanced Presentation Skills', url: SB + 'group-presentation.html#advanced-presentation-skills' },
+      ],
+    },
+    {
+      label: 'Spanish',
+      areaId: 'spanish',
+      items: [
+        { name: 'General Spanish by level', url: SB + 'group-spanish.html#general-spanish-by-level' },
+        { name: 'Culture & History in Spanish', url: SB + 'group-spanish.html#culture-and-history-in-spanish' },
+      ],
+    },
+  ],
+};
 
 // ============================================================
 // COURSE WEEKS IN BARCELONA
