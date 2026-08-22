@@ -167,8 +167,9 @@ consent banner is gone, because there is nothing left to consent to on page view
 1. **Class times.** SpainBcn publishes "Monday to Friday mornings" and a 20 or 25 hour choice, but
    no clock times. The old site's "10:00–14:00 / 10:00–15:00" could not be confirmed, so the site
    no longer states times. If they are correct, put them in `schedule` in `site-data.js`.
-2. **The hosting company** named in `/privacy/`. The policy describes the server logs of the host
-   used for spainbcn.com; confirm who will host this site before publishing.
+2. ~~**The hosting company** named in `/privacy/`.~~ Resolved 21 August 2026: the site is hosted by
+   Dinahosting S.L., Santiago de Compostela, and `/privacy/` names it as the processor for the
+   server logs from `hosting` in `site-data.js`.
 3. **Google reviews link.** The rating and count come from SpainBcn's homepage; the link here is a
    Google local-results search rather than the organisation's own review URL, which the current
    SpainBcn markup does not expose in a stable form.
@@ -178,6 +179,14 @@ consent banner is gone, because there is nothing left to consent to on page view
    instead of answering it.
 6. **The last four course weeks** were verified against the organisation's own sheet; SpainBcn's
    own dates page was rate-limiting requests and could not be read as a second source.
+7. **The course weeks run out on 13 November 2026, and nothing filters a week once it has passed.**
+   `dates` in `site-data.js` is a fixed list exported from the DATES-SPAINBCN sheet, and no page
+   compares a row against today's date. The home page's "Upcoming weeks in Barcelona", the
+   "Next in Barcelona" column on `/join-a-course/` and the count on `/dates/` will all keep
+   presenting a week as forthcoming after it has happened — the first one on 19 September 2026.
+   Either re-export the sheet before each publish, as the file's own header already says to, or
+   filter `dates` on `end` at build time so a stale export cannot mislead anyone. The second is
+   the one that survives someone forgetting.
 
 ---
 

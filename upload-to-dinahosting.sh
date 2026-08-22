@@ -233,8 +233,58 @@ fi   # end of upload stage
 # ------------------------------------------------------------
 bold "4. Checking $CHECK_URL"
 
-http() { curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$1"; }
-loc()  { curl -sI --max-time 30 "$1" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r'; }
+# The host rate-limits bursts. Six requests inside two seconds and it
+# starts answering 429, which reads exactly like a broken page — that is
+# what failed every deploy so far, on the 404 check, while the upload
+# itself had succeeded. Measured against the hosting on 22 August 2026:
+# a burst draws 429 from the fourth request onwards; at three seconds
+# apart four to six get through before one is refused; a 429 clears
+# after about twenty seconds of quiet. So pacing alone is not enough —
+# the checks below are paced *and* wait a 429 out rather than reporting
+# it as a broken page.
+CHECK_PACE="${CHECK_PACE:-3}"
+CHECK_RETRIES="${CHECK_RETRIES:-4}"
+CHECK_BACKOFF="${CHECK_BACKOFF:-20}"
+
+# One request, paced, retried for as long as the host is rate-limiting.
+# Prints the status code and the Location header, one per line. A proxy
+# that answers CONNECT adds a status line of its own, so the last one
+# wins.
+head_of() {
+  local url="$1" attempt=0 headers code
+  while :; do
+    headers=$(curl -sS -o /dev/null -D - --max-time 30 "$url" 2>/dev/null | tr -d '\r')
+    code=$(printf '%s\n' "$headers" | awk '/^HTTP\//{c=$2} END{print c}')
+    [ "$code" != "429" ] && break
+    attempt=$((attempt + 1))
+    [ "$attempt" -gt "$CHECK_RETRIES" ] && break
+    printf '  … rate-limited, waiting %ss\n' "$((CHECK_BACKOFF * attempt))" >&2
+    sleep "$((CHECK_BACKOFF * attempt))"
+  done
+  sleep "$CHECK_PACE"
+  printf '%s\n' "${code:-000}"
+  printf '%s\n' "$headers" | awk 'tolower($1)=="location:"{print $2}'
+}
+
+# The stylesheet check needs the bytes, not the status, so it cannot go
+# through head_of.
+paced_body() {
+  local url="$1" attempt=0 tmp code
+  tmp=$(mktemp)
+  while :; do
+    code=$(curl -sS -o "$tmp" -w '%{http_code}' --max-time 30 "$url")
+    [ "$code" != "429" ] && break
+    attempt=$((attempt + 1))
+    [ "$attempt" -gt "$CHECK_RETRIES" ] && break
+    sleep "$((CHECK_BACKOFF * attempt))"
+  done
+  sleep "$CHECK_PACE"
+  cat "$tmp"
+  rm -f "$tmp"
+}
+
+http() { head_of "$1" | sed -n 1p; }
+loc()  { head_of "$1" | sed -n 2p; }
 
 bad=0
 for path in / /join-a-course/ /dates/ /contact/ /your-week/ /about/ /barcelona/ /bring-a-group/ /plan-a-mobility/ /privacy/ /cookies/; do
@@ -254,7 +304,7 @@ for pair in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you
   esac
 done
 
-size=$(curl -s --max-time 30 "$CHECK_URL/assets/css/site.css" | wc -c | tr -d ' ')
+size=$(paced_body "$CHECK_URL/assets/css/site.css" | wc -c | tr -d ' ')
 want=$(wc -c < "$DIST/assets/css/site.css" | tr -d ' ')
 [ "$size" = "$want" ] && ok "site.css served whole ($want bytes)" || { echo "  ✗ site.css served $size bytes, built $want"; bad=1; }
 
