@@ -9,6 +9,7 @@
     "build:live": "node build.mjs && node tools/build-htaccess.mjs",
     "build:pages": "BASE_PATH=/ErasmusInBarcelona SITE_URL=https://rahv-fb.github.io/ErasmusInBarcelona PROTOTYPE=1 node build.mjs",
     "images": "node tools/build-images.mjs",
+    "dates": "node tools/refresh-dates.mjs",
     "start": "node build.mjs && node server.mjs",
     "serve": "node server.mjs",
     "check": "node scripts/health-check.mjs",
