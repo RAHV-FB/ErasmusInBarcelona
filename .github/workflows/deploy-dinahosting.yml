@@ -185,23 +185,59 @@ jobs:
 
       # Against the real domain once it points here; against the
       # hosting's own name while it does not.
+      #
+      # The host rate-limits: a fast run of requests starts coming back
+      # 429, which is the checker being impatient rather than the site
+      # being wrong. So requests are spaced out and a 429 is waited out
+      # rather than believed.
       - name: Check the site answers
         env:
           BASE: ${{ vars.SITE_CHECK_URL || 'https://www.erasmusinbarcelona.com' }}
         run: |
           sleep 10
           echo "checking $BASE"
+
+          code() {
+            local url="$1" i out
+            for i in 1 2 3 4; do
+              out=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 "$url")
+              [ "$out" = "429" ] || { printf '%s' "$out"; return; }
+              sleep 20
+            done
+            printf '%s' "$out"
+          }
+
+          location() {
+            local url="$1" i out headers
+            for i in 1 2 3 4; do
+              headers=$(curl -sSI --max-time 30 "$url")
+              out=$(printf '%s' "$headers" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r')
+              printf '%s' "$headers" | grep -qi '^HTTP/[0-9.]* 429' || { printf '%s' "$out"; return; }
+              sleep 20
+            done
+            printf '%s' "$out"
+          }
+
+          bad=0
           for path in / /join-a-course/ /dates/ /contact/ /your-week/; do
-            code=$(curl -sS -o /dev/null -w '%{http_code}' --retry 3 --retry-delay 5 "$BASE$path")
-            echo "$code  $path"
-            [ "$code" = "200" ] || exit 1
+            got=$(code "$BASE$path")
+            echo "$got  $path"
+            [ "$got" = "200" ] || bad=1
+            sleep 2
           done
-          code=$(curl -sS -o /dev/null -w '%{http_code}' "$BASE/no-such-page/")
-          echo "$code  /no-such-page/ (expected 404)"
-          [ "$code" = "404" ] || exit 1
+
+          got=$(code "$BASE/no-such-page/")
+          echo "$got  /no-such-page/ (expected 404)"
+          [ "$got" = "404" ] || bad=1
+          sleep 2
+
           for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/; do
             from=${legacy%%:*}; to=${legacy##*:}
-            location=$(curl -sSI "$BASE$from" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r')
-            echo "$from → $location (expected $to)"
-            case "$location" in *"$to") ;; *) exit 1 ;; esac
+            where=$(location "$BASE$from")
+            echo "$from → ${where:-nowhere} (expected $to)"
+            case "$where" in *"$to") ;; *) bad=1 ;; esac
+            sleep 2
           done
+
+          [ "$bad" = 0 ] || { echo "::error::the site is not answering correctly"; exit 1; }
+          echo "the site answers correctly"

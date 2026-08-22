@@ -26,16 +26,20 @@ mistake cost an hour.
 
 ## The situation in one paragraph
 
-`erasmusinbarcelona.com` is a live business site running on **Webnode**, with its DNS at
-**Register.it** and its mail at Webnode too. A dinahosting account for the domain already
-existed, paid to 21 November 2026, with an empty web root — nobody had ever published to it.
-A registrar transfer from Register.it to dinahosting was opened on 21 August 2026 at 15:12 and
-is at step 3 of 4, waiting on the losing registrar. The new site now sits on that dinahosting
-account and serves correctly there. When the transfer completes, the nameservers move to
-dinahosting, the zone is rebuilt there, and the domain starts answering from the new site.
+`erasmusinbarcelona.com` is a live business site running on **Webnode**, which is also its
+**registrar** and its mail provider; the nameservers it uses are Register.it's. A dinahosting
+account for the domain already existed, paid to 21 November 2026, with an empty web root —
+nobody had ever published to it. A registrar transfer to dinahosting was opened on 21 August
+2026 and **approved by the owner**, so it completes on or before **26 August 2026**. The new
+site now sits on that dinahosting account and serves correctly there. When the transfer
+completes, the nameservers move to dinahosting, the zone is rebuilt there, and the domain
+starts answering from the new site.
 
 The old Webnode site stays up and untouched until that moment. There is no window where the
-domain serves nothing.
+domain serves nothing — provided step 2 below is done promptly. **Webnode is the losing
+registrar and the current DNS and mail provider all at once**, so do not assume its
+nameservers keep answering indefinitely after the domain leaves. The site is ready and
+verified, so there is no reason to wait: move the nameservers as soon as the transfer lands.
 
 ---
 
@@ -69,8 +73,11 @@ display (`ftp.erasmusinbarcelona.com`) does not work and the `espacioseguro.com`
 
 The owner's decision on mail: **nobody uses `@erasmusinbarcelona.com`** — the site's contact
 address is `Hola@SpainBcn.com`, a different domain — so mail moves to dinahosting with
-everything else. Before the Webnode plan is cancelled, somebody should open that mailbox once
-and confirm there is nothing in it worth keeping. That is the one step with no undo.
+everything else. Two cautions. Before the Webnode plan is cancelled, somebody should open that
+mailbox once and confirm there is nothing in it worth keeping; that is the one step with no
+undo. And **do not point MX at dinahosting before a mailbox exists there** — mail to the
+domain would bounce rather than sit unread. Moving the web records and leaving MX on Webnode
+for a few days is perfectly fine.
 
 ---
 
@@ -132,9 +139,9 @@ Once the domain is in the dinahosting account, set its nameservers to dinahostin
 |---|---|
 | `A @` | `82.98.164.84` |
 | `A www` | `82.98.164.84` |
-| `MX @` | dinahosting's mail server for this hosting, priority 10 |
-| `TXT @` | dinahosting's SPF include, replacing the Webnode one |
-| `CNAME _dmarc` | drop the Webnode CNAME; a plain `TXT _dmarc` with `v=DMARC1; p=none;` is fine |
+| `MX @` | **leave on Webnode for now** — see the mail caution above. Move it once a dinahosting mailbox exists. |
+| `TXT @` | the SPF that matches wherever MX points. While MX stays on Webnode, keep the Webnode include. |
+| `CNAME _dmarc` | drop the Webnode CNAME when mail moves; a plain `TXT _dmarc` with `v=DMARC1; p=none;` is fine |
 | `autoconfig` | drop it — Register.it's, and meaningless here |
 
 **Lower the TTLs a day beforehand** if you can. The apex is currently 3600s, so without that
@@ -223,6 +230,16 @@ against a non-standard port bounces to the live domain.
 **404.html is `noindex`, correctly.** A guard that rejects any `noindex` page rejects every
 build. The prototype build is identified by its own markers instead: a `robots.txt` that
 disallows everything, and a redirecting stub at each legacy path.
+
+**The host rate-limits, and answers 429.** Fire a dozen requests at it in a few seconds and it
+starts returning `429 Too Many Requests`, which looks exactly like a broken page — one deploy
+failed on `/no-such-page/` answering 429 instead of 404. Both checkers now space their
+requests out and wait a 429 out rather than believing it.
+
+**Every deploy re-uploads every file, and takes eight or nine minutes.** The server does not
+preserve the timestamps lftp sets, so the mirror sees every file as changed. It is left this
+way deliberately: comparing on size alone would skip a changed file that happened to keep its
+length, and the whole site is under 5 MB. Do not "optimise" it without thinking that through.
 
 **Your browser caches the preview URL hard.** Append a query string when checking.
 

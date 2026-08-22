@@ -233,13 +233,35 @@ fi   # end of upload stage
 # ------------------------------------------------------------
 bold "4. Checking $CHECK_URL"
 
-http() { curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$1"; }
-loc()  { curl -sI --max-time 30 "$1" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r'; }
+# The host rate-limits. A fast run of requests starts coming back 429,
+# which is this script being impatient rather than the site being
+# wrong, so a 429 is waited out rather than believed.
+http() {
+  local i out
+  for i in 1 2 3 4; do
+    out=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$1")
+    [ "$out" = "429" ] || { printf '%s' "$out"; return; }
+    sleep 20
+  done
+  printf '%s' "$out"
+}
+
+loc() {
+  local i headers out
+  for i in 1 2 3 4; do
+    headers=$(curl -sI --max-time 30 "$1")
+    out=$(printf '%s' "$headers" | awk 'tolower($1)=="location:"{print $2}' | tr -d '\r')
+    printf '%s' "$headers" | grep -qi '^HTTP/[0-9.]* 429' || { printf '%s' "$out"; return; }
+    sleep 20
+  done
+  printf '%s' "$out"
+}
 
 bad=0
 for path in / /join-a-course/ /dates/ /contact/ /your-week/ /about/ /barcelona/ /bring-a-group/ /plan-a-mobility/ /privacy/ /cookies/; do
   code=$(http "$CHECK_URL$path")
   [ "$code" = "200" ] && ok "200 $path" || { echo "  ✗ $code $path"; bad=1; }
+  sleep 2
 done
 
 code=$(http "$CHECK_URL/no-such-page/")
@@ -252,6 +274,7 @@ for pair in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you
     *"$to") ok "$from → $to" ;;
     *) echo "  ✗ $from went to '${where:-nowhere}', should be $to"; bad=1 ;;
   esac
+  sleep 2
 done
 
 size=$(curl -s --max-time 30 "$CHECK_URL/assets/css/site.css" | wc -c | tr -d ' ')
