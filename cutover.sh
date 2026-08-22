@@ -96,12 +96,14 @@ fi
 
 if [ "$DO_ZONE" = 1 ]; then
   bold "Zone"
-  for host in "" www; do
-    label="${host:-@}"
+  # The apex is "@", not an empty hostname. An empty one is rejected
+  # outright — "Required param hostname is missing" — which is the API
+  # being helpful: it will not guess what an unnamed record means.
+  for host in @ www; do
     resp=$(api Domain_Zone_UpdateTypeA \
              "domain=$DOMAIN" "hostname=$host" "ip=$NEW_IP" "oldIp=$OLD_IP")
-    check "$resp" "updating A $label"
-    ok "A $label → $NEW_IP"
+    check "$resp" "updating A $host"
+    ok "A $host → $NEW_IP"
   done
   echo
   note "These take effect only once the nameservers move. Check them in"
