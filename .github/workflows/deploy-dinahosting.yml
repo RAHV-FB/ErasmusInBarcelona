@@ -77,6 +77,12 @@ jobs:
           node build.mjs
           node tools/build-htaccess.mjs
 
+      # The migration invariants: no value from the previous site, no
+      # internal link to a legacy path, redirects one hop, sitemap
+      # matching the build. scripts/guards.mjs says what failed.
+      - name: Guard against legacy values
+        run: node scripts/guards.mjs
+
       # The upload deletes whatever is not in dist/, so the one
       # thing that must never be wrong is where it points.
       - name: Refuse to mirror outside the web root
@@ -231,11 +237,17 @@ jobs:
           [ "$got" = "404" ] || bad=1
           sleep 2
 
-          for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/; do
+          got=$(code "$BASE/blank-page2/")
+          echo "$got  /blank-page2/ (expected 410)"
+          [ "$got" = "410" ] || bad=1
+          sleep 2
+
+          for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/ /c1-spanish/:/join-a-course/ /summer-dates/:/dates/; do
             from=${legacy%%:*}; to=${legacy##*:}
             where=$(location "$BASE$from")
             echo "$from → ${where:-nowhere} (expected $to)"
-            case "$where" in *"$to") ;; *) bad=1 ;; esac
+            # *"$to"* not *"$to": some targets carry a #fragment after the path.
+            case "$where" in *"$to"*) ;; *) bad=1 ;; esac
             sleep 2
           done
 

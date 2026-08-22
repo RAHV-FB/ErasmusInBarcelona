@@ -59,8 +59,8 @@ export default function joinACourse() {
     <div class="cols cols--lead">
       <div>
         <h1>Staff training courses in Barcelona</h1>
-        <p class="lede">One- and two-week courses for teachers and education staff. Most run Monday to
-          Friday with 20- or 25-hour options.</p>
+        <p class="lede">One-week courses for teachers and education staff, Monday to Friday, with
+          20- or 25-hour options.</p>
         <ul class="price price--inline">
           <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
           <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
@@ -112,7 +112,7 @@ export default function joinACourse() {
         <h2>Choosing a week</h2>
       </div>
       <ul class="facts">
-        <li><span class="facts__term">Length</span><span class="facts__value">One or two weeks. ${d.schedule.twoWeeks}</span></li>
+        <li><span class="facts__term">Length</span><span class="facts__value">${esc(d.schedule.twoWeeks)}</span></li>
         <li><span class="facts__term">Hours</span><span class="facts__value">${d.schedule.hours}</span></li>
         <li><span class="facts__term">Who comes</span><span class="facts__value">Courses are open to both
           teaching and non-teaching staff, depending on the subject.</span></li>

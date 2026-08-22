@@ -38,7 +38,7 @@ export default function home() {
     <div class="cols cols--lead">
       <div>
         <h1 class="hero__title">Staff training courses in Barcelona</h1>
-        <p class="lede hero__lede">One- and two-week courses for teachers and other people working in
+        <p class="lede hero__lede">One-week courses for teachers and other people working in
           education, with small international groups throughout the year.</p>
         <div class="btn-row">
           <a class="btn" href="/dates/">See course dates</a>

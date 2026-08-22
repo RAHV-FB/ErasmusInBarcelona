@@ -563,3 +563,145 @@ Dates and Your Week — each time naming the application a document is for, neve
 
 12 pages healthy at eight widths, no horizontal overflow at 390 or 1280, 41 external links resolve,
 privacy and network QA 27 of 27.
+
+---
+
+## 22 August 2026 — independent production audit and migration cleanup
+
+The domain went live on the new hosting this morning (see HANDOFF.md). This audit crawled
+production independently of the repository, on the assumption that the old and new sites might be
+coexisting — the state an external audit had described. They are not: the cutover replaced the
+old site wholesale. The deploy mirrors `dist/` into the web root and deletes what the build no
+longer produces, so no legacy HTML, script or document survives on the domain. What remained were
+gaps and defects at the edges, all fixed in this pass.
+
+### What the crawl found
+
+Every route was probed live over HTTPS and HTTP, on www and the apex.
+
+- The 11 canonical pages and 404.html answer correctly; robots.txt and sitemap.xml are the
+  build's own. `/contact/` is the rebuilt contact page — the legacy contact page, with its
+  obsolete OID and Webnode stack, is gone.
+- The 25 mapped legacy paths all answered 301 — **but in two hops through plain http://**.
+  Varnish terminates TLS in front of Apache, so Apache expanded the relative `RedirectMatch`
+  targets against `http://`, and every legacy redirect bounced https → http → https.
+  `tools/build-htaccess.mjs` now writes absolute https targets as `RewriteRule`s: one hop from
+  any scheme or host. Targets carrying a `#fragment` discard the query string (QSD), which
+  Apache would otherwise append after the fragment.
+- Fourteen legacy routes still in search indexes answered 404 with no redirect. Thirteen are now
+  mapped in `src/data/redirects.js` — `/summer-dates/` → `/dates/`; `/sen/` →
+  `/join-a-course/#inclusion`; `/clil/`, `/creative-english/`, `/c1-english/`,
+  `/english-courses/`, `/language-methodology/` → `/join-a-course/#english`; `/a1-spanish/`
+  through `/c1-spanish/` → `/join-a-course/#spanish`; `/erasmus-ka1-courses/` →
+  `/join-a-course/`. Old course pages go to the matching subject area on this site, whose rows
+  link on to the SpainBcn programme pages — not straight to the SpainBcn catalogue, so a visitor
+  who searched for Barcelona stays in the Barcelona context. `/blank-page2/`, a Webnode artefact
+  with no intent behind it, answers **410 Gone** (a new `GONE` list, honoured by server.mjs, the
+  .htaccess and a deploy check).
+- Host canonicalisation: `http://www` → `https://www` and `https://apex` → `https://www` in one
+  hop each. `http://apex` takes two (an upstream forced-https answer precedes Apache); ordinary,
+  and not reachable from `.htaccess`.
+- An unknown URL answers a branded 404; `llms.txt` was 404 and is now generated (below).
+
+Live pages carry no Webnode, cdnwnd, Google Tag Manager or analytics residue: the only
+third-party request on page view is the Umami EU tracker, configured exactly as `/privacy/`
+describes, and forms.app appears in the markup only as the consent-gated loader.
+
+### Facts re-verified against the sources
+
+Checked on 2026-08-22, spainbcn.com and the DATES-SPAINBCN sheet:
+
+| Fact | Result |
+| --- | --- |
+| Barcelona fee €400 / 20 h, €450 / 25 h | Confirmed, including SpainBcn's structured offer data |
+| OID **E10336106**, no E10139423 or "PIC 933769240" anywhere current | Confirmed — the old pair appears nowhere on either live site |
+| Legal name, NIF B72643455, address 08025, phone 633 163 789, Hola@SpainBcn.com | Confirmed; Erasmus@SpainBcn.com and 93 376 92 40 appear nowhere current |
+| The 12 course rows on `/dates/` | Match the sheet's 12 future Barcelona rows exactly |
+| 4.9 from 134 Google reviews | Confirmed on SpainBcn's homepage today |
+| Cancellation, VAT exemption, "confirmation is the contract", no deposit | All on spainbcn.com/terms.html in the same words |
+| "Receiving partner in Spain", "job shadowing at Spanish schools and education organisations" | Verbatim SpainBcn claims |
+| **Two-week model** | **Corrected — see below** |
+
+**The one factual error found:** the site said "One- and two-week courses" and "A two-week course
+is 50 hours" as if every course had a two-week form. Every SpainBcn subject area publishes
+"Format: One week, Mon–Fri"; only AI & ICT adds "or two (50 over two weeks)", for the named
+**AI & ICT Intensive**. The home and courses ledes now say one-week courses, and
+`schedule.twoWeeks` reads "Courses run one week; the two-week AI & ICT Intensive runs 50 hours
+across two adjacent weeks" — rendered on the courses, dates and your-week pages.
+
+Two smaller one-source violations on `/dates/` were fixed: "Six course weeks" (hardcoded) now
+renders from `weeks.length`, and "From the course calendar, 20 August 2026" now renders from
+`datesSource.importedOn`.
+
+### New guards
+
+`scripts/guards.mjs` (`npm run guards`, and a deploy step before upload) fails the build if:
+the old OID, the "PIC" number, €350/€700/€800, a 2025 date, Webnode/cdnwnd, a tag manager or
+"Certificate of Participation" appears in the output; any page lacks (or contradicts) the current
+OID; a redirect targets anything but a built page, or chains; any page links to a legacy path;
+or the sitemap disagrees with the built, indexable pages. The post-deploy check now also tests
+the 410 and two of the new redirects, live.
+
+### AI search
+
+`build.mjs` now writes `/llms.txt`: Erasmus in Barcelona is the Barcelona website of
+SpainBcn-Programs (legal name and OID from `site-data.js`), not a separate organisation, with
+one line per page and the three SpainBcn links. JSON-LD was audited as appropriate rather than
+voluminous: EducationalOrganization (home and About), BreadcrumbList, no invented ratings, no
+Course or Event instances this site should not be asserting. SpainBcn's own structured data
+lists erasmusinbarcelona.com under `sameAs`, so the entity relationship is stated from both
+sides.
+
+### Legacy assets off this domain
+
+The old site's syllabus PDFs, application DOCX files and images were served from Webnode's CDN
+(`8493d733cb.clvaw-cdnwnd.com`), catalogued in notes/audit.md. No page on this domain links to
+any of them, and this domain cannot redirect or remove them. Webnode is paid up to September
+2026; cancelling it (already planned in HANDOFF.md) removes the account's CDN files. Until then
+they may linger in search caches; if any indexed document with the old OID or fees needs faster
+removal, that is a Search Console / Webnode-account action for the owner.
+
+### Search-index state
+
+Google still shows old titles and snippets (":: Erasmus in Barcelona - Schools and
+Universities", the €350 student fee) for URLs that now 301 — stale representations of retired
+pages, not live content. No page change can fix a stale snippet; the 301s, the sitemap and a
+recrawl will. That is the owner's Search Console list below.
+
+### Owner actions — nothing here can be done from this repository
+
+1. **Search Console**: add the property (or re-verify), submit `sitemap.xml`, request indexing
+   of the main pages, and watch the legacy URLs fall out as their 301/410s are recrawled.
+2. **Registrant verification** (HANDOFF.md): confirm spainbcnmiriam@gmail.com acted on
+   dinahosting's "pendiente de verificar" notice — an unverified contact suspends the domain.
+3. **Cancel Webnode** after September 2026 — this also removes the legacy CDN documents.
+4. **Delete `SITE_CHECK_URL`**, make the repository private, disable GitHub Pages (the
+   prototype still serves at rahv-fb.github.io, noindexed and robots-disallowed, harmless but
+   unnecessary).
+5. **Mail alias**: if Erasmus@SpainBcn.com still receives mail, keep it forwarding internally;
+   it appears on no current page and should stay that way.
+
+### Needs a human — unchanged or newly flagged
+
+The earlier lists stand (class times, group limits, Barceloneta address, Aerobús fare, venue
+accessibility, the Google reviews link form). Newly flagged, all legally sensitive and none
+changed by this pass:
+
+1. **"Students are in our care during the programme hours and the agreed activities"**
+   (/bring-a-group/). Neither SpainBcn page publishes a supervision or safeguarding policy.
+   The sentence allocates responsibility; it should be reviewed against actual practice and,
+   ideally, by someone qualified. LEGAL REVIEW REQUIRED.
+2. **Group programme lengths** ("two-week and shorter programmes", /bring-a-group/): consistent
+   with the custom-quoted group offer, but not published by SpainBcn; confirm with the team.
+3. **Photographs of minors**: `/privacy/` says group programmes are arranged with the school,
+   which is responsible for consent. Confirm that this matches how photo permissions are
+   actually gathered for student groups.
+
+### Verification of this pass
+
+`npm run check` — all 12 pages healthy at eight widths (metadata, headings, alt text, dead
+links, third-party requests, tap targets, overflow). `npm run links` — all 41 external links
+and anchors resolve, every SpainBcn cross-link included. `npm run guards` — clean.
+`server.mjs` answers the new 301s, the 410 and the 404 exactly as the generated `.htaccess`
+does. The live re-crawl after the next deploy is the deploy workflow's own final step, extended
+by this pass.
