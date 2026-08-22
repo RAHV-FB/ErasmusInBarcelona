@@ -18,14 +18,25 @@ cd ErasmusInBarcelona
 
 # edit src/… — never dist/, never the server
 
-npm run build:live        # dist/ plus the production .htaccess
-npm start                 # serve it at http://127.0.0.1:4173 and look
-npm run guards            # the publish guards — no browser, a second or two
-npm install && npm run check   # browser audit of every page, first run only
+npm run build:live
+npm start
+npm run guards
+npm run check
 
 git commit -am "…"
 git push origin claude/site-health-check-df5ie0
 ```
+
+`build:live` writes `dist/` plus the production `.htaccess`; `npm start` serves it at
+<http://127.0.0.1:4173>; `guards` is the cheap pass; `check` is the browser audit of every page.
+
+**First time on a machine:** `npm install`, then `npx playwright install chromium`. The second is
+a separate download and `npm install` does not imply it, so without it `npm run check` stops
+before it starts.
+
+Nothing in these blocks carries a trailing `#` comment, because macOS ships zsh and an
+interactive zsh does not strip them — pasting an annotated line hands the annotation to the
+command as arguments.
 
 `.github/workflows/check.yml` runs the build, the guards and the browser audit on every pull
 request, and on every push to a branch that deploys. It publishes nothing and uses no secrets,
@@ -53,12 +64,12 @@ the script.
 
 ## The deploy script
 
-```bash
-bash upload-to-dinahosting.sh                # build, upload, verify
-bash upload-to-dinahosting.sh --dry-run      # list what would go, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-bash upload-to-dinahosting.sh --check-url https://www.erasmusinbarcelona.com
-```
+| Command | What it does |
+|---|---|
+| `bash upload-to-dinahosting.sh` | build, upload, verify |
+| `bash upload-to-dinahosting.sh --dry-run` | list what would go, send nothing |
+| `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
+| `bash upload-to-dinahosting.sh --check-url <url>` | verify somewhere other than the default |
 
 `curl` only. macOS ships it, so there is nothing to install — no Homebrew, no lftp, no Node
 modules beyond what the build already needs.
@@ -156,9 +167,9 @@ account holds eight other domains, and every one of them will need the same thre
 ```bash
 export DINA_USER=... DINA_PASS=...
 DOMAIN=other.com NEW_IP=1.2.3.4 OLD_IP=<whatever is there now> bash cutover.sh
-bash cutover.sh --zone         # A @ and A www → NEW_IP
-bash cutover.sh --switch-ns    # nameservers → dinahosting, after typing the domain
-bash cutover.sh --watch        # poll public DNS until it agrees
+bash cutover.sh --zone
+bash cutover.sh --switch-ns
+bash cutover.sh --watch
 ```
 
 The default is a dry run. It verifies credentials before anything else, treats any non-success

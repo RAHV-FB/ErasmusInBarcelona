@@ -5,16 +5,17 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 
 ## Run it
 
-```bash
-npm install          # Playwright and sharp, both dev-only
-npm start            # build, then serve on http://127.0.0.1:4173
-npm run build        # build dist/ only
-npm run build:live   # build dist/ with the production .htaccess
-npm run guards       # the publish guards — no browser, a second or two
-npm run check        # build, serve, and audit every page in a browser
-npm run links        # check every off-site link and anchor (hits real servers)
-npm run images       # regenerate the images in src/assets/images
-```
+| Command | What it does |
+|---|---|
+| `npm install` | Playwright and sharp, both dev-only |
+| `npx playwright install chromium` | the browser `npm run check` drives — a separate download, once per machine |
+| `npm start` | build, then serve on <http://127.0.0.1:4173> |
+| `npm run build` | build `dist/` only |
+| `npm run build:live` | build `dist/` with the production `.htaccess` |
+| `npm run guards` | the publish guards — no browser, a second or two |
+| `npm run check` | build, serve, and audit every page in a browser |
+| `npm run links` | check every off-site link and anchor (hits real servers) |
+| `npm run images` | regenerate the images in `src/assets/images` |
 
 Changing something? [CONTRIBUTING.md](CONTRIBUTING.md) has the recipe for each of the usual
 jobs, what will stop you and why, how it gets published and how to undo it.

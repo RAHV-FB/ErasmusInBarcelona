@@ -27,19 +27,31 @@ cannot fall behind what it is checking.
 ## Before you commit
 
 ```bash
-npm run build:live   # dist/ plus the production .htaccess
-npm run guards       # the cheap checks — no browser, a second or two
-npm run check        # every page in a real browser at eight widths
+npm run build:live
+npm run guards
+npm run check
 ```
 
-`npm run check` catches console errors, failed requests, dead internal links, missing or
-duplicate metadata, heading levels skipped, images without alt text or dimensions, third-party
-requests on load, tap targets under 44px and horizontal overflow. `npm run guards` catches the
-things a browser cannot see — see the table below.
+`build:live` writes `dist/` plus the production `.htaccess`. `guards` is the cheap pass — no
+browser, a second or two. `check` opens every page in a real browser at eight widths, and
+catches console errors, failed requests, dead internal links, missing or duplicate metadata,
+heading levels skipped, images without alt text or dimensions, third-party requests on load, tap
+targets under 44px and horizontal overflow. `guards` catches the things a browser cannot see —
+see the table below.
 
 Run `npm run links` too if you touched a link to SpainBcn or anywhere else off-site. It is not
 in CI because it fetches somebody else's server for every link, which is not a thing to do on
 every push.
+
+**First time on a machine:** `npm install`, then `npx playwright install chromium`. The second
+one is not optional and not implied by the first — `npm install` fetches the Playwright library,
+the browser it drives is a separate download, and without it `npm run check` stops before it
+starts.
+
+The commands above carry no trailing `#` comments on purpose. macOS ships zsh, and an
+interactive zsh does not treat `#` as a comment, so pasting an annotated block hands the
+annotation to the command as arguments — which is how `bash upload-to-dinahosting.sh
+--verify-only  # check the live site` becomes `unknown option: #`.
 
 One trap: `npm run check` rebuilds `dist/` with `node build.mjs`, which does **not** write
 `.htaccess`. If you are about to upload by hand, run `npm run build:live` again afterwards.
@@ -112,11 +124,11 @@ nine minutes end to end on its last run.
 To publish by hand instead — the same guards, a deeper verification, and it asks for the
 password rather than reading a secret:
 
-```bash
-bash upload-to-dinahosting.sh
-bash upload-to-dinahosting.sh --dry-run      # say what would change, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-```
+| Command | What it does |
+|---|---|
+| `bash upload-to-dinahosting.sh` | build, upload, verify |
+| `bash upload-to-dinahosting.sh --dry-run` | say what would change, send nothing |
+| `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
 
 **Worth doing once:** rename the default branch to `main`. It is
 `claude/site-health-check-df5ie0` today, which is a session name doing a permanent job. Both
