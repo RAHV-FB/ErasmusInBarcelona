@@ -114,7 +114,7 @@ assuming it.
 ## How it gets published
 
 The push is the deploy, but only from a branch the deploy workflow watches — today `main` and
-`claude/site-health-check-df5ie0`, and `main` does not exist yet. A push anywhere else runs the
+`claude/site-health-check-df5ie0`. `main` now exists and holds everything. A push anywhere else runs the
 checks and uploads nothing.
 
 `.github/workflows/deploy-dinahosting.yml` builds, runs the guards, mirrors `dist/` into the web
@@ -131,7 +131,7 @@ password rather than reading a secret:
 | `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
 
 **Worth doing once:** rename the default branch to `main`. It is
-`claude/site-health-check-df5ie0` today, which is a session name doing a permanent job. Both
+`main` since 23 August 2026; the old `claude/site-health-check-df5ie0` still deploys too. Both
 workflows already trigger on `main`, so the rename is the whole change.
 
 ## How to undo one

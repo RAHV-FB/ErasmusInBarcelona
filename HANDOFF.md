@@ -115,7 +115,7 @@ Both routes build from source, run the same guards, and verify the result. Use e
 
 ```bash
 git commit -am "…"
-git push origin claude/site-health-check-df5ie0
+git push origin main
 ```
 
 `.github/workflows/deploy-dinahosting.yml` builds, mirrors over FTPS with `lftp`, checks every
@@ -150,7 +150,7 @@ From a terminal, start to finish:
 # Once per machine: get the source and the dev dependencies.
 git clone https://github.com/RAHV-FB/ErasmusInBarcelona.git ~/ErasmusInBarcelona
 cd ~/ErasmusInBarcelona
-git checkout claude/site-health-check-df5ie0   # the branch that publishes (until it is renamed main)
+git checkout main                              # the branch that publishes
 npm install
 
 # Every refresh:
@@ -184,8 +184,9 @@ link", the CSV export stops answering and the script says so; nothing breaks sil
   removed, so nothing will start failing when you do — Pages from a private repository needs a
   paid plan.
 - **Cancel Webnode** once September comes round.
-- **Consider renaming the default branch to `main`.** The deploy workflow already triggers on
-  both names.
+- **Make `main` the default branch** in GitHub → Settings → Branches. `main` exists since
+  23 August 2026 and holds every branch's work; both workflows already trigger on it. Once
+  flipped, the old `claude/*` branches can be deleted.
 
 ---
 

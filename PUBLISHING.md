@@ -24,7 +24,7 @@ npm run guards
 npm run check
 
 git commit -am "…"
-git push origin claude/site-health-check-df5ie0
+git push origin main
 ```
 
 `build:live` writes `dist/` plus the production `.htaccess`; `npm start` serves it at
@@ -45,9 +45,9 @@ decision to publish it. [CONTRIBUTING.md](CONTRIBUTING.md) is the guide to makin
 itself.
 
 The push is the deploy: `.github/workflows/deploy-dinahosting.yml` builds and uploads — but
-only from a branch it watches, today `main` and `claude/site-health-check-df5ie0`, and `main`
-does not exist yet. A push to any other branch is checked and uploads nothing. To publish
-without waiting for CI, or when CI is not an option:
+only from a branch it watches: `main`, which holds everything since 23 August 2026, and the
+old `claude/site-health-check-df5ie0`. A push to any other branch is checked and uploads
+nothing. To publish without waiting for CI, or when CI is not an option:
 
 ```bash
 bash upload-to-dinahosting.sh
