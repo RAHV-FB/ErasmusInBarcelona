@@ -34,8 +34,11 @@ const ANALYTICS_HOST = analytics.websiteId ? new URL(analytics.scriptUrl).host :
 
 execFileSync(process.execPath, [path.join(ROOT, 'build.mjs')], { cwd: ROOT, stdio: 'inherit' });
 
-const ROUTES = ['/', '/join-a-course/', '/bring-a-group/', '/plan-a-mobility/', '/dates/',
-  '/your-week/', '/barcelona/', '/about/', '/contact/', '/privacy/', '/cookies/'];
+// Every page the build just wrote, read from its sitemap — a page added
+// to build.mjs cannot silently skip the audit. 404.html is checked
+// separately below.
+const ROUTES = [...fs.readFileSync(path.join(DIST, 'sitemap.xml'), 'utf8')
+  .matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
 const ORIGIN = `http://127.0.0.1:${PORT}`;
 
 const server = spawn(process.execPath, [path.join(ROOT, 'server.mjs')], {

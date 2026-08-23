@@ -14,6 +14,7 @@ import { REDIRECTS } from './src/data/redirects.js';
 
 import home from './src/pages/home.js';
 import joinACourse from './src/pages/join-a-course.js';
+import universities from './src/pages/universities.js';
 import bringAGroup from './src/pages/bring-a-group.js';
 import planAMobility from './src/pages/plan-a-mobility.js';
 import dates from './src/pages/dates.js';
@@ -31,6 +32,7 @@ const DIST = 'dist';
 export const PAGES = {
   '/': home,
   '/join-a-course/': joinACourse,
+  '/universities/': universities,
   '/bring-a-group/': bringAGroup,
   '/plan-a-mobility/': planAMobility,
   '/dates/': dates,
@@ -109,6 +111,7 @@ ${data.spainbcn.home}.
 ## Pages
 
 - [Staff training courses](${SITE_URL}/join-a-course/): the subject areas, fees and the next scheduled Barcelona weeks
+- [University staff](${SITE_URL}/universities/): the courses whose published audience includes university teaching, research and administrative staff
 - [Dates](${SITE_URL}/dates/): the scheduled course weeks in Barcelona; other weeks open on request
 - [Your week](${SITE_URL}/your-week/): how a course week runs, booking steps and the documents provided
 - [Student groups](${SITE_URL}/bring-a-group/): programmes for secondary, high-school and VET groups
