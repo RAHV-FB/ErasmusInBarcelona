@@ -51,7 +51,17 @@ if (!SOURCE_ONLY) {
   if (!fs.existsSync(DIST)) {
     fail('dist/ does not exist. Run `npm run build:live` first.');
   } else {
-    for (const f of REQUIRED) if (!has(f)) fail(`missing from the build: ${f}`);
+    for (const f of REQUIRED) {
+      if (has(f)) continue;
+      // .htaccess is the one required file `node build.mjs` does not write —
+      // tools/build-htaccess.mjs does, and `npm run check` rebuilds with
+      // build.mjs alone. Until the two sections below checked for it, that
+      // combination came out as an ENOENT stack rather than as a guard.
+      fail(f === '.htaccess'
+        ? 'missing from the build: .htaccess. `node build.mjs` does not write it —\n'
+          + '      run `npm run build:live`, or `node tools/build-htaccess.mjs` on its own.'
+        : `missing from the build: ${f}`);
+    }
   }
 }
 
@@ -176,7 +186,7 @@ if (buildable) {
 // first of them in the clear. Measured on the live site on
 // 22 August 2026 before this was fixed.
 // ------------------------------------------------------------
-if (buildable) {
+if (buildable && has('.htaccess')) {
   const htaccess = read('.htaccess');
 
   // ^pattern$ target [R=301…] — per-directory context, so the pattern has
@@ -279,7 +289,7 @@ if (buildable) {
 // is exempt from the rule, so neither can reproduce what the live site
 // sees. So the generated file is read here instead.
 // ------------------------------------------------------------
-if (buildable) {
+if (buildable && has('.htaccess')) {
   const htaccess = read('.htaccess');
   const scheme = htaccess.split('\n').findIndex((l) => /RewriteCond\s+%\{HTTPS\}/.test(l));
   if (scheme === -1) {

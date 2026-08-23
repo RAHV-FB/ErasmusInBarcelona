@@ -143,7 +143,7 @@ for (const r of rows) console.log(`  ${r.start} → ${r.end}  ${r.course}`);
 
 const before = JSON.stringify(currentDates);
 const after = JSON.stringify(rows);
-if (before === after) console.log('\nNo change against src/data/site-data.js.');
+const unchanged = before === after;
 
 if (DRY) { console.log('\n--dry-run: nothing written.'); process.exit(0); }
 
@@ -156,5 +156,14 @@ if (!importedRe.test(src)) fail('could not find datesSource.importedOn in src/da
 src = src.replace(importedRe, `$1${today}$2`);
 fs.writeFileSync(DATA, src);
 
-console.log(`\nWrote src/data/site-data.js (importedOn: ${today}).`);
+// Saying "no change" and then writing the file reads as a bug. The weeks
+// can be unchanged and the file still change, because importedOn records
+// when the sheet was last read — which is worth committing on its own: it
+// is the difference between a date nobody has checked since August and one
+// checked this morning.
+if (unchanged) {
+  console.log(`\nThe weeks are unchanged. Recorded the check: importedOn ${today}.`);
+} else {
+  console.log(`\nWrote the weeks to src/data/site-data.js (importedOn: ${today}).`);
+}
 console.log('Review with `git diff src/data/site-data.js`, then `npm run check` and publish.');

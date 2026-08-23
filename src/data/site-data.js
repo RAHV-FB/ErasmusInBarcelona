@@ -361,7 +361,7 @@ export const universityProgrammes = {
 // ============================================================
 export const datesSource = {
   sheet: 'https://docs.google.com/spreadsheets/d/1V2xozrjvgq4rIP1V-iPUSz5nrvTqSZWV0y9mr4f2kOE/edit?gid=480287972',
-  importedOn: '2026-08-22',
+  importedOn: '2026-08-23',
   note: 'Other dates and levels open on request.',
 };
 

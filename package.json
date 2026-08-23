@@ -2,7 +2,7 @@
   "name": "erasmusinbarcelona",
   "version": "1.0.0",
   "private": true,
-  "description": "ErasmusInBarcelona.com \u2014 Erasmus+ courses and education programmes in Barcelona, by SpainBcn-Programs",
+  "description": "ErasmusInBarcelona.com — Erasmus+ KA1 staff training in Barcelona, by SpainBcn-Programs",
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "playwright": "^1.49.0",
-    "sharp": "^0.33.0"
+    "sharp": "^0.35.3"
   },
   "engines": {
     "node": ">=18"

@@ -132,6 +132,22 @@ for (const route of ROUTES) {
   });
   await page.waitForLoadState('networkidle').catch(() => {});
 
+  // Settle the images before judging them. Two ways one can be innocently
+  // incomplete at this point: it is still arriving, or it is lazy and the
+  // scroll above outran the browser's notice of it, so scrolling back to
+  // the top left it never triggered. Both read as "not loaded" and neither
+  // is a broken page — the giveaway is that no request failed. Ask for
+  // whatever has not started, then wait for the set to finish, so what is
+  // reported below is an image that genuinely cannot load.
+  await page.evaluate(async () => {
+    const imgs = [...document.images];
+    for (const i of imgs) if (!i.complete) i.loading = 'eager';
+    await Promise.all(imgs.map((i) => (i.complete ? null : Promise.race([
+      i.decode().catch(() => {}),
+      new Promise((r) => setTimeout(r, 5000)),
+    ]))));
+  });
+
   const info = await page.evaluate(() => {
     const meta = (sel) => document.querySelector(sel)?.getAttribute('content') || '';
     const headings = [...document.querySelectorAll('h1, h2, h3, h4')].map((h) => +h.tagName[1]);
