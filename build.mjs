@@ -93,6 +93,37 @@ fs.writeFileSync(path.join(DIST, 'sitemap.xml'),
   urls.map((u) => `  <url><loc>${SITE_URL}${u}</loc></url>`).join('\n') +
   `\n</urlset>\n`);
 
+// llms.txt: who this site belongs to and where each answer lives, for
+// assistants that read it. Same facts, same source, nothing the pages
+// don't already say.
+fs.writeFileSync(path.join(DIST, 'llms.txt'), `# Erasmus in Barcelona
+
+Erasmus in Barcelona (${SITE_URL}/) is the Barcelona website of
+${data.organisation.by} — registered as ${data.organisation.legalName},
+Erasmus+ OID ${data.organisation.oid} — not a separate organisation. It covers
+Erasmus+ KA1 staff training courses in Barcelona for teachers and education
+staff, programmes for student groups, and institutional programmes. The full
+course catalogue and the other Spanish destinations are published on
+${data.spainbcn.home}.
+
+## Pages
+
+- [Staff training courses](${SITE_URL}/join-a-course/): the subject areas, fees and the next scheduled Barcelona weeks
+- [Dates](${SITE_URL}/dates/): the scheduled course weeks in Barcelona; other weeks open on request
+- [Your week](${SITE_URL}/your-week/): how a course week runs, booking steps and the documents provided
+- [Student groups](${SITE_URL}/bring-a-group/): programmes for secondary, high-school and VET groups
+- [Institutional programmes](${SITE_URL}/plan-a-mobility/): private weeks, job shadowing, visits, and the registration details for Erasmus+ applications
+- [Barcelona](${SITE_URL}/barcelona/): where classes run, where to stay and how to get around
+- [About](${SITE_URL}/about/): the organisation, its history since ${data.organisation.founded}, and the team
+- [Contact](${SITE_URL}/contact/): email, phone, WhatsApp and the sign-up form
+
+## SpainBcn-Programs
+
+- [Full course catalogue](${data.spainbcn.catalogue})
+- [All locations in Spain](${data.spainbcn.locations})
+- [Projects and groups](${data.spainbcn.projects})
+`);
+
 // A static host has no redirect rules, so the prototype ships a small
 // redirecting page at each legacy path instead. A real deploy uses the
 // server's redirect map and does not need these.

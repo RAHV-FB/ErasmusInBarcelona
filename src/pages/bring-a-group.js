@@ -47,9 +47,9 @@ export default function bringAGroup() {
       <ul class="facts">
         <li><span class="facts__term">Who it is for</span><span class="facts__value">Secondary,
           high-school and VET student groups, travelling with their own teachers.</span></li>
-        <li><span class="facts__term">Subjects</span><span class="facts__value">Any subject in the
-          catalogue, on its own or combined across the week. Language, AI and ICT, and culture and
-          citizenship are the usual choices. <a href="/join-a-course/">See the areas →</a></span></li>
+        <li><span class="facts__term">Subjects</span><span class="facts__value">Language, AI and ICT,
+          and culture and citizenship are the usual choices, on their own or combined across the
+          week. Ask about other subjects. <a href="/join-a-course/">See the areas →</a></span></li>
         <li><span class="facts__term">Language</span><span class="facts__value">English or Spanish.</span></li>
         <li><span class="facts__term">Length</span><span class="facts__value">A week is usual. We also
           run two-week and shorter programmes.</span></li>

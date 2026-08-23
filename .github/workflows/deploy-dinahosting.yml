@@ -90,11 +90,12 @@ jobs:
 
       # Every guard lives in scripts/guards.mjs, which the shell deploy
       # and the pull-request check both run, so no two callers can
-      # enforce different things. It refuses a prototype build, a
-      # sitemap that disagrees with what was built, an .htaccess that
-      # disagrees with redirects.js, a course week that has already
-      # happened, and a fact typed into a template instead of read from
-      # src/data/.
+      # enforce different things. It refuses a value from the previous
+      # site, an internal link to a legacy path, an incoherent redirect
+      # table, a sitemap that disagrees with the build, a prototype
+      # build, an .htaccess that disagrees with redirects.js or has lost
+      # a rule the live site depends on, a course week that has already
+      # happened, and a fact typed into a template.
       - name: Guards
         run: node scripts/guards.mjs
 
@@ -219,11 +220,17 @@ jobs:
           [ "$got" = "404" ] || bad=1
           sleep 2
 
-          for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/; do
+          got=$(code "$BASE/blank-page2/")
+          echo "$got  /blank-page2/ (expected 410)"
+          [ "$got" = "410" ] || bad=1
+          sleep 2
+
+          for legacy in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/ /c1-spanish/:/join-a-course/ /summer-dates/:/dates/; do
             from=${legacy%%:*}; to=${legacy##*:}
             where=$(location "$BASE$from")
             echo "$from → ${where:-nowhere} (expected $to)"
-            case "$where" in *"$to") ;; *) bad=1 ;; esac
+            # *"$to"* not *"$to": some targets carry a #fragment after the path.
+            case "$where" in *"$to"*) ;; *) bad=1 ;; esac
             sleep 2
           done
 

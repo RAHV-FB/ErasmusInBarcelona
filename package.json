@@ -13,6 +13,7 @@
     "serve": "node server.mjs",
     "guards": "node scripts/guards.mjs",
     "check": "node scripts/health-check.mjs",
+    "guards": "node build.mjs && node tools/build-htaccess.mjs && node scripts/guards.mjs",
     "links": "node scripts/link-check.mjs"
   },
   "devDependencies": {

@@ -184,7 +184,8 @@ export const lunch = 'Lunch is not included. Both course areas have cafés and r
   + 'minutes\' walk, and a menú del día — a set lunch of two courses — is the usual weekday option.';
 
 export const language = 'Signs, announcements and menus are in Catalan and Spanish, often with English '
-  + 'as well. Courses are taught in English, except the Spanish programmes, which are taught in Spanish.';
+  + 'as well. Courses are taught in English, except the Spanish programmes, which are taught in '
+  + 'Spanish; the Language + ICT week runs in either.';
 
 export const accessibility = 'The two course areas are different buildings, so step-free access is not '
   + 'the same in both. Tell us what you need when you enquire and we will confirm what the venue for '

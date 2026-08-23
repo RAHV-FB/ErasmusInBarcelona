@@ -72,6 +72,11 @@ One trap: `npm run check` rebuilds `dist/` with `node build.mjs`, which does **n
 | `has "…" typed in` | a fact copied into a template | render it from `src/data/` |
 | `forces HTTPS on %{HTTPS} alone` | the scheme rule lost its `X-Forwarded-Proto` condition | put it back. This one takes the site **down**, not just wrong — see below |
 | `preview host is exempted in N RewriteCond line(s)` | the `*.dinaserver.com` exemption dropped from a rule | both rules need it, or a preview check bounces to the live domain |
+| `it must be absolute and start https://…` | a redirect target went relative again | Apache expands it against `http://` behind Varnish, so every legacy URL takes two hops |
+| `targets a #fragment without the NE flag` | a rule lost `NE` or `QSD` | without `NE` Apache escapes `#` to `%23`; without `QSD` it appends the query after the fragment |
+| `contains forbidden "…"` | a value from the previous site came back | the old OID, the old fees, a Webnode or tag-manager reference. Check the source, not the symptom |
+| `internal link to legacy path` | a page links through a redirect | link straight to the destination |
+| `is marked gone but a page is built there` | `GONE` and the build disagree | a path is either gone (410) or a page, never both |
 
 The guards run in CI on every pull request and on every push to a branch that deploys, and
 again inside both deploy paths. They are the same file in all three places.

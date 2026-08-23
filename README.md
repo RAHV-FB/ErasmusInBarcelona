@@ -12,7 +12,7 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 | `npm start` | build, then serve on <http://127.0.0.1:4173> |
 | `npm run build` | build `dist/` only |
 | `npm run build:live` | build `dist/` with the production `.htaccess` |
-| `npm run guards` | the publish guards — no browser, a second or two |
+| `npm run guards` | build, then verify the publish invariants — no browser, a second or two |
 | `npm run check` | build, serve, and audit every page in a browser |
 | `npm run links` | check every off-site link and anchor (hits real servers) |
 | `npm run images` | regenerate the images in `src/assets/images` |

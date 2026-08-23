@@ -155,7 +155,11 @@ export const booking = {
 export const schedule = {
   pattern: 'Classes run Monday to Friday mornings.',
   hours: 'You choose 20 or 25 hours a week when you book.',
-  twoWeeks: 'A two-week course is 50 hours.',
+  // The two-week format belongs to one programme. Every SpainBcn subject
+  // area publishes "One week, Mon-Fri"; only AI & ICT adds "or two
+  // (50 over two weeks)", for the AI & ICT Intensive. Checked area by
+  // area on spainbcn.com, 2026-08-22.
+  twoWeeks: 'Courses run one week; the two-week AI & ICT Intensive runs 50 hours across two adjacent weeks.',
   activities: 'Two afternoons are given to the week\'s cultural activities. Both are included in the fee, both are optional, and someone from the team goes with the group.',
   materials: 'Course materials are handed out on the first day.',
   certificate: 'Certificate of attendance',
