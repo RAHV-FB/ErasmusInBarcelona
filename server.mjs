@@ -10,7 +10,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REDIRECTS } from './src/data/redirects.js';
+import { REDIRECTS, GONE } from './src/data/redirects.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'dist');
 const PORT = Number(process.env.PORT || 4173);
@@ -85,6 +85,12 @@ const server = http.createServer((req, res) => {
 
   const redirect = REDIRECTS[pathname] || REDIRECTS[pathname.replace(/\/$/, '')];
   if (redirect) return send(res, 301, '', { Location: BASE_PATH + redirect });
+
+  if (GONE.includes(pathname)) {
+    const goneFile = path.join(ROOT, '404.html');
+    if (fs.existsSync(goneFile)) return sendFile(res, 410, goneFile);
+    return send(res, 410, 'Gone');
+  }
 
   // Directory URLs keep their trailing slash, so relative links and
   // canonical URLs agree with each other.

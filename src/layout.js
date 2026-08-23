@@ -184,6 +184,11 @@ function organisationSchema() {
     email: contact.email,
     telephone: contact.phone,
     foundingDate: String(organisation.founded),
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: 'Erasmus Organisation ID (OID)',
+      value: organisation.oid,
+    },
     address: {
       '@type': 'PostalAddress',
       streetAddress: contact.street,

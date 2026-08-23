@@ -97,8 +97,8 @@ export default function planAMobility() {
       </div>
       <div>
         <h2>When to get in touch</h2>
-        <p>If possible, contact us before you submit. We can prepare the course description,
-          pre-registration confirmation, dates and fees within a few working days.</p>
+        <p>If possible, contact us before you submit, so the course description, the pre-registration
+          confirmation and the dates and fees are ready in time for your application.</p>
         <h2 style="margin-top:1.6em">If a participant withdraws</h2>
         <p>${d.booking.cancellation}</p>
       </div>
@@ -108,8 +108,7 @@ export default function planAMobility() {
   <section class="section section--cobalt">
     <div class="container">
       <h2>Where to start</h2>
-      <p class="lede">Send us the group, the objectives and the dates you have in mind.
-        ${d.contact.replyTime}</p>
+      <p class="lede">Send us the group, the objectives and the dates you have in mind.</p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Email us</a>
         <a class="btn btn--ghost" href="${d.spainbcn.projects}" rel="noopener">How projects work on SpainBcn ↗</a>

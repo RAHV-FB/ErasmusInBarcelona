@@ -38,7 +38,7 @@ export default function home() {
     <div class="cols cols--lead">
       <div>
         <h1 class="hero__title">Staff training courses in Barcelona</h1>
-        <p class="lede hero__lede">One- and two-week courses for teachers and other people working in
+        <p class="lede hero__lede">One-week courses for teachers and other people working in
           education, with small international groups throughout the year.</p>
         <div class="btn-row">
           <a class="btn" href="/dates/">See course dates</a>
@@ -123,7 +123,6 @@ export default function home() {
   <section class="section section--cobalt">
     <div class="container">
       <h2>Questions about a course or a group?</h2>
-      <p class="lede">${d.contact.replyTime}</p>
       <div class="btn-row">
         <a class="btn" href="/contact/">Get in touch</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -134,7 +133,7 @@ export default function home() {
   return page({
     path: '/',
     current: '',
-    title: 'Erasmus+ Staff Training Courses in Barcelona | SpainBcn-Programs',
+    title: 'Erasmus+ Staff Training in Barcelona | SpainBcn-Programs',
     description: 'Erasmus+ KA1 staff training in Barcelona for teachers and education staff from schools, universities, VET and adult education. Erasmus+ funding is not required. Student groups and institutional programmes arranged separately.',
   }, body);
 }

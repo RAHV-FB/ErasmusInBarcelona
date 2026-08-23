@@ -19,8 +19,8 @@ export default function dates() {
   <section class="container hero">
     <div style="max-width:52ch">
       <h1>Staff training dates in Barcelona</h1>
-      <p class="lede">Six course weeks are scheduled in Barcelona, Monday to Friday. We can also run a
-        course in a week that isn't listed.</p>
+      <p class="lede">The ${d.weeks.length} scheduled course weeks in Barcelona run Monday to Friday.
+        We can also run a course in a week that isn't listed.</p>
     </div>
   </section>
 
@@ -35,7 +35,8 @@ export default function dates() {
         ${rows}
       </div>
       <div class="board__foot">
-        <span class="meta">From the course calendar, 20 August 2026.</span>
+        <span class="meta">From the course calendar, ${new Date(d.datesSource.importedOn + 'T12:00:00Z')
+          .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}.</span>
       </div>
 
       <div class="cols cols--split" style="margin-top:44px">
@@ -48,9 +49,10 @@ export default function dates() {
         <div>
           <h2>If your week isn't listed</h2>
           <p>We can run any course in the catalogue in another week, and a second level can open in a
-            week that's already listed. A two-week course runs as two adjacent weeks.</p>
-          <p class="meta">Ask early if you can — the documents an Erasmus+ application needs take a
-            couple of working days to prepare.</p>
+            week that's already listed. The two-week AI &amp; ICT Intensive runs as two adjacent
+            weeks.</p>
+          <p class="meta">Ask early if you can, so the documents your Erasmus+ application needs are
+            ready in time.</p>
         </div>
       </div>
     </div>
