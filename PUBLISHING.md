@@ -29,15 +29,16 @@ which the next deploy overwrites. And:
 ```bash
 cd ~/ErasmusInBarcelona
 npm run build:live
-npm start
 npm run guards
 npm run check
 git commit -am "…"
 git push origin main
 ```
 
-`build:live` writes `dist/` plus the production `.htaccess`; `npm start` serves it at
-<http://127.0.0.1:4173>; `guards` is the cheap pass; `check` is the browser audit of every page.
+`build:live` writes `dist/` plus the production `.htaccess`; `guards` is the cheap pass; `check`
+is the browser audit of every page. To look at the build yourself first, `npm start` serves it at
+<http://127.0.0.1:4173> and holds the terminal until you stop it, which is why it is not in the
+block above.
 
 No block in this file or in [HANDOFF.md](HANDOFF.md) carries a `#` comment, because macOS ships
 zsh and an interactive zsh does not strip them — pasting an annotated line hands the annotation
