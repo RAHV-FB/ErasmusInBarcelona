@@ -110,4 +110,8 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, HOST, () => {
   console.log(`Erasmus in Barcelona — serving ${ROOT}`);
   console.log(`  http://${HOST}:${PORT}${BASE_PATH}/`);
+  // A server that has started looks identical to a command that has hung,
+  // and this one is the last line of the publish loop in the docs, so say
+  // which it is.
+  console.log('  Open that in a browser. Ctrl-C to stop the server.');
 });
