@@ -18,33 +18,58 @@ cd ErasmusInBarcelona
 
 # edit src/… — never dist/, never the server
 
-npm run build:live        # dist/ plus the production .htaccess
-npm start                 # serve it at http://127.0.0.1:4173 and look
-npm install && npm run check   # browser audit of every page, first run only
+npm run build:live
+npm start
+npm run guards
+npm run check
 
 git commit -am "…"
 git push origin claude/site-health-check-df5ie0
 ```
 
-The push is the deploy: `.github/workflows/deploy-dinahosting.yml` builds and uploads. To
-publish without waiting for CI, or when CI is not an option:
+`build:live` writes `dist/` plus the production `.htaccess`; `npm start` serves it at
+<http://127.0.0.1:4173>; `guards` is the cheap pass; `check` is the browser audit of every page.
+
+**First time on a machine:** `npm install`, then `npx playwright install chromium`. The second is
+a separate download and `npm install` does not imply it, so without it `npm run check` stops
+before it starts.
+
+Nothing in these blocks carries a trailing `#` comment, because macOS ships zsh and an
+interactive zsh does not strip them — pasting an annotated line hands the annotation to the
+command as arguments.
+
+`.github/workflows/check.yml` runs the build, the guards and the browser audit on every pull
+request, and on every push to a branch that deploys. It publishes nothing and uses no secrets,
+so it is safe on any branch — and it is the only thing that looks at a change before the
+decision to publish it. [CONTRIBUTING.md](CONTRIBUTING.md) is the guide to making the change
+itself.
+
+The push is the deploy: `.github/workflows/deploy-dinahosting.yml` builds and uploads — but
+only from a branch it watches, today `main` and `claude/site-health-check-df5ie0`, and `main`
+does not exist yet. A push to any other branch is checked and uploads nothing. To publish
+without waiting for CI, or when CI is not an option:
 
 ```bash
 bash upload-to-dinahosting.sh
 ```
 
-Both do the same work and enforce the same guards.
+Both build from source and both run `scripts/guards.mjs` — one file, so no two callers can
+enforce different things. They do not verify equally afterwards: the workflow checks that every
+file in `dist/` came back in a remote listing, then five pages, the 404 and three redirects.
+The shell script reads every file's size back off the server, then checks eleven pages, the
+404, four redirects and `site.css` served whole. When you want to know the site is right, run
+the script.
 
 ---
 
 ## The deploy script
 
-```bash
-bash upload-to-dinahosting.sh                # build, upload, verify
-bash upload-to-dinahosting.sh --dry-run      # list what would go, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-bash upload-to-dinahosting.sh --check-url https://www.erasmusinbarcelona.com
-```
+| Command | What it does |
+|---|---|
+| `bash upload-to-dinahosting.sh` | build, upload, verify |
+| `bash upload-to-dinahosting.sh --dry-run` | list what would go, send nothing |
+| `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
+| `bash upload-to-dinahosting.sh --check-url <url>` | verify somewhere other than the default |
 
 `curl` only. macOS ships it, so there is nothing to install — no Homebrew, no lftp, no Node
 modules beyond what the build already needs.
@@ -142,9 +167,9 @@ account holds eight other domains, and every one of them will need the same thre
 ```bash
 export DINA_USER=... DINA_PASS=...
 DOMAIN=other.com NEW_IP=1.2.3.4 OLD_IP=<whatever is there now> bash cutover.sh
-bash cutover.sh --zone         # A @ and A www → NEW_IP
-bash cutover.sh --switch-ns    # nameservers → dinahosting, after typing the domain
-bash cutover.sh --watch        # poll public DNS until it agrees
+bash cutover.sh --zone
+bash cutover.sh --switch-ns
+bash cutover.sh --watch
 ```
 
 The default is a dry run. It verifies credentials before anything else, treats any non-success

@@ -39,6 +39,12 @@ export const stations = {
 // The airport, and the four ways in that a participant actually chooses
 // between. Times are ranges because they are; fares are exact where an
 // official body publishes them.
+// The airport metro fare is quoted three times on the Barcelona page — the
+// option, the ticket table and the rule below — and was a fourth, typed into
+// the template. One constant, so a TMB rise cannot leave the prose
+// disagreeing with the table.
+export const AIRPORT_FARE = '€5.90';
+
 export const airport = {
   name: 'Josep Tarradellas Barcelona–El Prat (BCN)',
   distanceKm: 16,
@@ -59,7 +65,7 @@ export const airport = {
       name: 'Metro L9 Sud',
       bestFor: 'The Sagrada Família area, changing at Collblanc',
       time: '45–55 min to Sagrada Família',
-      fare: '€5.90',
+      fare: AIRPORT_FARE,
       fareNote: 'The airport ticket. No other single-journey ticket is valid at the airport stations.',
       detail: 'Serves both terminals every 7 minutes. It does not reach the city centre directly — '
         + 'it ends at Zona Universitària — but it meets L5 at Collblanc, and L5 runs straight to '
@@ -109,7 +115,7 @@ export const tickets = [
   {
     id: 'airport',
     name: 'Airport ticket',
-    price: '€5.90',
+    price: AIRPORT_FARE,
     what: 'One metro journey to or from the airport stations.',
     airport: true,
   },
@@ -126,8 +132,9 @@ export const tickets = [
 // Airport with a T-casual?". Worth quoting because getting it wrong
 // means buying a second ticket at the barrier.
 export const airportTicketRule = 'The single ticket and the T-casual are not valid at the Aeroport T1 '
-  + 'and Aeroport T2 metro stations on L9 Sud. Arrive there with one and you have to buy the €5.90 '
-  + 'airport ticket before you can leave the station. The R2 Nord train and the buses are not affected.';
+  + 'and Aeroport T2 metro stations on L9 Sud. Arrive there with one and you have to buy the '
+  + AIRPORT_FARE + ' airport ticket before you can leave the station. The R2 Nord train '
+  + 'and the buses are not affected.';
 
 // Areas to stay in, judged on how each one reaches the two course
 // areas. Gràcia office: Sagrada Família (L2, L5) and Verdaguer (L4, L5).

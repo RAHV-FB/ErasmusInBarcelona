@@ -11,8 +11,8 @@
     "images": "node tools/build-images.mjs",
     "start": "node build.mjs && node server.mjs",
     "serve": "node server.mjs",
+    "guards": "node scripts/guards.mjs",
     "check": "node scripts/health-check.mjs",
-    "guards": "node build.mjs && node scripts/guards.mjs",
     "links": "node scripts/link-check.mjs"
   },
   "devDependencies": {

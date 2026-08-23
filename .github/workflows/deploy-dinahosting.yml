@@ -77,12 +77,6 @@ jobs:
           node build.mjs
           node tools/build-htaccess.mjs
 
-      # The migration invariants: no value from the previous site, no
-      # internal link to a legacy path, redirects one hop, sitemap
-      # matching the build. scripts/guards.mjs says what failed.
-      - name: Guard against legacy values
-        run: node scripts/guards.mjs
-
       # The upload deletes whatever is not in dist/, so the one
       # thing that must never be wrong is where it points.
       - name: Refuse to mirror outside the web root
@@ -94,27 +88,15 @@ jobs:
           esac
           echo "web root: $dir"
 
-      # PROTOTYPE=1 builds the Pages preview: every page noindex, a
-      # robots.txt that disallows everything, and a redirecting stub at
-      # each legacy path. Publishing one would take the site out of the
-      # index, so both of its markers are checked here. 404.html is
-      # noindex in every build, correctly, and is the one exception.
-      - name: Refuse to publish a prototype build
-        run: |
-          if grep -q '^Disallow: /$' dist/robots.txt; then
-            echo "::error::dist/robots.txt disallows everything — this is a prototype build."
-            exit 1
-          fi
-          stray=$(grep -rl 'content="noindex' dist/ --include='*.html' | grep -v '^dist/404\.html$' || true)
-          if [ -n "$stray" ]; then
-            echo "::error::noindex on pages that are meant to be indexed:"
-            echo "$stray"
-            exit 1
-          fi
-          grep -q 'https://www.erasmusinbarcelona.com/' dist/sitemap.xml \
-            || { echo "::error::sitemap.xml does not point at the live domain."; exit 1; }
-          test -f dist/.htaccess || { echo "::error::dist/.htaccess is missing."; exit 1; }
-          echo "publishable build: robots.txt allows indexing, only 404.html is noindex"
+      # Every guard lives in scripts/guards.mjs, which the shell deploy
+      # and the pull-request check both run, so no two callers can
+      # enforce different things. It refuses a prototype build, a
+      # sitemap that disagrees with what was built, an .htaccess that
+      # disagrees with redirects.js, a course week that has already
+      # happened, and a fact typed into a template instead of read from
+      # src/data/.
+      - name: Guards
+        run: node scripts/guards.mjs
 
       - name: Publish over FTPS
         env:

@@ -71,8 +71,22 @@ try {
   browser = await chromium.launch();
 } catch (err) {
   const executablePath = findChromium();
-  if (!executablePath) throw err;
-  browser = await chromium.launch({ executablePath });
+  if (executablePath) {
+    browser = await chromium.launch({ executablePath });
+  } else if (/Executable doesn't exist|npx playwright install/.test(String(err))) {
+    // `npm install` fetches the Playwright library; the browser it drives
+    // is a separate download. On a fresh machine the raw error is a
+    // Playwright banner inside a Node stack trace, which buries the one
+    // line that matters.
+    stop();
+    console.error('\nThe browser this check drives is not installed.\n');
+    console.error('  npx playwright install chromium\n');
+    console.error('`npm install` gets the Playwright library, not the browser — they are');
+    console.error('separate downloads. Once it is there, `npm run check` works offline.\n');
+    process.exit(1);
+  } else {
+    throw err;
+  }
 }
 
 let problems = 0;

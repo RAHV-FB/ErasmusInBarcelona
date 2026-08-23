@@ -129,7 +129,7 @@ export default function barcelona() {
         <div>
           <h3>Getting to and from the airport</h3>
           <p>The R2 Nord train is covered by an integrated ticket, so a T-casual journey works. The L9
-            airport metro is not: there you need the €5.90 airport ticket, or a pass that includes the
+            airport metro is not: there you need the ${esc(b.AIRPORT_FARE)} airport ticket, or a pass that includes the
             airport stations.</p>
         </div>
         <div>
