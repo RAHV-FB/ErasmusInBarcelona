@@ -24,6 +24,42 @@ cannot fall behind what it is checking.
 
 ---
 
+## Where things are
+
+```text
+~/ErasmusInBarcelona
+├── build.mjs                    every route, and the build that writes dist/
+├── server.mjs                   the local server: same redirect table, in JavaScript
+├── src/
+│   ├── data/                    every fact the site states
+│   │   ├── site-data.js           prices, dates, courses, people, the OID, the addresses
+│   │   ├── barcelona-practical.js transport, fares, airport, neighbourhoods
+│   │   ├── redirects.js           the legacy URL table, and the 410 list
+│   │   └── analytics.js           Umami, once, including the EU host
+│   ├── pages/                   one module per page, rendered from src/data/
+│   ├── layout.js                SITE_URL, head, nav, footer, breadcrumbs, JSON-LD
+│   └── assets/
+│       ├── css/site.css           the whole stylesheet
+│       ├── js/site.js             menu, date filter, group planner, sign-up form
+│       └── images/                the WebP files the site serves
+├── tools/
+│   ├── build-htaccess.mjs       redirects.js → the production .htaccess
+│   ├── build-images.mjs         uploads/ and source-photos/ → src/assets/images
+│   └── refresh-dates.mjs        the DATES-SPAINBCN sheet → dates in site-data.js
+├── scripts/
+│   ├── guards.mjs               the publish guards, run by CI and both deploys
+│   ├── health-check.mjs         the browser audit, npm run check
+│   └── link-check.mjs           off-site links, npm run links
+├── uploads/  source-photos/     photograph originals; never published
+├── notes/production-report.md   what was decided, and what is still unresolved
+├── upload-to-dinahosting.sh     build, upload, verify — curl only
+├── cutover.sh                   the domain move, kept for the other eight domains
+├── .github/workflows/           check.yml on every change, deploy-dinahosting.yml on main
+└── dist/                        generated on every build. Never edit it, never commit it
+```
+
+---
+
 ## Before you commit
 
 ```bash
@@ -72,6 +108,11 @@ One trap: `npm run check` rebuilds `dist/` with `node build.mjs`, which does **n
 | `has "…" typed in` | a fact copied into a template | render it from `src/data/` |
 | `forces HTTPS on %{HTTPS} alone` | the scheme rule lost its `X-Forwarded-Proto` condition | put it back. This one takes the site **down**, not just wrong — see below |
 | `preview host is exempted in N RewriteCond line(s)` | the `*.dinaserver.com` exemption dropped from a rule | both rules need it, or a preview check bounces to the live domain |
+| `it must be absolute and start https://…` | a redirect target went relative again | Apache expands it against `http://` behind Varnish, so every legacy URL takes two hops |
+| `targets a #fragment without the NE flag` | a rule lost `NE` or `QSD` | without `NE` Apache escapes `#` to `%23`; without `QSD` it appends the query after the fragment |
+| `contains forbidden "…"` | a value from the previous site came back | the old OID, the old fees, a Webnode or tag-manager reference. Check the source, not the symptom |
+| `internal link to legacy path` | a page links through a redirect | link straight to the destination |
+| `is marked gone but a page is built there` | `GONE` and the build disagree | a path is either gone (410) or a page, never both |
 
 The guards run in CI on every pull request and on every push to a branch that deploys, and
 again inside both deploy paths. They are the same file in all three places.
@@ -113,9 +154,8 @@ assuming it.
 
 ## How it gets published
 
-The push is the deploy, but only from a branch the deploy workflow watches — today `main` and
-`claude/site-health-check-df5ie0`. `main` now exists and holds everything. A push anywhere else runs the
-checks and uploads nothing.
+The push is the deploy, and `main` is the only branch that publishes. A push anywhere else runs
+the checks and uploads nothing.
 
 `.github/workflows/deploy-dinahosting.yml` builds, runs the guards, mirrors `dist/` into the web
 root over FTPS, verifies every file landed, then checks the live site over HTTP. It took about
@@ -130,9 +170,10 @@ password rather than reading a secret:
 | `bash upload-to-dinahosting.sh --dry-run` | say what would change, send nothing |
 | `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
 
-**Worth doing once:** rename the default branch to `main`. It is
-`main` since 23 August 2026; the old `claude/site-health-check-df5ie0` still deploys too. Both
-workflows already trigger on `main`, so the rename is the whole change.
+**Left for the owner:** make `main` the repository's default branch, in GitHub → Settings →
+Branches. It is still `claude/site-health-check-df5ie0`, a session name doing a permanent job.
+Nothing depends on the flip any more — both workflows trigger on `main` alone — but until it
+happens a new clone and a new pull request both start from the wrong branch.
 
 ## How to undo one
 

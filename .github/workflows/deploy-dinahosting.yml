@@ -47,7 +47,6 @@ on:
   push:
     branches:
       - main
-      - claude/site-health-check-df5ie0
   workflow_dispatch:
 
 # One deployment at a time, and let a running one finish rather
@@ -90,11 +89,12 @@ jobs:
 
       # Every guard lives in scripts/guards.mjs, which the shell deploy
       # and the pull-request check both run, so no two callers can
-      # enforce different things. It refuses a prototype build, a
-      # sitemap that disagrees with what was built, an .htaccess that
-      # disagrees with redirects.js, a course week that has already
-      # happened, and a fact typed into a template instead of read from
-      # src/data/.
+      # enforce different things. It refuses a value from the previous
+      # site, an internal link to a legacy path, an incoherent redirect
+      # table, a sitemap that disagrees with the build, a prototype
+      # build, an .htaccess that disagrees with redirects.js or has lost
+      # a rule the live site depends on, a course week that has already
+      # happened, and a fact typed into a template.
       - name: Guards
         run: node scripts/guards.mjs
 

@@ -12,7 +12,7 @@
     "dates": "node tools/refresh-dates.mjs",
     "start": "node build.mjs && node server.mjs",
     "serve": "node server.mjs",
-    "guards": "node scripts/guards.mjs",
+    "guards": "node build.mjs && node tools/build-htaccess.mjs && node scripts/guards.mjs",
     "check": "node scripts/health-check.mjs",
     "links": "node scripts/link-check.mjs"
   },

@@ -182,9 +182,9 @@ if (buildable) {
   // ^pattern$ target [R=301…] — per-directory context, so the pattern has
   // no leading slash. The canonical rules use ^(.*)$ and are skipped.
   const rules = new Map(
-    [...htaccess.matchAll(/RewriteRule \^(\S+)\$ (\S+) \[R=301/g)]
+    [...htaccess.matchAll(/RewriteRule \^(\S+)\$ (\S+) \[(R=301[^\]]*)\]/g)]
       .filter((m) => !m[1].includes('('))
-      .map((m) => ['/' + m[1].replace(/\\/g, ''), m[2]]),
+      .map((m) => ['/' + m[1].replace(/\\/g, ''), { target: m[2], flags: m[3].split(',') }]),
   );
   const goneRules = [...htaccess.matchAll(/RewriteRule \^(\S+)\$ - \[R=410/g)]
     .map((m) => '/' + m[1].replace(/\\/g, ''));
@@ -195,13 +195,26 @@ if (buildable) {
     const rule = rules.get(from) ?? rules.get(from.replace(/\/$/, '') || '/');
     if (!rule) { fail(`redirect missing from .htaccess: ${from}`); continue; }
 
-    if (!rule.startsWith(`${LIVE_ORIGIN}/`) && rule !== LIVE_ORIGIN + '/') {
-      fail(`${from} redirects to "${rule}" in .htaccess — it must be absolute and start\n`
+    if (!rule.target.startsWith(`${LIVE_ORIGIN}/`) && rule.target !== LIVE_ORIGIN + '/') {
+      fail(`${from} redirects to "${rule.target}" in .htaccess — it must be absolute and start\n`
         + `      ${LIVE_ORIGIN}/, or Apache hands back an http:// Location behind Varnish\n`
         + '      and every legacy URL takes two hops. See tools/build-htaccess.mjs.');
-    } else if (rule.slice(LIVE_ORIGIN.length) !== to) {
+    } else if (rule.target.slice(LIVE_ORIGIN.length) !== to) {
       fail(`redirect disagrees: ${from} → ${to} in redirects.js, `
-        + `${rule.slice(LIVE_ORIGIN.length)} in .htaccess`);
+        + `${rule.target.slice(LIVE_ORIGIN.length)} in .htaccess`);
+    }
+
+    // A target carrying a fragment needs two more flags. Without NE
+    // Apache escapes the # to %23 and the visitor lands on a URL that
+    // names no anchor; without QSD it appends the query string after
+    // the fragment, where the browser reads it as part of the anchor.
+    if (to.includes('#')) {
+      for (const flag of ['NE', 'QSD']) {
+        if (!rule.flags.includes(flag)) {
+          fail(`.htaccess sends ${from} to a #fragment without the ${flag} flag. `
+            + 'See tools/build-htaccess.mjs.');
+        }
+      }
     }
   }
   for (const from of rules.keys()) {

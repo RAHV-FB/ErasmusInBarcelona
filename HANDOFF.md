@@ -146,29 +146,42 @@ have not ended, and rewrites the array in place. Nothing else in the file is tou
 
 From a terminal, start to finish:
 
+Once per machine — the clone, the dev dependencies, and the browser `npm run check` drives.
+That last one is a separate download and `npm install` does not imply it:
+
 ```bash
-# Once per machine: get the source and the dev dependencies.
 git clone https://github.com/RAHV-FB/ErasmusInBarcelona.git ~/ErasmusInBarcelona
 cd ~/ErasmusInBarcelona
-git checkout main                              # the branch that publishes
+git checkout main
 npm install
-
-# Every refresh:
-cd ~/ErasmusInBarcelona
-git pull
-npm run dates                    # sheet → src/data/site-data.js; prints every week it wrote
-git diff src/data/site-data.js   # read what changed before you ship it
-npm run check                    # every page in a real browser; a minute or two
-bash upload-to-dinahosting.sh    # build, upload, verify — asks for the FTP password, stores nothing
-git commit -am "Refresh course weeks from the sheet"
-git push
+npx playwright install chromium
 ```
 
-The FTP password is the hosting account's (user `erasmusinbarcelona`, host
-`erasmusinbarcelona-com.espacioseguro.com` — both are the script's defaults, so only the
-password is asked for). The push at the end also triggers the GitHub deploy, which uploads the
-same bytes again — harmless, and it keeps the repository and the server telling the same story.
-Pushing *without* running the upload script works too; it is just the slower nine-minute route.
+Then every refresh, from `~/ErasmusInBarcelona`:
+
+```bash
+cd ~/ErasmusInBarcelona
+git pull origin main
+npm run dates
+git diff src/data/site-data.js
+npm run check
+bash upload-to-dinahosting.sh
+git commit -am "Refresh course weeks from the sheet"
+git push origin main
+```
+
+Line by line: `npm run dates` reads the sheet into `src/data/site-data.js` and prints every week
+it wrote; `git diff` is you reading what changed before it ships; `npm run check` opens every
+page in a real browser, a minute or two; `upload-to-dinahosting.sh` builds, uploads and verifies.
+It asks for the hosting account's FTP password and stores nothing — user `erasmusinbarcelona`,
+host `erasmusinbarcelona-com.espacioseguro.com`, both already the script's defaults, so the
+password is the only thing typed. The push then publishes the same bytes again through CI, which
+is harmless and keeps the repository and the server telling one story; pushing *without* running
+the upload script works too, and is just the slower nine-minute route.
+
+Neither block carries a trailing `#` comment, and that is deliberate. macOS ships zsh, and an
+interactive zsh does not treat `#` as a comment — it hands the annotation to the command as
+arguments, which is how an annotated line becomes `unknown option: #`.
 
 What the script refuses to do, by design: write anything when the sheet has a course label it
 does not recognise (add it to `COURSES` in `tools/refresh-dates.mjs` with its subject area),
@@ -184,9 +197,12 @@ link", the CSV export stops answering and the script says so; nothing breaks sil
   removed, so nothing will start failing when you do — Pages from a private repository needs a
   paid plan.
 - **Cancel Webnode** once September comes round.
-- **Make `main` the default branch** in GitHub → Settings → Branches. `main` exists since
-  23 August 2026 and holds every branch's work; both workflows already trigger on it. Once
-  flipped, the old `claude/*` branches can be deleted.
+- **Make `main` the default branch** in GitHub → Settings → Branches. It is still
+  `claude/site-health-check-df5ie0`, a session name doing a permanent job, so a new clone and a
+  new pull request both start from the wrong branch. `main` holds every branch's work as of
+  23 August 2026 and is the only branch either workflow now triggers on, so nothing else waits
+  on the flip — but the old `claude/*` branches cannot be deleted until it happens, because
+  GitHub will not delete a default branch.
 
 ---
 
