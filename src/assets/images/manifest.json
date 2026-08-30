@@ -116,6 +116,14 @@
     ],
     "ratio": 1.4995
   },
+  "course-group-spainbcn-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
   "team-adriana": {
     "widths": [
       251

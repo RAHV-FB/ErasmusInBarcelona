@@ -515,6 +515,11 @@ export const images = {
     alt: 'A Spanish course group in the sitting room at the SpainBcn office in Barcelona',
     focus: '50% 72%',
   },
+  officeClassroom: {
+    file: 'course-group-spainbcn-classroom',
+    alt: 'Participants at laptops in the SpainBcn classroom in Barcelona',
+    focus: '50% 55%',
+  },
   founders: {
     file: 'spainbcn-founders-1997',
     alt: 'María Ángeles and Miriam at the SpainBcn exhibition stand in 1997',

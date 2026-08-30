@@ -111,6 +111,7 @@ appears exactly once — with two frames from www.spainbcn.com kept where no upl
 | Barcelona band | A student group under the Park Güell colonnade | The city and a group in one frame |
 | About | María Ángeles and Miriam in 1997 · a Spanish course group in the sitting room | The history, then how a week looks today |
 | Contact | A course group in wicker chairs in the sitting room | The room an enquiry leads to |
+| Universities | Participants at laptops in the SpainBcn classroom | Adults at laptops, from the AI & ICT area (from spainbcn.com) |
 
 Left unpublished: the dim ICT frame (825×464, too dark to print well), the four-view strip of the
 school (139px tall), and the three category graphics and logo mark, which are text as image, not
