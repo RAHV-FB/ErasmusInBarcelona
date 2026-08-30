@@ -106,6 +106,22 @@
 
   /* ---------- the sign-up form, and only ever after permission ---------- */
 
+  // One loader for both embeds. Nothing here runs until the visitor has
+  // allowed forms.app.
+  var embedScript = function (onReady, onFail) {
+    if (window.formsapp) { onReady(); return; }
+    var script = document.querySelector('script[data-formsapp]');
+    if (!script) {
+      script = document.createElement('script');
+      script.src = 'https://cdn.formsapp.io/embed.js';
+      script.async = true;
+      script.setAttribute('data-formsapp', '');
+      document.head.appendChild(script);
+    }
+    script.addEventListener('load', onReady);
+    script.addEventListener('error', onFail);
+  };
+
   var gate = document.querySelector('[data-form-gate]');
   var mountPoint = document.getElementById('form-embed');
   var instance = null;
@@ -118,7 +134,6 @@
 
     gate.setAttribute('data-loading', 'true');
 
-    var script = document.querySelector('script[data-formsapp]');
     var start = function () {
       try {
         // The standard embed attaches to an element carrying the form id.
@@ -141,19 +156,7 @@
       }
     };
 
-    if (window.formsapp) { start(); return; }
-
-    if (!script) {
-      script = document.createElement('script');
-      script.src = 'https://cdn.formsapp.io/embed.js';
-      script.async = true;
-      script.setAttribute('data-formsapp', '');
-      script.addEventListener('load', start);
-      script.addEventListener('error', failForm);
-      document.head.appendChild(script);
-    } else {
-      script.addEventListener('load', start);
-    }
+    embedScript(start, failForm);
   };
 
   function failForm() {
@@ -173,6 +176,97 @@
     if (mountPoint) mountPoint.replaceChildren();
     if (gate) gate.hidden = false;
   };
+
+  /* ---------- the sign-up side tab, behind the same permission ---------- */
+
+  // Before permission the tab on screen is the local stand-in rendered by
+  // layout.js; it opens a small panel with the choice and the email
+  // address. With permission, the real forms.app side tab replaces it
+  // (CSS hides the stand-in). If the embed script cannot be fetched, the
+  // stand-in comes back and its panel says so instead of asking again.
+  var signupTab = document.querySelector('[data-signup-tab]');
+  var signupOpen = signupTab ? signupTab.querySelector('[data-signup-open]') : null;
+  var signupPanel = signupTab ? signupTab.querySelector('.signup-tab__panel') : null;
+  var sidetab = null;
+
+  var showSignupPanel = function (state) {
+    if (!signupOpen || !signupPanel) return;
+    signupPanel.hidden = !state;
+    signupOpen.setAttribute('aria-expanded', String(state));
+    if (state) {
+      var first = signupPanel.querySelector('button, a');
+      if (first) first.focus();
+    }
+  };
+
+  var loadSidetab = function () {
+    if (!signupTab || sidetab) return;
+    embedScript(function () {
+      try {
+        sidetab = new window.formsapp(
+          signupTab.getAttribute('data-form-id'),
+          'sidetab',
+          {
+            button: {
+              color: signupTab.getAttribute('data-tab-color'),
+              text: signupTab.getAttribute('data-tab-text'),
+            },
+            align: {
+              horizontal: signupTab.getAttribute('data-tab-align-h'),
+              vertical: signupTab.getAttribute('data-tab-align-v'),
+            },
+            width: signupTab.getAttribute('data-tab-width'),
+            height: signupTab.getAttribute('data-tab-height'),
+          },
+          signupTab.getAttribute('data-form-host')
+        );
+      } catch (e) { failSidetab(); }
+    }, failSidetab);
+  };
+
+  function failSidetab() {
+    if (!signupTab) return;
+    // Permission was given but the embed never arrived: bring the
+    // stand-in back, without the offer it cannot honour.
+    signupTab.setAttribute('data-fallback', '');
+    signupTab.querySelectorAll('[data-signup-ask], [data-privacy-set]').forEach(function (el) { el.hidden = true; });
+    var failed = signupTab.querySelector('[data-signup-failed]');
+    if (failed) failed.hidden = false;
+  }
+
+  var unloadSidetab = function () {
+    if (sidetab && sidetab.destroy) {
+      try { sidetab.destroy(); } catch (e) {}
+    }
+    sidetab = null;
+    // The embed appends its own tab to <body>; withdrawing permission
+    // removes it. The standard embed on the contact page is unmounted by
+    // unloadForm, not here.
+    document.querySelectorAll('.formsapp-sidetab-wrapper').forEach(function (el) { el.remove(); });
+    if (!signupTab) return;
+    signupTab.removeAttribute('data-fallback');
+    signupTab.querySelectorAll('[data-signup-ask], [data-privacy-set]').forEach(function (el) { el.hidden = false; });
+    var failed = signupTab.querySelector('[data-signup-failed]');
+    if (failed) failed.hidden = true;
+  };
+
+  if (signupOpen) {
+    signupOpen.addEventListener('click', function () {
+      showSignupPanel(signupPanel.hidden);
+    });
+    signupTab.querySelectorAll('[data-signup-close]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        showSignupPanel(false);
+        signupOpen.focus();
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !signupPanel.hidden) {
+        showSignupPanel(false);
+        signupOpen.focus();
+      }
+    });
+  }
 
   /* ---------- privacy choices ---------- */
 
@@ -216,8 +310,9 @@
       writePrivacy(allow);
       if (banner) banner.hidden = true;
       showState();
-      if (allow) loadForm();
-      else unloadForm();
+      showSignupPanel(false);
+      if (allow) { loadForm(); loadSidetab(); }
+      else { unloadForm(); unloadSidetab(); }
     });
   });
 
@@ -269,5 +364,8 @@
 
   // Last, so an already-allowed form is built with the planner's answers
   // rather than before they have been read out of the URL.
-  if (gate && document.documentElement.classList.contains('formsapp-allowed')) loadForm();
+  if (document.documentElement.classList.contains('formsapp-allowed')) {
+    if (gate) loadForm();
+    if (signupTab) loadSidetab();
+  }
 }());

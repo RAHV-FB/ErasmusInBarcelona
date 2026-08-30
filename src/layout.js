@@ -173,6 +173,42 @@ function privacyUi() {
   </dialog>`;
 }
 
+// The "Sign Up!" side tab. The real forms.app tab can only exist after the
+// visitor allows forms.app, so until then this local stand-in holds its
+// place — same spot, same colour, same words, drawn here with no request —
+// and opens a small panel offering that choice, with the email address for
+// anyone who would rather not take it. site.js swaps in the real embed the
+// moment forms.app is allowed. The contact page carries the form itself,
+// so it goes without the tab.
+function signupTab() {
+  const t = data.formsApp.sidetab;
+  return `<div class="signup-tab" data-signup-tab
+    data-form-id="${data.formsApp.id}" data-form-host="${t.host}"
+    data-tab-text="${esc(t.text)}" data-tab-color="${esc(t.color)}"
+    data-tab-align-h="${t.align.horizontal}" data-tab-align-v="${t.align.vertical}"
+    data-tab-width="${t.width}" data-tab-height="${t.height}">
+    <button type="button" class="signup-tab__open" style="background-color:${esc(t.color)}"
+      data-signup-open aria-expanded="false" aria-controls="signup-panel">
+      <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+        <path fill="currentColor" fill-rule="evenodd" d="M1.5 1h13c.28 0 .5.22.5.5v9c0 .28-.22.5-.5.5H8.2l-3.5 3.3c-.26.25-.7.06-.7-.29V11H1.5c-.28 0-.5-.22-.5-.5v-9c0-.28.22-.5.5-.5zM4 4v1h8V4H4zm0 3v1h5V7H4z"/>
+      </svg>
+      ${esc(t.text)}</button>
+    <div class="signup-tab__panel" id="signup-panel" hidden>
+      <h2>Sign up</h2>
+      <p data-signup-ask>The sign-up form is provided by forms.app and loads only if you allow it;
+        forms.app uses its own cookies.</p>
+      <p data-signup-failed hidden>The form couldn't be loaded.</p>
+      <div class="signup-tab__actions">
+        <button type="button" class="btn" data-privacy-set="true">Allow sign-up form</button>
+        <button type="button" class="btn btn--ghost" data-signup-close>Close</button>
+      </div>
+      <p>Or email <a href="${data.contact.emailHref}">${data.contact.email}</a> or message us on
+        <a href="${data.contact.whatsapp}" rel="noopener">WhatsApp ↗</a>.</p>
+      <p class="meta"><a href="/privacy/">Privacy</a></p>
+    </div>
+  </div>`;
+}
+
 function organisationSchema() {
   const { organisation, contact, spainbcn, social } = data;
   return {
@@ -272,6 +308,7 @@ ${header(meta.current)}
 ${body}
 </main>
 ${footer()}
+${meta.path === '/contact/' ? '' : signupTab()}
 ${privacyUi()}
 <script src="/assets/js/site.js" defer></script>
 </body>

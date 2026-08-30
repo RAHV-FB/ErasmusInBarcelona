@@ -96,9 +96,11 @@ and it is public — it appears in the markup of every page. `data-host-url` is 
 it the tracker falls back to its US-facing collector whichever host the script came from. Set
 `UMAMI_WEBSITE_ID` to report a test build somewhere else.
 
-**forms.app** provides the sign-up form on `/contact/` and is requested only after the visitor
-allows it. Their choice is stored as `eib-privacy-v1` in local storage and read before first paint.
-"Privacy choices" in the footer changes it; withdrawing unmounts the embed.
+**forms.app** provides the sign-up form: embedded on `/contact/`, and opened by the "Sign Up!"
+side tab on every other page. It is requested only after the visitor allows it — until then the
+tab is a local stand-in (same place, same colour, no request) that opens a panel offering the
+choice and the email address. Their choice is stored as `eib-privacy-v1` in local storage and read
+before first paint. "Privacy choices" in the footer changes it; withdrawing unmounts both embeds.
 
 `/privacy/` and `/cookies/` describe exactly this. If either service changes, those pages change in
 the same commit — and the network behaviour gets re-checked, not assumed.

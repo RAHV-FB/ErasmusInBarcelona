@@ -12,7 +12,7 @@ export default function privacy() {
     <div style="max-width:52ch">
       <h1>Privacy</h1>
       <p class="lede">What this website does with information about you.</p>
-      <p class="meta">Last reviewed 20 August 2026.</p>
+      <p class="meta">Last reviewed 30 August 2026.</p>
     </div>
   </section>
 
@@ -62,9 +62,11 @@ export default function privacy() {
         and improving the service, Article 6(1)(f) GDPR.</p>
 
       <h2>The sign-up form</h2>
-      <p>The sign-up form on the contact page is provided by forms.app. We do not connect to
-        forms.app when you open the website: the form is loaded only after you choose to allow it,
-        and your answer is remembered so you are not asked again.</p>
+      <p>The sign-up form is provided by forms.app: it is embedded on the contact page, and the
+        orange "${d.formsApp.sidetab.text}" tab on the edge of the other pages opens it. We do not
+        connect to forms.app when you open the website: until you allow it, that tab is drawn by
+        this site itself and only offers you the choice. The form is loaded after you choose to
+        allow it, and your answer is remembered so you are not asked again.</p>
       <p>Once it loads, forms.app receives the technical information needed to serve the form and may
         set its own cookies in your browser; its current cookie policy states that forms created by
         its members use cookies. It may process technical information such as your IP address,
