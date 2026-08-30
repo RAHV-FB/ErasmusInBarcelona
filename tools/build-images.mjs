@@ -22,36 +22,32 @@ const WIDTHS = [800, 1200, 1600];   // a middle step so a 1440 viewport
 
 // original file → production name (descriptive, no upload ids)
 const PHOTOS = {
+  'photo_uploads-1787246880578-kn57.png': 'staff-training-session-laptops',
+  'photo_uploads-1787246868207-igg7.jpeg': 'spanish-course-group-whiteboard',
+  'photo_uploads-1787246868124-4i9m.png': 'course-group-trainer-spainbcn-classroom',
+  'photo_uploads-1787246867962-f6e1.jpg': 'ict-course-group-day-by-day',
+  'photo_uploads-1787246867970-fhh3.jpeg': 'course-group-gallery-room',
   'photo_uploads-1787246879625-qvdv.jpeg': 'spanish-course-group-spainbcn-office',
+  'photo_uploads-1787246879624-bjwh.jpeg': 'staff-group-spainbcn-office',
+  'photo_uploads-1787246868160-zxrv.jpeg': 'course-group-spainbcn-sitting-room',
   'photo_uploads-1787246868171-k047.jpeg': 'student-group-ciutadella-barcelona',
   'photo_uploads-1787246868139-ji5r.jpeg': 'student-group-viewpoint-barcelona',
+  'photo_uploads-1787246868632-mye6.png': 'student-group-park-guell-barcelona',
+  'photo_uploads-1787246875557-jx0m.jpeg': 'student-group-certificates-classroom',
   'photo_uploads-1787246882590-ijcs.png': 'barceloneta-seafront-barcelona',
   'photo_uploads-1787246868436-z9ma.png': 'spainbcn-founders-1997',
-  // Also in uploads/, processed on demand if a page ever needs them:
-  //   ...867970-fhh3  English course group in a classroom
-  //   ...867962-f6e1  ICT training group around a table
-  //   ...875558-wqfk  ICT group with laptops (dim, low resolution)
-  //   ...868124-4i9m  ICT course group at the office
-  //   ...868160-zxrv  Spanish course group in the sitting room
-  //   ...868207-igg7  Spanish course for teachers, lined up at the whiteboard
-  //   ...879624-bjwh  Spanish teacher group in the sitting room
-  //   ...868632-mye6  Student group under the Park Güell colonnade
+  // Still in uploads/, left unpublished:
+  //   ...875558-wqfk  ICT group with laptops — too dim and too small (825x464) to print well
   //   ...868185-3qqb  Four small views of the school (713px wide, too small to place)
-  //   ...875557-jx0m  Certificates in a bare classroom (people small, cluttered foreground)
-  //   ...880578-kn57  AI classroom (a soft video still — do not use)
   // The three category graphics and the logo mark in uploads/ are not photographs.
 };
 
 // Already-compressed sources are re-encoded a little more gently, so a
-// second generation of WebP does not show.
+// second generation of WebP does not show. Only the two photographs a page
+// still uses are processed; the rest of the archive stays in source-photos/.
 const SPAINBCN = {
-  'a-group-of-thirteen.webp': 'course-group-with-certificates',
-  'loc-barcelona-class.webp': 'course-group-in-class-barcelona',
   'location-2.webp': 'course-group-arc-de-triomf-barcelona',
   'group-of-people-sitting-at-a-long-table.webp': 'course-group-cafe-terrace-barcelona',
-  'loc-barcelona-group.webp': 'course-group-barcelona-cathedral',
-  'a-group-of-seven-women-and-one-young-man.webp': 'course-group-spainbcn-classroom',
-  'a-group-of-women-sitting-around-a-table.webp': 'course-group-working-session',
 };
 
 // Two portraits are whole-body snapshots where no automatic crop finds a

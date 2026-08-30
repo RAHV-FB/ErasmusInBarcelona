@@ -53,17 +53,18 @@ export default function about() {
   </section>
 
   <section class="section section--powder">
-    <div class="container cols cols--split">
+    <div class="container cols cols--lead">
       <div>
         <h2>How the courses run</h2>
         <p>Groups are small and international: most weeks bring together participants from several
           European countries. Trainers teach in their own subject areas.</p>
-      </div>
-      <div>
-        <h2>Reviews</h2>
+        <h2 style="margin-top:1.6em">Reviews</h2>
         <p><a class="link-strong" href="${d.reviews.url}" rel="noopener">${d.reviews.rating}/5 from
           ${d.reviews.count} Google reviews ↗</a></p>
       </div>
+      <figure class="media media--photo">
+        ${img(d.images.spanishOffice, { sizes: '(min-width: 860px) 45vw, 100vw' })}
+      </figure>
     </div>
   </section>
 

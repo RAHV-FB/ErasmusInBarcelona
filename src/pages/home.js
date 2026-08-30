@@ -48,7 +48,7 @@ export default function home() {
           ${d.organisation.founded}.</p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.certificates, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
+        ${img(d.images.heroSession, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
       </figure>
     </div>
   </section>
@@ -101,7 +101,7 @@ export default function home() {
         <p><a class="link-strong" href="/your-week/">What a week involves →</a></p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.classGroup, { sizes: '(min-width: 860px) 48vw, 100vw' })}
+        ${img(d.images.spanishWhiteboard, { sizes: '(min-width: 860px) 48vw, 100vw' })}
       </figure>
     </div>
   </section>

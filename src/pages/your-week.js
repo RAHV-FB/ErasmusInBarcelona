@@ -34,7 +34,7 @@ export default function yourWeek() {
           works.</p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.workingSession, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
+        ${img(d.images.ictDayByDay, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
       </figure>
     </div>
   </section>

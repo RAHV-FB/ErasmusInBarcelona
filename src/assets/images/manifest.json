@@ -1,4 +1,38 @@
 {
+  "staff-training-session-laptops": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.7264
+  },
+  "spanish-course-group-whiteboard": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "course-group-trainer-spainbcn-classroom": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.5174
+  },
+  "ict-course-group-day-by-day": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.374
+  },
+  "course-group-gallery-room": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
   "spanish-course-group-spainbcn-office": {
     "widths": [
       800,
@@ -6,6 +40,22 @@
       1600
     ],
     "ratio": 1.1896
+  },
+  "staff-group-spainbcn-office": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "course-group-spainbcn-sitting-room": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
   },
   "student-group-ciutadella-barcelona": {
     "widths": [
@@ -20,6 +70,22 @@
     ],
     "ratio": 1.4545
   },
+  "student-group-park-guell-barcelona": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3031
+  },
+  "student-group-certificates-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
   "barceloneta-seafront-barcelona": {
     "widths": [
       800
@@ -33,22 +99,6 @@
       1600
     ],
     "ratio": 1.418
-  },
-  "course-group-with-certificates": {
-    "widths": [
-      800,
-      1200,
-      1600
-    ],
-    "ratio": 1.5052
-  },
-  "course-group-in-class-barcelona": {
-    "widths": [
-      800,
-      1200,
-      1600
-    ],
-    "ratio": 1.5009
   },
   "course-group-arc-de-triomf-barcelona": {
     "widths": [
@@ -65,29 +115,6 @@
       1600
     ],
     "ratio": 1.4995
-  },
-  "course-group-barcelona-cathedral": {
-    "widths": [
-      800,
-      1200,
-      1600
-    ],
-    "ratio": 1.5009
-  },
-  "course-group-spainbcn-classroom": {
-    "widths": [
-      800,
-      1200,
-      1600
-    ],
-    "ratio": 1.3333
-  },
-  "course-group-working-session": {
-    "widths": [
-      800,
-      1200
-    ],
-    "ratio": 1.3333
   },
   "team-adriana": {
     "widths": [

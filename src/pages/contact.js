@@ -1,4 +1,4 @@
-import { page } from '../layout.js';
+import { page, img } from '../layout.js';
 import * as d from '../data/site-data.js';
 
 export default function contact() {
@@ -32,6 +32,10 @@ export default function contact() {
           <li>We confirm availability, the level and the fee in writing.</li>
           <li>If you register, we send the confirmation and the documents your project needs.</li>
         </ol>
+
+        <figure class="media media--wide" style="margin-top:2em">
+          ${img(d.images.sittingRoom, { sizes: '(min-width: 860px) 55vw, 100vw' })}
+        </figure>
       </div>
 
       <div class="form-panel">

@@ -144,8 +144,8 @@ export default function barcelona() {
   </section>
 
   <figure class="media media--band">
-    ${img(d.images.cathedral, { sizes: '100vw' })}
-    <figcaption class="container">Plaça de la Seu</figcaption>
+    ${img(d.images.parkGuell, { sizes: '100vw' })}
+    <figcaption class="container">Park Güell</figcaption>
   </figure>
 
   <section class="section">
