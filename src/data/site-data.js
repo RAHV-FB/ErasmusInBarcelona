@@ -84,6 +84,20 @@ export const formsApp = {
   host: 'https://rear0ghq.forms.app',
   privacy: 'https://forms.app/en/privacy-policy',
   cookies: 'https://forms.app/en/cookie-policy',
+  // The "Sign Up!" side tab, on every page except the contact page (which
+  // carries the form itself). These are the dashboard's own sidetab embed
+  // settings, copied from its snippet on 30 August 2026 — including its
+  // host, which the snippet issues as eu.forms.app rather than the form's
+  // subdomain above. The local stand-in tab (layout.js, site.css) is drawn
+  // from the same values; its position in site.css matches `align`.
+  sidetab: {
+    host: 'https://eu.forms.app',
+    text: 'Sign Up!',
+    color: '#ff9e24',
+    align: { horizontal: 'right', vertical: 'middle' },
+    width: '400px',
+    height: '300px',
+  },
   fields: {
     name: { id: '6a6cae069a7b7458ace74c76', label: 'Full name', type: 'name' },
     email: { id: '6a6cae229a7b7458ace74c77', label: 'Email', type: 'email' },
@@ -208,6 +222,7 @@ export const courseAreas = [
     programmes: [
       { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
       { name: 'School AI & ICT', url: SB + 'group-ai-ict.html#school-ai-and-ict' },
+      { name: 'University AI & ICT', url: SB + 'group-ai-ict.html#university-ai-and-ict' },
       { name: 'AI for Language Teaching', url: SB + 'group-ai-ict.html#ai-for-language-teaching' },
       { name: 'AI & ICT Intensive (two weeks)', url: SB + 'group-ai-ict.html#ai-and-ict-intensive-two-weeks' },
     ],
@@ -301,6 +316,53 @@ export const courseAreas = [
 
 
 // ============================================================
+// UNIVERSITY STAFF
+//
+// The programmes whose published audience on SpainBcn names
+// university staff, for /universities/. University AI & ICT is the
+// one written for higher education alone — its audience is
+// university teaching, research and administrative staff, nobody
+// else. Audiences checked programme by programme on the SpainBcn
+// subject-area pages, 2026-08-22.
+// ============================================================
+export const universityProgrammes = {
+  dedicated: {
+    name: 'University AI & ICT',
+    url: SB + 'group-ai-ict.html#university-ai-and-ict',
+    audience: 'university teaching, research and administrative staff',
+    desc: 'Digital tools for lectures, seminars and research support, and where AI fits academic work.',
+  },
+  groups: [
+    {
+      label: 'AI and digital teaching',
+      areaId: 'ai',
+      items: [
+        { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
+        { name: 'Innovative teaching methods with ICT', url: SB + 'group-ai-ict.html#innovative-teaching-methods-with-ict' },
+      ],
+    },
+    {
+      label: 'English and communication',
+      areaId: 'english',
+      items: [
+        { name: 'General English by level', url: SB + 'group-english.html#general-english-by-level' },
+        { name: 'Culture & History in English', url: SB + 'group-english.html#culture-and-history-in-english' },
+        { name: 'Presentation Skills', url: SB + 'group-presentation.html#presentation-skills' },
+        { name: 'Advanced Presentation Skills', url: SB + 'group-presentation.html#advanced-presentation-skills' },
+      ],
+    },
+    {
+      label: 'Spanish',
+      areaId: 'spanish',
+      items: [
+        { name: 'General Spanish by level', url: SB + 'group-spanish.html#general-spanish-by-level' },
+        { name: 'Culture & History in Spanish', url: SB + 'group-spanish.html#culture-and-history-in-spanish' },
+      ],
+    },
+  ],
+};
+
+// ============================================================
 // COURSE WEEKS IN BARCELONA
 //
 // Exported by hand from the organisation's DATES-SPAINBCN sheet
@@ -313,23 +375,23 @@ export const courseAreas = [
 // ============================================================
 export const datesSource = {
   sheet: 'https://docs.google.com/spreadsheets/d/1V2xozrjvgq4rIP1V-iPUSz5nrvTqSZWV0y9mr4f2kOE/edit?gid=480287972',
-  importedOn: '2026-08-20',
+  importedOn: '2026-08-23',
   note: 'Other dates and levels open on request.',
 };
 
 export const dates = [
   { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'English', area: 'english' },
   { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'Spanish', area: 'spanish' },
-  { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'AI & ICT', area: 'ai' },
-  { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'Public Speaking', area: 'english' },
   { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'Integration and classroom management', area: 'wellbeing' },
+  { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'Public Speaking', area: 'english' },
+  { start: '2026-09-14', end: '2026-09-18', label: '14–18', month: 'Sep', course: 'AI & ICT', area: 'ai' },
   { start: '2026-09-21', end: '2026-09-25', label: '21–25', month: 'Sep', course: 'Mindfulness in the classroom', area: 'wellbeing' },
   { start: '2026-09-28', end: '2026-10-02', label: '28 Sep – 2 Oct', month: '', course: 'English', area: 'english' },
   { start: '2026-10-12', end: '2026-10-16', label: '12–16', month: 'Oct', course: 'English', area: 'english' },
   { start: '2026-10-19', end: '2026-10-23', label: '19–23', month: 'Oct', course: 'English', area: 'english' },
   { start: '2026-10-19', end: '2026-10-23', label: '19–23', month: 'Oct', course: 'AI & ICT', area: 'ai' },
-  { start: '2026-11-09', end: '2026-11-13', label: '9–13', month: 'Nov', course: 'English', area: 'english' },
   { start: '2026-11-09', end: '2026-11-13', label: '9–13', month: 'Nov', course: 'AI & ICT', area: 'ai' },
+  { start: '2026-11-09', end: '2026-11-13', label: '9–13', month: 'Nov', course: 'English', area: 'english' },
 ];
 
 // ============================================================

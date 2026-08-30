@@ -34,8 +34,11 @@ const ANALYTICS_HOST = analytics.websiteId ? new URL(analytics.scriptUrl).host :
 
 execFileSync(process.execPath, [path.join(ROOT, 'build.mjs')], { cwd: ROOT, stdio: 'inherit' });
 
-const ROUTES = ['/', '/join-a-course/', '/bring-a-group/', '/plan-a-mobility/', '/dates/',
-  '/your-week/', '/barcelona/', '/about/', '/contact/', '/privacy/', '/cookies/'];
+// Every page the build just wrote, read from its sitemap — a page added
+// to build.mjs cannot silently skip the audit. 404.html is checked
+// separately below.
+const ROUTES = [...fs.readFileSync(path.join(DIST, 'sitemap.xml'), 'utf8')
+  .matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
 const ORIGIN = `http://127.0.0.1:${PORT}`;
 
 const server = spawn(process.execPath, [path.join(ROOT, 'server.mjs')], {
@@ -71,8 +74,22 @@ try {
   browser = await chromium.launch();
 } catch (err) {
   const executablePath = findChromium();
-  if (!executablePath) throw err;
-  browser = await chromium.launch({ executablePath });
+  if (executablePath) {
+    browser = await chromium.launch({ executablePath });
+  } else if (/Executable doesn't exist|npx playwright install/.test(String(err))) {
+    // `npm install` fetches the Playwright library; the browser it drives
+    // is a separate download. On a fresh machine the raw error is a
+    // Playwright banner inside a Node stack trace, which buries the one
+    // line that matters.
+    stop();
+    console.error('\nThe browser this check drives is not installed.\n');
+    console.error('  npx playwright install chromium\n');
+    console.error('`npm install` gets the Playwright library, not the browser — they are');
+    console.error('separate downloads. Once it is there, `npm run check` works offline.\n');
+    process.exit(1);
+  } else {
+    throw err;
+  }
 }
 
 let problems = 0;
@@ -114,6 +131,22 @@ for (const route of ROUTES) {
     window.scrollTo(0, 0);
   });
   await page.waitForLoadState('networkidle').catch(() => {});
+
+  // Settle the images before judging them. Two ways one can be innocently
+  // incomplete at this point: it is still arriving, or it is lazy and the
+  // scroll above outran the browser's notice of it, so scrolling back to
+  // the top left it never triggered. Both read as "not loaded" and neither
+  // is a broken page — the giveaway is that no request failed. Ask for
+  // whatever has not started, then wait for the set to finish, so what is
+  // reported below is an image that genuinely cannot load.
+  await page.evaluate(async () => {
+    const imgs = [...document.images];
+    for (const i of imgs) if (!i.complete) i.loading = 'eager';
+    await Promise.all(imgs.map((i) => (i.complete ? null : Promise.race([
+      i.decode().catch(() => {}),
+      new Promise((r) => setTimeout(r, 5000)),
+    ]))));
+  });
 
   const info = await page.evaluate(() => {
     const meta = (sel) => document.querySelector(sel)?.getAttribute('content') || '';

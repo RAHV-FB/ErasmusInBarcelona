@@ -30,7 +30,12 @@ set -uo pipefail
 FTP_HOST="${FTP_HOST:-erasmusinbarcelona-com.espacioseguro.com}"
 FTP_USER="${FTP_USER:-erasmusinbarcelona}"
 WEB_ROOT="${WEB_ROOT:-www}"
-CHECK_URL="${CHECK_URL:-http://erasmusinbarcelona.hl1639.dinaserver.com}"
+# The live domain. It was the hosting's *.dinaserver.com preview while the
+# domain still answered elsewhere; leaving it there after the cutover meant
+# a publish that said "Published" having checked a host nobody visits, over
+# plain HTTP. --check-url still points it at the preview when that is what
+# you want.
+CHECK_URL="${CHECK_URL:-https://www.erasmusinbarcelona.com}"
 DIST="dist"
 
 # Excluded from both upload and prune: the server owns these, and a
@@ -73,21 +78,15 @@ command -v node >/dev/null || fail "node is not installed. The build needs Node 
 node build.mjs || fail "build failed"
 node tools/build-htaccess.mjs || fail ".htaccess generation failed"
 
-[ -f "$DIST/.htaccess" ] || fail "$DIST/.htaccess is missing — the server would lose its redirects and its 404."
-[ -f "$DIST/index.html" ] || fail "$DIST/index.html is missing."
+# Every guard lives in scripts/guards.mjs, which the GitHub workflow and
+# the pull-request check both run too — a prototype build, a sitemap that
+# disagrees with the build, an .htaccess that disagrees with
+# redirects.js, a course week that has already happened, a fact typed
+# into a template. One definition, so no two callers can enforce
+# different things.
+node scripts/guards.mjs || fail "guards failed — nothing was uploaded."
 
-if grep -q '^Disallow: /$' "$DIST/robots.txt"; then
-  fail "$DIST/robots.txt disallows everything. This is a PROTOTYPE=1 build; publishing it would remove the site from search results."
-fi
-
-stray=$(grep -rl 'content="noindex' "$DIST" --include='*.html' | grep -v "^$DIST/404\.html$" || true)
-[ -n "$stray" ] && fail "noindex on pages meant to be indexed:
-$stray"
-
-grep -q 'https://www.erasmusinbarcelona.com/' "$DIST/sitemap.xml" \
-  || fail "sitemap.xml does not point at the live domain. Check SITE_URL in src/layout.js."
-
-ok "$(find "$DIST" -type f | wc -l | tr -d ' ') files, $(du -sh "$DIST" | cut -f1) — robots.txt allows indexing, only 404.html is noindex"
+ok "$(find "$DIST" -type f | wc -l | tr -d ' ') files, $(du -sh "$DIST" | cut -f1) — built from source and past every guard"
 fi
 
 # ------------------------------------------------------------
@@ -200,7 +199,7 @@ list_remote() {                       # recursive: prints file paths under $1
       for owned in "${SERVER_OWNED[@]}"; do [ "$name" = "$owned" ] && continue 2; done
     fi
     local path="${dir:+$dir/}$name"
-    if "${CURL[@]}" --head --user "$FTP_USER:$FTP_PASS" "$(remote_url "$WEB_ROOT/$path")" \
+    if "${CURL[@]}" --head --user "$FTP_USER:$FTP_PASS" "$(remote_url "$WEB_ROOT/$path")" 2>/dev/null \
          | grep -qi '^content-length:'; then
       printf '%s\n' "$path"
     else
@@ -258,7 +257,19 @@ loc() {
 }
 
 bad=0
-for path in / /join-a-course/ /dates/ /contact/ /your-week/ /about/ /barcelona/ /bring-a-group/ /plan-a-mobility/ /privacy/ /cookies/; do
+
+# Every page the build wrote, read from its own sitemap. Hard-coding the
+# list meant a new page was published unchecked — /universities/ went live
+# and this said "Published" without ever asking for it. scripts/health-check.mjs
+# reads the same file, so the two cannot disagree about what the site contains.
+pages=$(node -e '
+  const fs = require("fs");
+  for (const m of fs.readFileSync(process.argv[1], "utf8").matchAll(/<loc>([^<]+)<\/loc>/g)) {
+    process.stdout.write(new URL(m[1]).pathname + "\n");
+  }
+' "$DIST/sitemap.xml") || fail "could not read $DIST/sitemap.xml"
+
+for path in $pages; do
   code=$(http "$CHECK_URL$path")
   [ "$code" = "200" ] && ok "200 $path" || { echo "  ✗ $code $path"; bad=1; }
   sleep 2
@@ -267,8 +278,23 @@ done
 code=$(http "$CHECK_URL/no-such-page/")
 [ "$code" = "404" ] && ok "404 on a page that does not exist" || { echo "  ✗ /no-such-page/ answered $code, should be 404"; bad=1; }
 
-for pair in /about-us/:/about/ /program-information/:/your-week/ /we-come-to-you/:/plan-a-mobility/ /currently-open-dates/:/dates/; do
-  from="${pair%%:*}"; to="${pair##*:}"
+# A sample of the legacy table rather than all 37 — the host rate-limits and
+# this runs by hand. Which paths to sample is a choice; where each one should
+# land is not, so the destinations come from redirects.js. The last is a
+# fragment target, the case that needs NE and QSD in the .htaccess and fails
+# silently without them.
+pairs=$(node -e '
+  import("./src/data/redirects.js").then(({ REDIRECTS }) => {
+    const sample = ["/about-us/", "/program-information/", "/we-come-to-you/",
+                    "/currently-open-dates/", "/english-courses/"];
+    for (const from of sample) {
+      if (REDIRECTS[from]) process.stdout.write(from + ":" + REDIRECTS[from] + "\n");
+    }
+  });
+') || fail "could not read src/data/redirects.js"
+
+for pair in $pairs; do
+  from="${pair%%:*}"; to="${pair#*:}"
   where=$(loc "$CHECK_URL$from")
   case "$where" in
     *"$to") ok "$from → $to" ;;

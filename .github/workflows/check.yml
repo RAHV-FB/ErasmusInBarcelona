@@ -1,0 +1,75 @@
+# ============================================================
+# Build the site and audit it, on every pull request and on every
+# push to a branch that deploys.
+#
+# Until this existed nothing validated a change before it went out. The
+# deploy workflow builds and uploads; its guards run after the decision
+# to publish has effectively been made, and the browser audit — the one
+# that catches a dead link, a missing alt, a heading level skipped, a
+# page that overflows at 320px — ran only if somebody remembered to run
+# it locally.
+#
+# So this runs the same guards the deploy runs, plus the browser audit,
+# against every branch. It publishes nothing and needs no secrets, which
+# is why it can safely run on branches the deploy ignores.
+#
+# `npm run links` is deliberately not here: it fetches www.spainbcn.com
+# for every off-site link and anchor, and running that on every push
+# would be hammering somebody else's server. Run it by hand before a
+# release — CONTRIBUTING.md says so.
+# ============================================================
+name: Check
+
+# A pull request covers a branch on its way in; a push covers the
+# branches that deploy, where a change can land without one. Listing
+# `push:` bare as well would run the whole thing twice for every push to
+# a branch that has a pull request open — which is exactly what it did
+# the first time.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+# A branch only needs its newest commit checked. Nothing here touches
+# the server, so cancelling a superseded run costs nothing.
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The build itself needs no dependencies — only Node's own modules.
+      - name: Build
+        run: |
+          node build.mjs
+          node tools/build-htaccess.mjs
+
+      # Cheap, needs no browser, and catches the things that would be
+      # wrong in production: a prototype build, a sitemap that disagrees
+      # with what was built, an .htaccess that disagrees with
+      # redirects.js, a course week that has already happened, a fact
+      # typed into a template instead of read from src/data/.
+      - name: Guards
+        run: node scripts/guards.mjs
+
+      - name: Install the browser
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      # Every page in a real browser at eight widths: console errors,
+      # failed requests, dead internal links, duplicate metadata, heading
+      # order, alt text, third-party requests on load, tap targets and
+      # horizontal overflow.
+      - name: Browser audit
+        run: npm run check

@@ -12,39 +12,72 @@ stays with a person.
 
 ## The loop
 
+Once per machine. The browser is a separate download and `npm install` does not imply it, so
+without the last line `npm run check` stops before it starts:
+
 ```bash
-git clone https://github.com/RAHV-FB/ErasmusInBarcelona.git
-cd ErasmusInBarcelona
-
-# edit src/… — never dist/, never the server
-
-npm run build:live        # dist/ plus the production .htaccess
-npm start                 # serve it at http://127.0.0.1:4173 and look
-npm install && npm run check   # browser audit of every page, first run only
-
-git commit -am "…"
-git push origin claude/site-health-check-df5ie0
+git clone https://github.com/RAHV-FB/ErasmusInBarcelona.git ~/ErasmusInBarcelona
+cd ~/ErasmusInBarcelona
+git checkout main
+npm install
+npx playwright install chromium
 ```
 
-The push is the deploy: `.github/workflows/deploy-dinahosting.yml` builds and uploads. To
-publish without waiting for CI, or when CI is not an option:
+Then edit under `src/` — never `dist/`, which is generated on every build, and never the server,
+which the next deploy overwrites. And:
+
+```bash
+cd ~/ErasmusInBarcelona
+npm run build:live
+npm run guards
+npm run check
+git commit -am "…"
+git push origin main
+```
+
+`build:live` writes `dist/` plus the production `.htaccess`; `guards` is the cheap pass; `check`
+is the browser audit of every page. To look at the build yourself first, `npm start` serves it at
+<http://127.0.0.1:4173> and holds the terminal until you stop it, which is why it is not in the
+block above.
+
+No block in this file or in [HANDOFF.md](HANDOFF.md) carries a `#` comment, because macOS ships
+zsh and an interactive zsh does not strip them — pasting an annotated line hands the annotation
+to the command as arguments.
+
+`.github/workflows/check.yml` runs the build, the guards and the browser audit on every pull
+request, and on every push to a branch that deploys. It publishes nothing and uses no secrets,
+so it is safe on any branch — and it is the only thing that looks at a change before the
+decision to publish it. [CONTRIBUTING.md](CONTRIBUTING.md) is the guide to making the change
+itself.
+
+The push is the deploy: `.github/workflows/deploy-dinahosting.yml` builds and uploads — from
+`main`, and from nowhere else. Every branch's work was merged onto it on 23 August 2026 and the
+session branches were taken off the trigger the same day, because two branches publishing into
+one web root means the last push wins and a stale one silently deletes whatever the newer one
+added. A push to any other branch is checked and uploads nothing. To publish without waiting
+for CI, or when CI is not an option:
 
 ```bash
 bash upload-to-dinahosting.sh
 ```
 
-Both do the same work and enforce the same guards.
+Both build from source and both run `scripts/guards.mjs` — one file, so no two callers can
+enforce different things. They do not verify equally afterwards: the workflow checks that every
+file in `dist/` came back in a remote listing, then five pages, the 404 and three redirects.
+The shell script reads every file's size back off the server, then checks eleven pages, the
+404, four redirects and `site.css` served whole. When you want to know the site is right, run
+the script.
 
 ---
 
 ## The deploy script
 
-```bash
-bash upload-to-dinahosting.sh                # build, upload, verify
-bash upload-to-dinahosting.sh --dry-run      # list what would go, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-bash upload-to-dinahosting.sh --check-url https://www.erasmusinbarcelona.com
-```
+| Command | What it does |
+|---|---|
+| `bash upload-to-dinahosting.sh` | build, upload, verify |
+| `bash upload-to-dinahosting.sh --dry-run` | list what would go, send nothing |
+| `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
+| `bash upload-to-dinahosting.sh --check-url <url>` | verify somewhere other than the default |
 
 `curl` only. macOS ships it, so there is nothing to install — no Homebrew, no lftp, no Node
 modules beyond what the build already needs.
@@ -142,9 +175,9 @@ account holds eight other domains, and every one of them will need the same thre
 ```bash
 export DINA_USER=... DINA_PASS=...
 DOMAIN=other.com NEW_IP=1.2.3.4 OLD_IP=<whatever is there now> bash cutover.sh
-bash cutover.sh --zone         # A @ and A www → NEW_IP
-bash cutover.sh --switch-ns    # nameservers → dinahosting, after typing the domain
-bash cutover.sh --watch        # poll public DNS until it agrees
+bash cutover.sh --zone
+bash cutover.sh --switch-ns
+bash cutover.sh --watch
 ```
 
 The default is a dry run. It verifies credentials before anything else, treats any non-success

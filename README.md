@@ -5,16 +5,20 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 
 ## Run it
 
-```bash
-npm install          # Playwright and sharp, both dev-only
-npm start            # build, then serve on http://127.0.0.1:4173
-npm run build        # build dist/ only
-npm run check        # build, serve, and audit every page in a browser
-npm run guards       # build, then verify the migration invariants (no legacy values or links)
-npm run links        # check every off-site link and anchor (hits real servers)
-npm run build:live   # build dist/ with the production .htaccess
-npm run images       # regenerate the images in src/assets/images
-```
+| Command | What it does |
+|---|---|
+| `npm install` | Playwright and sharp, both dev-only |
+| `npx playwright install chromium` | the browser `npm run check` drives — a separate download, once per machine |
+| `npm start` | build, then serve on <http://127.0.0.1:4173> |
+| `npm run build` | build `dist/` only |
+| `npm run build:live` | build `dist/` with the production `.htaccess` |
+| `npm run guards` | build, then verify the publish invariants — no browser, a second or two |
+| `npm run check` | build, serve, and audit every page in a browser |
+| `npm run links` | check every off-site link and anchor (hits real servers) |
+| `npm run images` | regenerate the images in `src/assets/images` |
+
+Changing something? [CONTRIBUTING.md](CONTRIBUTING.md) has the recipe for each of the usual
+jobs, what will stop you and why, how it gets published and how to undo it.
 
 ### The GitHub Pages prototype
 
@@ -47,6 +51,7 @@ build.mjs                 renders src/pages → dist/
 server.mjs                static server: clean URLs, legacy redirects, real 404
 tools/build-images.mjs    originals → resized WebP with descriptive names
 scripts/health-check.mjs  the browser audit behind `npm run check`
+scripts/guards.mjs        the publish guards, shared by CI and both deploy paths
 uploads/, source-photos/  the untouched original photographs; never published
 notes/                    the live-site audit and the production report
 ```
@@ -91,9 +96,11 @@ and it is public — it appears in the markup of every page. `data-host-url` is 
 it the tracker falls back to its US-facing collector whichever host the script came from. Set
 `UMAMI_WEBSITE_ID` to report a test build somewhere else.
 
-**forms.app** provides the sign-up form on `/contact/` and is requested only after the visitor
-allows it. Their choice is stored as `eib-privacy-v1` in local storage and read before first paint.
-"Privacy choices" in the footer changes it; withdrawing unmounts the embed.
+**forms.app** provides the sign-up form: embedded on `/contact/`, and opened by the "Sign Up!"
+side tab on every other page. It is requested only after the visitor allows it — until then the
+tab is a local stand-in (same place, same colour, no request) that opens a panel offering the
+choice and the email address. Their choice is stored as `eib-privacy-v1` in local storage and read
+before first paint. "Privacy choices" in the footer changes it; withdrawing unmounts both embeds.
 
 `/privacy/` and `/cookies/` describe exactly this. If either service changes, those pages change in
 the same commit — and the network behaviour gets re-checked, not assumed.

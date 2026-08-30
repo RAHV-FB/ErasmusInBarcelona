@@ -8,7 +8,7 @@ export default function cookies() {
       <h1>Cookies and privacy choices</h1>
       <p class="lede">This site sets no cookies of its own. One external service can, and only if you
         allow it.</p>
-      <p class="meta">Last reviewed 20 August 2026.</p>
+      <p class="meta">Last reviewed 30 August 2026.</p>
     </div>
   </section>
 
@@ -25,7 +25,9 @@ export default function cookies() {
         are in the <a href="/privacy/">privacy policy</a>.</p>
 
       <h2>The sign-up form</h2>
-      <p>The form on the contact page comes from forms.app and is not loaded unless you allow it.
+      <p>The sign-up form — embedded on the contact page, and opened by the
+        "${d.formsApp.sidetab.text}" tab on the other pages — comes from forms.app and is not
+        loaded unless you allow it. Until then the tab is drawn by this site and requests nothing.
         Once loaded, it uses its own cookies under its
         <a href="${d.formsApp.cookies}" rel="noopener">cookie policy ↗</a>. Those cookies are set by
         forms.app on its own domain, so we cannot delete them for you; clearing site data in your

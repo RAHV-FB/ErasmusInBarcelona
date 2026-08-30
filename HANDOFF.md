@@ -9,7 +9,22 @@ terminal, and [README.md](README.md) is how the site is built from source.
 > **One outstanding risk: the registrant contact may still be unverified.** After the transfer,
 > dinahosting warned "Dominio pendiente de verificar el contacto registrante" and named
 > **spainbcnmiriam@gmail.com**. ICANN requires suspension if that email is never acted on, and a
-> suspended domain is down no matter how correct everything else is. Check from a terminal:
+> suspended domain is down no matter how correct everything else is.
+>
+> Checked 22 August 2026, the evening after the transfer: the public registry (RDAP) shows only
+> the two normal registrar locks — **no `clientHold` or `serverHold`**, the statuses a failed
+> verification produces — so nothing is wrong *yet*. Three things about this trap:
+>
+> - **A verification link from Webnode does not count.** Verification is per registrar; clicking
+>   Webnode's email verified the contact with the old registrar, the day before the transfer
+>   away from it completed. If dinahosting requires its own round, that is a separate email.
+> - **The email goes to spainbcnmiriam@gmail.com, not to whoever runs the site.** "Nothing in my
+>   inbox" proves nothing — the message would be sitting in that mailbox, from dinahosting,
+>   subject along the lines of "verificación del contacto registrante".
+> - **The window is about 15 days from the transfer** (2013 RAA), so if it applies at all it
+>   runs out in early September 2026.
+>
+> The definitive answer is one API call, from any terminal, with the dinahosting panel login:
 >
 > ```bash
 > curl -sS https://dinahosting.com/special/api.php \
@@ -18,6 +33,12 @@ terminal, and [README.md](README.md) is how the site is built from source.
 >   --data-urlencode "domain=erasmusinbarcelona.com" \
 >   --data-urlencode "responseType=Json"
 > ```
+>
+> If it answers verified (or that no verification is pending), delete this whole block. If it
+> answers pending, get into spainbcnmiriam@gmail.com and click dinahosting's link. To re-check
+> the public side without credentials:
+> `curl -sS https://rdap.verisign.com/com/v1/domain/erasmusinbarcelona.com | grep -o '"status":[^]]*]'`
+> — any status containing `hold` means suspended.
 
 ---
 
@@ -94,7 +115,7 @@ Both routes build from source, run the same guards, and verify the result. Use e
 
 ```bash
 git commit -am "…"
-git push origin claude/site-health-check-df5ie0
+git push origin main
 ```
 
 `.github/workflows/deploy-dinahosting.yml` builds, mirrors over FTPS with `lftp`, checks every
@@ -102,11 +123,11 @@ file arrived, then checks the live site. Around nine minutes, most of it upload.
 
 ### Or from a terminal
 
-```bash
-bash upload-to-dinahosting.sh                # build, upload, verify
-bash upload-to-dinahosting.sh --dry-run      # list what would go, send nothing
-bash upload-to-dinahosting.sh --verify-only  # check the live site, upload nothing
-```
+| Command | What it does |
+|---|---|
+| `bash upload-to-dinahosting.sh` | build, upload, verify |
+| `bash upload-to-dinahosting.sh --dry-run` | list what would go, send nothing |
+| `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
 
 `curl` only, so nothing to install on a Mac. Three or four minutes, and it is the faster route
 when something is broken and you want it fixed now.
@@ -115,9 +136,59 @@ Either way: **look at the site afterwards.** The checks confirm that pages answe
 is a real 404, that legacy URLs still land and that the stylesheet arrives whole. They cannot
 tell you the price is wrong.
 
----
+### Refreshing the course weeks, then publishing — the whole loop
 
-## What is still open
+The recurring job. `dates` in `src/data/site-data.js` is a snapshot of the DATES-SPAINBCN
+sheet's Barcelona rows, and it goes stale: the first listed week ends, the site keeps calling it
+upcoming, and eventually the list runs out. `tools/refresh-dates.mjs` re-reads the sheet — the
+same one named in `datesSource`, over its public CSV export — keeps the Barcelona weeks that
+have not ended, and rewrites the array in place. Nothing else in the file is touched.
+
+From a terminal, start to finish:
+
+Once per machine — the clone, the dev dependencies, and the browser `npm run check` drives.
+That last one is a separate download and `npm install` does not imply it:
+
+```bash
+git clone https://github.com/RAHV-FB/ErasmusInBarcelona.git ~/ErasmusInBarcelona
+cd ~/ErasmusInBarcelona
+git checkout main
+npm install
+npx playwright install chromium
+```
+
+Then every refresh, from `~/ErasmusInBarcelona`:
+
+```bash
+cd ~/ErasmusInBarcelona
+git pull origin main
+npm run dates
+git diff src/data/site-data.js
+npm run check
+bash upload-to-dinahosting.sh
+git commit -am "Refresh course weeks from the sheet"
+git push origin main
+```
+
+Line by line: `npm run dates` reads the sheet into `src/data/site-data.js` and prints every week
+it wrote; `git diff` is you reading what changed before it ships; `npm run check` opens every
+page in a real browser, a minute or two; `upload-to-dinahosting.sh` builds, uploads and verifies.
+It asks for the hosting account's FTP password and stores nothing — user `erasmusinbarcelona`,
+host `erasmusinbarcelona-com.espacioseguro.com`, both already the script's defaults, so the
+password is the only thing typed. The push then publishes the same bytes again through CI, which
+is harmless and keeps the repository and the server telling one story; pushing *without* running
+the upload script works too, and is just the slower nine-minute route.
+
+Neither block carries a trailing `#` comment, and that is deliberate. macOS ships zsh, and an
+interactive zsh does not treat `#` as a comment — it hands the annotation to the command as
+arguments, which is how an annotated line becomes `unknown option: #`.
+
+What the script refuses to do, by design: write anything when the sheet has a course label it
+does not recognise (add it to `COURSES` in `tools/refresh-dates.mjs` with its subject area),
+when a date does not parse, or when no upcoming Barcelona week remains. `npm run dates -- --dry-run`
+prints what would be written without touching the file. Rows for the other destinations are
+ignored — they are SpainBcn's. If the sheet's sharing is ever tightened off "anyone with the
+link", the CSV export stops answering and the script says so; nothing breaks silently.
 
 - **Delete the `SITE_CHECK_URL` repository variable.** It was pointing CI's post-deploy check at
   the preview URL during the migration. With the domain live, deleting it makes CI check
@@ -126,8 +197,12 @@ tell you the price is wrong.
   removed, so nothing will start failing when you do — Pages from a private repository needs a
   paid plan.
 - **Cancel Webnode** once September comes round.
-- **Consider renaming the default branch to `main`.** The deploy workflow already triggers on
-  both names.
+- **Make `main` the default branch** in GitHub → Settings → Branches. It is still
+  `claude/site-health-check-df5ie0`, a session name doing a permanent job, so a new clone and a
+  new pull request both start from the wrong branch. `main` holds every branch's work as of
+  23 August 2026 and is the only branch either workflow now triggers on, so nothing else waits
+  on the flip — but the old `claude/*` branches cannot be deleted until it happens, because
+  GitHub will not delete a default branch.
 
 ---
 
@@ -177,6 +252,26 @@ it silently stops applying.
 **404.html is `noindex`, correctly.** A guard that rejects any `noindex` page rejects every
 build. The prototype build is identified by its own markers instead: a `robots.txt` that
 disallows everything, and a redirecting stub at each legacy path.
+
+**The preview host carries `x-robots-tag: noindex, nofollow`, the live domain does not.**
+The hosting adds it to everything served on `*.dinaserver.com`, and nothing in `.htaccess` does
+— so before the cutover there was no way to tell whether it followed the preview hostname or
+the account. It follows the hostname: checked on 22 August 2026 after go-live,
+`https://www.erasmusinbarcelona.com/` returns no `x-robots-tag` and its markup says
+`index, follow`. Worth re-checking on the next domain rather than assuming, because the failure
+is silent — every build guard passes while the site is invisible.
+
+**macOS zsh does not strip `#` comments, so annotated commands cannot be pasted.** An
+interactive zsh treats `#` as an ordinary character unless `interactive_comments` is set, so
+pasting `bash upload-to-dinahosting.sh --verify-only  # check the live site` hands the script
+five extra arguments and it stops with `unknown option: #`. The same paste through `npm` is
+quieter and worse: npm appends them to the script and runs it anyway. Every command block in
+these documents is therefore comment-free, and the explanations sit beside them in tables.
+
+**`npm install` does not install the browser.** `npm run check` drives Chromium through
+Playwright, and the browser is a separate download: `npx playwright install chromium`, once per
+machine. Without it the check stops before it starts, and until recently it did so behind a
+Playwright banner wrapped in a Node stack trace. It now says the one line that matters.
 
 **Your browser caches these URLs hard.** Append a query string when checking anything.
 
