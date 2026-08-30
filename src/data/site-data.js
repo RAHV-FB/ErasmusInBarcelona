@@ -84,6 +84,20 @@ export const formsApp = {
   host: 'https://rear0ghq.forms.app',
   privacy: 'https://forms.app/en/privacy-policy',
   cookies: 'https://forms.app/en/cookie-policy',
+  // The "Sign Up!" side tab, on every page except the contact page (which
+  // carries the form itself). These are the dashboard's own sidetab embed
+  // settings, copied from its snippet on 30 August 2026 — including its
+  // host, which the snippet issues as eu.forms.app rather than the form's
+  // subdomain above. The local stand-in tab (layout.js, site.css) is drawn
+  // from the same values; its position in site.css matches `align`.
+  sidetab: {
+    host: 'https://eu.forms.app',
+    text: 'Sign Up!',
+    color: '#ff9e24',
+    align: { horizontal: 'right', vertical: 'middle' },
+    width: '400px',
+    height: '300px',
+  },
   fields: {
     name: { id: '6a6cae069a7b7458ace74c76', label: 'Full name', type: 'name' },
     email: { id: '6a6cae229a7b7458ace74c77', label: 'Email', type: 'email' },

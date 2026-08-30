@@ -523,6 +523,48 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--ink-55); }
 }
 .site-footer .linkish:hover { color: var(--sun-text); }
 
+/* ---------- the sign-up side tab ---------- */
+/* The stand-in for the forms.app side tab: the same spot, colour and words
+   as the embed configured in site-data.js, drawn locally so nothing is
+   requested before permission. The position here is that configuration's
+   `align: right / middle`. Once forms.app is allowed, the real tab loads
+   and site.js hides this one — unless loading fails, when [data-fallback]
+   brings it back. The colour comes inline from layout.js, from the same
+   data the embed is configured with. */
+
+html.formsapp-allowed .signup-tab:not([data-fallback]) { display: none; }
+
+.signup-tab__open {
+  position: fixed; top: 50%; right: 0; z-index: 55;
+  height: 46px; padding: 0 18px;
+  /* Stand it on the right edge: swing it up around its bottom-right
+     corner, then slide it along the edge to centre it. */
+  transform: rotate(-90deg) translateX(calc(50% + 46px));
+  transform-origin: 100% 100%;
+  display: inline-flex; align-items: center; gap: 9px;
+  border: 0; border-radius: var(--radius) var(--radius) 0 0;
+  color: #000;
+  font: 600 .95rem/1 var(--sans); cursor: pointer;
+  box-shadow: 0 4px 16px rgba(32, 33, 36, .25);
+}
+.signup-tab__open:hover { filter: brightness(.94); }
+.signup-tab__open svg { flex: none; }
+
+.signup-tab__panel {
+  /* Above the privacy banner: the visitor asked for this panel, and it
+     carries the same choice the banner offers. */
+  position: fixed; top: 50%; right: 62px; z-index: 61;
+  transform: translateY(-50%);
+  width: min(400px, calc(100vw - 78px));
+  max-height: min(480px, calc(100vh - 32px)); overflow: auto;
+  background: var(--white); border: 1px solid var(--graphite);
+  box-shadow: 0 8px 28px rgba(32, 33, 36, .18);
+  padding: 22px;
+}
+.signup-tab__panel h2 { font-size: 1.3rem; }
+.signup-tab__panel p { font-size: .95rem; }
+.signup-tab__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; }
+
 /* ---------- institutional two-state block ---------- */
 
 .states { display: grid; gap: clamp(24px, 3vw, 40px); grid-template-columns: minmax(0, 1fr); }
