@@ -1,9 +1,11 @@
 {
-  "staff-training-session-laptops": {
+  "course-group-sunlit-room": {
     "widths": [
-      800
+      800,
+      1200,
+      1600
     ],
-    "ratio": 1.7264
+    "ratio": 1.4035
   },
   "spanish-course-group-whiteboard": {
     "widths": [

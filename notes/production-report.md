@@ -100,7 +100,7 @@ appears exactly once — with two frames from www.spainbcn.com kept where no upl
 
 | Where | Photograph | Why this one |
 | --- | --- | --- |
-| Home hero | A staff training session in progress, the group at laptops | The only frame of a course actually happening, not posed for the camera |
+| Home hero | A course group of thirteen in a sunlit room | Chosen by the owner, 30 August 2026 |
 | Home, typical week | A course group at a whiteboard of Spanish grammar | The morning's work still on the board |
 | Home band | A course group in front of the Arc de Triomf | Blue sky, palms, waving; unmistakably Barcelona (from spainbcn.com) |
 | Home, between sessions | A café terrace in Barcelona · the Barceloneta seafront | People enjoying themselves, then the light (the terrace from spainbcn.com) |
@@ -113,9 +113,10 @@ appears exactly once — with two frames from www.spainbcn.com kept where no upl
 | Contact | A course group in wicker chairs in the sitting room | The room an enquiry leads to |
 | Universities | Participants at laptops in the SpainBcn classroom | Adults at laptops, from the AI & ICT area (from spainbcn.com) |
 
-Left unpublished: the dim ICT frame (825×464, too dark to print well), the four-view strip of the
-school (139px tall), and the three category graphics and logo mark, which are text as image, not
-photographs. All originals stay in `uploads/`.
+Left unpublished: the soft AI-classroom video still (briefly the home hero), the dim ICT frame
+(825×464, too dark to print well), the four-view strip of the school (139px tall), and the three
+category graphics and logo mark, which are text as image, not photographs. All originals stay in
+`uploads/`.
 
 **Crops.** A photograph carries a focal point in `site-data.js` wherever the CSS crop would
 otherwise lose the faces, applied as `object-position`; frames already close to their displayed
