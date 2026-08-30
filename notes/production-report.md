@@ -95,26 +95,31 @@ own photographs. Seven were brought in (see source-photos/spainbcn/README.md for
 shows and which page it comes from, which is what the alt text may claim). Photographs of the other
 Spanish destinations were left alone: this site is Barcelona only.
 
-What is placed now, and why:
+What is placed now, and why. The organisation's own `uploads/` photographs carry the site — each
+appears exactly once — with two frames from www.spainbcn.com kept where no upload fits:
 
 | Where | Photograph | Why this one |
 | --- | --- | --- |
-| Home hero | A course group holding up their certificates | Faces fill the frame, everyone laughing; the warmest frame available |
-| Home, typical week | Participants at the desks of a Barcelona classroom | Daylight from the window, relaxed, nobody posed |
-| Home band | A course group in front of the Arc de Triomf | Blue sky, palms, waving; unmistakably Barcelona |
-| Home, between sessions | A café terrace in Barcelona · the Barceloneta seafront | People enjoying themselves, then the light |
-| Join a course | A course group in the sitting room at the office | The most human frame in the archive: a dozen faces, all smiling |
-| Bring a group | Students at Parc de la Ciutadella · students at a viewpoint | Sunlit, joyful, plainly students |
-| Your week | Participants working with coloured card | Shows the actual work of a session |
-| Barcelona band | A course group in front of the cathedral | The city and the group in one frame |
-| Barcelona, venue | The classroom at the office in Gràcia | Shows the real room, with people in it |
-| About | María Ángeles and Miriam in 1997 | The history, unchanged |
+| Home hero | A staff training session in progress, the group at laptops | The only frame of a course actually happening, not posed for the camera |
+| Home, typical week | A course group at a whiteboard of Spanish grammar | The morning's work still on the board |
+| Home band | A course group in front of the Arc de Triomf | Blue sky, palms, waving; unmistakably Barcelona (from spainbcn.com) |
+| Home, between sessions | A café terrace in Barcelona · the Barceloneta seafront | People enjoying themselves, then the light (the terrace from spainbcn.com) |
+| Join a course | Participants at laptops with their trainer · a group among framed prints | A course in session under the SpainBcn sign, then the range of people who come |
+| Bring a group | Students at Parc de la Ciutadella · at a viewpoint · a band of students holding certificates | Sunlit, joyful, plainly students; the certificates close the story |
+| Institutional programmes | A staff group in the office sitting room | A whole visiting team in one frame |
+| Your week | An ICT course group, the day-by-day programme on screen | The screen literally shows the week this page describes |
+| Barcelona band | A student group under the Park Güell colonnade | The city and a group in one frame |
+| About | María Ángeles and Miriam in 1997 · a Spanish course group in the sitting room | The history, then how a week looks today |
+| Contact | A course group in wicker chairs in the sitting room | The room an enquiry leads to |
+| Universities | Participants at laptops in the SpainBcn classroom | Adults at laptops, from the AI & ICT area (from spainbcn.com) |
 
-Dropped from the site: the bare-classroom certificates shot, the dim ICT frame, the four-view
-strip of the school, and the soft AI-classroom video still. All originals stay in `uploads/`.
+Left unpublished: the dim ICT frame (825×464, too dark to print well), the four-view strip of the
+school (139px tall), and the three category graphics and logo mark, which are text as image, not
+photographs. All originals stay in `uploads/`.
 
-**Crops.** Each photograph now carries a focal point in `site-data.js`, applied as
-`object-position`, so a wide or tall crop keeps the faces rather than the ceiling. The twelve team
+**Crops.** A photograph carries a focal point in `site-data.js` wherever the CSS crop would
+otherwise lose the faces, applied as `object-position`; frames already close to their displayed
+ratio need none. The twelve team
 portraits are cropped to the most salient region instead of a fixed top crop, with four —
 Adriana, Julie, Russell and Sandra — given an explicit face box, because they are whole-body
 holiday snapshots in which no automatic crop found a head. They now read as one set.
@@ -124,7 +129,7 @@ Only photographs a page actually uses are processed; the rest of the archive is 
 
 ### Sources
 
-All 12 photographs and all 12 team portraits are served from this site. The portraits were
+All 16 photographs and all 12 team portraits are served from this site. The portraits were
 downloaded from the old CDN and are no longer hotlinked; `clvaw-cdnwnd.com` appears nowhere.
 Originals stay in `uploads/` and `source-photos/`, neither of which is published. Production files
 carry descriptive names (`student-group-park-guell-barcelona-1600.webp`), are WebP, and are served

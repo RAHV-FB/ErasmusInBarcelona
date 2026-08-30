@@ -444,47 +444,42 @@ export const history = [
 // in uploads/ and source-photos/, which are not published.
 // ============================================================
 export const images = {
-  // The certificates moment, and the two Barcelona classroom shots, carry
-  // the site: faces close enough to read, daylight, nobody posed stiffly.
-  certificates: {
-    file: 'course-group-with-certificates',
-    alt: 'A course group holding up their certificates at the end of the week',
-    focus: '50% 42%',
-  },
-  classGroup: {
-    file: 'course-group-in-class-barcelona',
-    alt: 'Participants and their trainer at the desks of a Barcelona classroom',
-    focus: '50% 48%',
+  // Each photograph appears on exactly one page. Alt text claims only what
+  // the photograph shows; a place is named only when it is identifiable.
+  heroSession: {
+    file: 'staff-training-session-laptops',
+    alt: 'A staff training session in progress, the group working at laptops',
   },
   arcDeTriomf: {
     file: 'course-group-arc-de-triomf-barcelona',
     alt: 'A course group waving on the palm-lined promenade in front of the Arc de Triomf in Barcelona',
     focus: '50% 52%',
   },
+  spanishWhiteboard: {
+    file: 'spanish-course-group-whiteboard',
+    alt: 'A course group in front of a whiteboard of Spanish grammar notes',
+  },
   cafeTerrace: {
     file: 'course-group-cafe-terrace-barcelona',
     alt: 'Course participants raising their glasses at a café terrace in Barcelona',
     focus: '50% 50%',
   },
-  cathedral: {
-    file: 'course-group-barcelona-cathedral',
-    alt: 'A course group in the square in front of Barcelona cathedral',
-    focus: '50% 58%',
+  barceloneta: {
+    file: 'barceloneta-seafront-barcelona',
+    alt: 'Palm trees and evening light on the Barceloneta seafront',
+    focus: '50% 50%',
   },
-  officeClassroom: {
-    file: 'course-group-spainbcn-classroom',
-    alt: 'Participants at laptops in the SpainBcn classroom in Barcelona',
-    focus: '50% 55%',
+  trainerClassroom: {
+    file: 'course-group-trainer-spainbcn-classroom',
+    alt: 'Participants at laptops with their trainer in the SpainBcn classroom',
   },
-  workingSession: {
-    file: 'course-group-working-session',
-    alt: 'Participants working with coloured card and paper at classroom tables',
-    focus: '50% 45%',
+  galleryRoom: {
+    file: 'course-group-gallery-room',
+    alt: 'A course group photographed together in a room hung with framed prints',
   },
-  spanishOffice: {
-    file: 'spanish-course-group-spainbcn-office',
-    alt: 'A Spanish course group in the sitting room at the SpainBcn office in Barcelona',
-    focus: '50% 72%',
+  ictDayByDay: {
+    file: 'ict-course-group-day-by-day',
+    alt: "An ICT course group around the table in the SpainBcn classroom, the week's day-by-day programme on the screen",
   },
   ciutadella: {
     file: 'student-group-ciutadella-barcelona',
@@ -496,10 +491,34 @@ export const images = {
     alt: 'A student group sitting together at a viewpoint over the sea in Barcelona',
     focus: '50% 50%',
   },
-  barceloneta: {
-    file: 'barceloneta-seafront-barcelona',
-    alt: 'Palm trees and evening light on the Barceloneta seafront',
-    focus: '50% 50%',
+  studentCertificates: {
+    file: 'student-group-certificates-classroom',
+    alt: 'A student group holding up their certificates in the classroom',
+    focus: '50% 45%',
+  },
+  parkGuell: {
+    file: 'student-group-park-guell-barcelona',
+    alt: 'A student group under the stone colonnade in Park Güell, Barcelona',
+    focus: '50% 65%',
+  },
+  staffOffice: {
+    file: 'staff-group-spainbcn-office',
+    alt: 'A course group in the sitting room at the SpainBcn office, under the SpainBcn-Programs sign',
+  },
+  sittingRoom: {
+    file: 'course-group-spainbcn-sitting-room',
+    alt: 'A course group in wicker chairs around the table in the SpainBcn sitting room',
+    focus: '50% 55%',
+  },
+  spanishOffice: {
+    file: 'spanish-course-group-spainbcn-office',
+    alt: 'A Spanish course group in the sitting room at the SpainBcn office in Barcelona',
+    focus: '50% 72%',
+  },
+  officeClassroom: {
+    file: 'course-group-spainbcn-classroom',
+    alt: 'Participants at laptops in the SpainBcn classroom in Barcelona',
+    focus: '50% 55%',
   },
   founders: {
     file: 'spainbcn-founders-1997',

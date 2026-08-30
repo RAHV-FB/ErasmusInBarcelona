@@ -105,6 +105,10 @@ export default function bringAGroup() {
     </div>
   </section>
 
+  <figure class="media media--band">
+    ${img(d.images.studentCertificates, { sizes: '100vw' })}
+  </figure>
+
   <section class="section section--rule">
     <div class="container cols cols--split">
       <div>

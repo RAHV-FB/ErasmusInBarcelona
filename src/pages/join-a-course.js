@@ -69,7 +69,7 @@ export default function joinACourse() {
         <p><a class="link-strong" href="/universities/">Erasmus+ staff training for university staff →</a></p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.spanishOffice, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
+        ${img(d.images.trainerClassroom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
       </figure>
     </div>
   </section>
@@ -108,7 +108,8 @@ export default function joinACourse() {
   </section>
 
   <section class="section">
-    <div class="container">
+    <div class="container cols cols--lead">
+      <div>
       <div class="section-head">
         <h2>Choosing a week</h2>
       </div>
@@ -127,6 +128,10 @@ export default function joinACourse() {
         <li><span class="facts__term">If plans change</span><span class="facts__value">${d.booking.cancellation}</span></li>
       </ul>
       <p style="margin-top:20px"><a class="link-strong" href="/your-week/">See a typical Barcelona week →</a></p>
+      </div>
+      <figure class="media media--photo">
+        ${img(d.images.galleryRoom, { sizes: '(min-width: 860px) 45vw, 100vw' })}
+      </figure>
     </div>
   </section>
 

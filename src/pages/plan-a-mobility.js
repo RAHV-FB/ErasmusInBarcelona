@@ -1,4 +1,4 @@
-import { page, esc } from '../layout.js';
+import { page, img, esc } from '../layout.js';
 import * as d from '../data/site-data.js';
 
 export default function planAMobility() {
@@ -9,16 +9,21 @@ export default function planAMobility() {
 
   const body = `
   <section class="container hero hero--tight">
-    <div style="max-width:54ch">
-      <h1>Institutional programmes in Barcelona</h1>
-      <p class="lede">Private course weeks, job shadowing and educational visits for schools and other
-        education organisations, with the documents your Erasmus+ application needs.</p>
-      <p class="meta">Sending individual staff to a scheduled week instead?
-        <a href="/join-a-course/">See the courses →</a></p>
-      <div class="btn-row">
-        <a class="btn" href="/contact/">Tell us about the project</a>
-        <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
+    <div class="cols cols--lead">
+      <div>
+        <h1>Institutional programmes in Barcelona</h1>
+        <p class="lede">Private course weeks, job shadowing and educational visits for schools and other
+          education organisations, with the documents your Erasmus+ application needs.</p>
+        <p class="meta">Sending individual staff to a scheduled week instead?
+          <a href="/join-a-course/">See the courses →</a></p>
+        <div class="btn-row">
+          <a class="btn" href="/contact/">Tell us about the project</a>
+          <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
+        </div>
       </div>
+      <figure class="media media--photo">
+        ${img(d.images.staffOffice, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
+      </figure>
     </div>
   </section>
 
