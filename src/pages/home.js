@@ -48,7 +48,7 @@ export default function home() {
           ${d.organisation.founded}.</p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.heroSession, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
+        ${img(d.images.heroGroup, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
       </figure>
     </div>
   </section>

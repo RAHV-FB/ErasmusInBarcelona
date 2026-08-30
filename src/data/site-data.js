@@ -446,9 +446,9 @@ export const history = [
 export const images = {
   // Each photograph appears on exactly one page. Alt text claims only what
   // the photograph shows; a place is named only when it is identifiable.
-  heroSession: {
-    file: 'staff-training-session-laptops',
-    alt: 'A staff training session in progress, the group working at laptops',
+  heroGroup: {
+    file: 'course-group-sunlit-room',
+    alt: 'A course group photographed together in a sunlit room',
   },
   arcDeTriomf: {
     file: 'course-group-arc-de-triomf-barcelona',

@@ -22,7 +22,7 @@ const WIDTHS = [800, 1200, 1600];   // a middle step so a 1440 viewport
 
 // original file → production name (descriptive, no upload ids)
 const PHOTOS = {
-  'photo_uploads-1787246880578-kn57.png': 'staff-training-session-laptops',
+  'screenshot-2026-08-30-course-group.webp': 'course-group-sunlit-room',
   'photo_uploads-1787246868207-igg7.jpeg': 'spanish-course-group-whiteboard',
   'photo_uploads-1787246868124-4i9m.png': 'course-group-trainer-spainbcn-classroom',
   'photo_uploads-1787246867962-f6e1.jpg': 'ict-course-group-day-by-day',
@@ -37,9 +37,12 @@ const PHOTOS = {
   'photo_uploads-1787246882590-ijcs.png': 'barceloneta-seafront-barcelona',
   'photo_uploads-1787246868436-z9ma.png': 'spainbcn-founders-1997',
   // Still in uploads/, left unpublished:
+  //   ...880578-kn57  AI classroom (a soft video still; was briefly the home hero)
   //   ...875558-wqfk  ICT group with laptops — too dim and too small (825x464) to print well
   //   ...868185-3qqb  Four small views of the school (713px wide, too small to place)
   // The three category graphics and the logo mark in uploads/ are not photographs.
+  // screenshot-2026-08-30-course-group.webp was supplied by the owner on
+  // 30 August 2026 for the home hero.
 };
 
 // Already-compressed sources are re-encoded a little more gently, so a
