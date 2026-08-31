@@ -201,13 +201,10 @@ link", the CSV export stops answering and the script says so; nothing breaks sil
   removed, so nothing will start failing when you do — Pages from a private repository needs a
   paid plan.
 - **Cancel Webnode** once September comes round.
-- **Make `main` the default branch** in GitHub → Settings → Branches. It is still
-  `claude/site-health-check-df5ie0`, a session name doing a permanent job, so a new clone and a
-  new pull request both start from the wrong branch. Checked 31 August 2026: every `claude/*`
-  branch is fully merged into `main` — no branch holds a commit `main` does not — and all work
-  happens on `main`. After the flip, delete every `claude/*` branch at
-  <https://github.com/RAHV-FB/ErasmusInBarcelona/branches>; nothing is lost by doing so. GitHub
-  will not delete a default branch, which is why the flip comes first.
+
+Closed 31 August 2026: `main` became the default branch and every `claude/*` branch — each one
+verified fully merged — was deleted. `main` is the repository's only branch; everything is
+developed on it and deploys from it.
 
 ---
 

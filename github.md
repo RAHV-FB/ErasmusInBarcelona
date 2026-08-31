@@ -8,10 +8,9 @@ branch: main
 date: 2026-08-31
 
 ### Updated in this project
-- The branch history was consolidated. Every `claude/*` working branch is fully merged into
-  `main`; `main` is the only branch developed and deployed from now on.
-- Two clicks still need the repository owner: switch the default branch to `main` and delete the
-  stale `claude/*` branches — the steps are in HANDOFF.md under "What is still open".
+- The branch history was consolidated. Every `claude/*` working branch was verified fully merged
+  into `main` and deleted, and `main` is the default branch. It is the repository's only branch,
+  developed on and deployed from.
 - Earlier sync notes — the prototype-to-production conversion, the fact verification against
   www.spainbcn.com, the image localisation — are recorded in notes/production-report.md.
 
