@@ -13,6 +13,9 @@ import * as data from './src/data/site-data.js';
 import { REDIRECTS } from './src/data/redirects.js';
 
 import home from './src/pages/home.js';
+import courses from './src/pages/courses.js';
+import { renderCourseGroup } from './src/pages/course-group.js';
+import { courseGroups } from './src/data/course-groups.js';
 import joinACourse from './src/pages/join-a-course.js';
 import universities from './src/pages/universities.js';
 import bringAGroup from './src/pages/bring-a-group.js';
@@ -31,6 +34,9 @@ const DIST = 'dist';
 // route → renderer. The route is also the canonical URL.
 export const PAGES = {
   '/': home,
+  '/courses/': courses,
+  ...Object.fromEntries(courseGroups.map((g) =>
+    [`/courses/${g.slug}/`, () => renderCourseGroup(g)])),
   '/join-a-course/': joinACourse,
   '/universities/': universities,
   '/bring-a-group/': bringAGroup,
@@ -110,6 +116,7 @@ ${data.spainbcn.home}.
 
 ## Pages
 
+- [Course groups](${SITE_URL}/courses/): the Barcelona catalogue — nine groups of one-week KA1 courses, each with its own page
 - [Staff training courses](${SITE_URL}/join-a-course/): the subject areas, fees and the next scheduled Barcelona weeks
 - [University staff](${SITE_URL}/universities/): the courses whose published audience includes university teaching, research and administrative staff
 - [Dates](${SITE_URL}/dates/): the scheduled course weeks in Barcelona; other weeks open on request
@@ -119,6 +126,10 @@ ${data.spainbcn.home}.
 - [Barcelona](${SITE_URL}/barcelona/): where classes run, where to stay and how to get around
 - [About](${SITE_URL}/about/): the organisation, its history since ${data.organisation.founded}, and the team
 - [Contact](${SITE_URL}/contact/): email, phone, WhatsApp and the sign-up form
+
+## Course groups
+
+${courseGroups.map((g) => `- [${g.title}](${SITE_URL}/courses/${g.slug}/): ${g.short}`).join('\n')}
 
 ## SpainBcn-Programs
 
@@ -161,7 +172,8 @@ fs.writeFileSync(path.join(DIST, '.nojekyll'), '');
 
 console.log(`${count} pages → ${DIST}/${BASE_PATH ? ` (base path ${BASE_PATH})` : ''}${PROTOTYPE ? ' [prototype: noindex]' : ''}`);
 console.log(`${urls.length} URLs in sitemap.xml · ${data.weeks.length} weeks (${data.dates.length} courses) · ` +
-  `${data.courseAreas.length} subject areas`);
+  `${data.courseAreas.length} subject areas · ${courseGroups.length} course groups ` +
+  `(${courseGroups.reduce((n, g) => n + g.courses.length, 0)} courses)`);
 console.log(analytics.websiteId
   ? `analytics: ${analytics.provider} ${analytics.region}, website ${analytics.websiteId.slice(0, 8)}…, `
     + `reporting to ${new URL(analytics.collector).host} only from ${analytics.domains}`

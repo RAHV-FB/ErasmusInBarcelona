@@ -46,12 +46,15 @@ const PHOTOS = {
 };
 
 // Already-compressed sources are re-encoded a little more gently, so a
-// second generation of WebP does not show. Only the three photographs a page
+// second generation of WebP does not show. Only the photographs a page
 // still uses are processed; the rest of the archive stays in source-photos/.
 const SPAINBCN = {
   'location-2.webp': 'course-group-arc-de-triomf-barcelona',
   'group-of-people-sitting-at-a-long-table.webp': 'course-group-cafe-terrace-barcelona',
   'a-group-of-seven-women-and-one-young-man.webp': 'course-group-spainbcn-classroom',
+  'loc-barcelona-group.webp': 'course-group-cathedral-square-barcelona',
+  'a-group-of-women-sitting-around-a-table.webp': 'course-group-coloured-card-workshop',
+  'loc-barcelona-class.webp': 'course-group-barcelona-classroom',
 };
 
 // Two portraits are whole-body snapshots where no automatic crop finds a

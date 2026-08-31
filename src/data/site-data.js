@@ -204,10 +204,15 @@ export const projectFormats = [
 // ============================================================
 // COURSES
 //
-// SpainBcn keeps the catalogue: 39 programmes across 14 subject
-// areas. This site curates them into six choices and links each
-// programme to its own entry on SpainBcn. Programme names are
-// SpainBcn's own — never a name invented here.
+// SpainBcn keeps the full catalogue: 39 programmes across 14
+// subject areas. This site curates them into six choices below and
+// links each programme to its own entry on SpainBcn.
+//
+// The Barcelona course groups in src/data/course-groups.js are a
+// separate thing: the organisation's own Barcelona catalogue, nine
+// groups defined by the owner in August 2026, each with its own
+// page under /courses/. Fees, schedule and booking terms on those
+// pages come from this file, never from the group data.
 // ============================================================
 const SB = 'https://www.spainbcn.com/';
 
@@ -444,7 +449,9 @@ export const history = [
 // in uploads/ and source-photos/, which are not published.
 // ============================================================
 export const images = {
-  // Each photograph appears on exactly one page. Alt text claims only what
+  // Outside /courses/, each photograph appears on exactly one page. The
+  // course-group pages reuse the photographs that fit their subject until
+  // each group's own photographs are supplied. Alt text claims only what
   // the photograph shows; a place is named only when it is identifiable.
   heroGroup: {
     file: 'course-group-sunlit-room',
@@ -524,6 +531,21 @@ export const images = {
     file: 'spainbcn-founders-1997',
     alt: 'María Ángeles and Miriam at the SpainBcn exhibition stand in 1997',
     focus: '50% 45%',
+  },
+  // From the SpainBcn archive (see source-photos/spainbcn/README.md for
+  // what each may claim), processed for the course-group pages.
+  cathedralSquare: {
+    file: 'course-group-cathedral-square-barcelona',
+    alt: 'A course group in the square in front of Barcelona cathedral',
+    focus: '50% 55%',
+  },
+  cardWorkshop: {
+    file: 'course-group-coloured-card-workshop',
+    alt: 'Participants working with coloured card at classroom tables',
+  },
+  barcelonaClassroom: {
+    file: 'course-group-barcelona-classroom',
+    alt: 'Participants and their trainer at the desks of a Barcelona classroom',
   },
 };
 

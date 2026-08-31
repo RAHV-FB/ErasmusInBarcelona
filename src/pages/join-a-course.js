@@ -66,7 +66,8 @@ export default function joinACourse() {
           <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
         </ul>
         <p class="meta">Per person, per week, in Barcelona.</p>
-        <p><a class="link-strong" href="/universities/">Erasmus+ staff training for university staff →</a></p>
+        <p><a class="link-strong" href="/courses/">Browse the nine Barcelona course groups →</a><br>
+          <a class="link-strong" href="/universities/">Erasmus+ staff training for university staff →</a></p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.trainerClassroom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}

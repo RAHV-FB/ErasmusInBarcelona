@@ -126,6 +126,29 @@
     ],
     "ratio": 1.3333
   },
+  "course-group-cathedral-square-barcelona": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.5009
+  },
+  "course-group-coloured-card-workshop": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 1.3333
+  },
+  "course-group-barcelona-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.5009
+  },
   "team-adriana": {
     "widths": [
       251

@@ -181,7 +181,7 @@ img { max-width: 100%; height: auto; }
   font: 600 .9rem/1 var(--sans); color: var(--graphite); cursor: pointer;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
   .nav {
     display: none; position: fixed; inset: 72px 0 0; margin: 0;
@@ -433,6 +433,58 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--ink-55); }
 .area__dates b { font-weight: 700; white-space: nowrap; }
 .area__dates span { display: block; color: var(--ink-55); font-size: .85rem; }
 .area__none { margin: 0; font-weight: 600; }
+
+/* ---------- course groups (/courses/) ---------- */
+
+.group-cards {
+  display: grid; gap: clamp(20px, 3vw, 32px);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) { .group-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .group-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.group-card { border: 1px solid var(--line); display: flex; flex-direction: column; }
+.group-card__photo { margin: 0; }
+.group-card__photo img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; background: var(--powder); }
+.group-card__body { padding: 16px 18px 20px; display: grid; gap: 6px; }
+.group-card h3 { margin: 0; font-size: clamp(1.05rem, 1.6vw, 1.2rem); }
+.group-card h3 a { text-decoration: none; }
+.group-card h3 a:hover { text-decoration: underline; color: var(--cobalt); }
+.group-card p { margin: 0; color: var(--ink-70); font-size: .95rem; }
+.group-card .meta { margin-top: 2px; }
+
+/* The courses inside a group, opened and closed with native <details>. */
+.course-list { border-top: 1px solid var(--graphite); }
+.course { border-bottom: 1px solid var(--line); }
+.course > summary {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 16px; align-items: center;
+  min-height: 56px; padding: 16px 2px;
+  cursor: pointer; list-style: none;
+}
+.course > summary::-webkit-details-marker { display: none; }
+.course__title { margin: 0; font-size: clamp(1.05rem, 1.6vw, 1.25rem); grid-column: 1; }
+.course__level {
+  grid-column: 1;
+  font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-55);
+}
+.course > summary::after {
+  content: '+'; font-size: 1.35rem; font-weight: 600; line-height: 1;
+  color: var(--cobalt); grid-column: 2; grid-row: 1 / span 2;
+}
+.course[open] > summary::after { content: '\2212'; }
+.course > summary:hover .course__title { color: var(--cobalt); }
+.course__body { padding: 2px 2px 28px; max-width: 74ch; }
+.course__body h4 {
+  font-size: .74rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-55); margin: 1.5em 0 .5em;
+}
+.course__body ul { margin: 0 0 1rem; padding-left: 1.15em; }
+.course__body li { margin-bottom: .35em; color: var(--ink-70); }
+.course__body li:last-child { margin-bottom: 0; }
+.course__photo { margin: 4px 0 18px; max-width: 560px; }
+.course__ask { margin-top: 1.3rem; }
 
 /* ---------- the sign-up form and its permission gate ---------- */
 

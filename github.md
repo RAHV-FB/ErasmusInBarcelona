@@ -8,6 +8,8 @@ branch: main
 date: 2026-08-31
 
 ### Updated in this project
+- The Barcelona catalogue went up: nine course groups, each with its own page under `/courses/`
+  and two to five courses inside, rendered by one template from `src/data/course-groups.js`.
 - The branch history was consolidated. Every `claude/*` working branch was verified fully merged
   into `main` and deleted, and `main` is the default branch. It is the repository's only branch,
   developed on and deployed from.
@@ -18,6 +20,8 @@ date: 2026-08-31
 | Route | Source | Built to |
 | --- | --- | --- |
 | `/` | src/pages/home.js | dist/index.html |
+| `/courses/` | src/pages/courses.js | dist/courses/index.html |
+| `/courses/<group>/` (nine) | src/pages/course-group.js from src/data/course-groups.js | dist/courses/&lt;group&gt;/index.html |
 | `/join-a-course/` | src/pages/join-a-course.js | dist/join-a-course/index.html |
 | `/bring-a-group/` | src/pages/bring-a-group.js | dist/bring-a-group/index.html |
 | `/plan-a-mobility/` | src/pages/plan-a-mobility.js | dist/plan-a-mobility/index.html |

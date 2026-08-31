@@ -47,6 +47,7 @@ export function portrait(person, size = 'people') {
 }
 
 const NAV = [
+  { href: '/courses/', label: 'Courses', key: 'courses' },
   { href: '/join-a-course/', label: 'Staff training', key: 'join' },
   { href: '/universities/', label: 'Universities', key: 'universities' },
   { href: '/bring-a-group/', label: 'Student groups', key: 'group' },
@@ -88,6 +89,7 @@ function footer() {
         <div>
           <h2>Pages</h2>
           <ul>
+            <li><a href="/courses/">Course groups</a></li>
             <li><a href="/join-a-course/">Staff training courses</a></li>
             <li><a href="/universities/">University staff</a></li>
             <li><a href="/bring-a-group/">Student groups</a></li>
