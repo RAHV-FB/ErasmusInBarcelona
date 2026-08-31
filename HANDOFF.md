@@ -190,6 +190,10 @@ prints what would be written without touching the file. Rows for the other desti
 ignored — they are SpainBcn's. If the sheet's sharing is ever tightened off "anyone with the
 link", the CSV export stops answering and the script says so; nothing breaks silently.
 
+---
+
+## What is still open
+
 - **Delete the `SITE_CHECK_URL` repository variable.** It was pointing CI's post-deploy check at
   the preview URL during the migration. With the domain live, deleting it makes CI check
   `https://www.erasmusinbarcelona.com` instead.
@@ -199,10 +203,11 @@ link", the CSV export stops answering and the script says so; nothing breaks sil
 - **Cancel Webnode** once September comes round.
 - **Make `main` the default branch** in GitHub → Settings → Branches. It is still
   `claude/site-health-check-df5ie0`, a session name doing a permanent job, so a new clone and a
-  new pull request both start from the wrong branch. `main` holds every branch's work as of
-  23 August 2026 and is the only branch either workflow now triggers on, so nothing else waits
-  on the flip — but the old `claude/*` branches cannot be deleted until it happens, because
-  GitHub will not delete a default branch.
+  new pull request both start from the wrong branch. Checked 31 August 2026: every `claude/*`
+  branch is fully merged into `main` — no branch holds a commit `main` does not — and all work
+  happens on `main`. After the flip, delete every `claude/*` branch at
+  <https://github.com/RAHV-FB/ErasmusInBarcelona/branches>; nothing is lost by doing so. GitHub
+  will not delete a default branch, which is why the flip comes first.
 
 ---
 
