@@ -15,12 +15,6 @@
     ],
     "ratio": 1.3333
   },
-  "course-group-trainer-spainbcn-classroom": {
-    "widths": [
-      800
-    ],
-    "ratio": 1.5174
-  },
   "ict-course-group-day-by-day": {
     "widths": [
       800
@@ -101,6 +95,267 @@
       1600
     ],
     "ratio": 1.418
+  },
+  "course-group-blue-screen-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3289
+  },
+  "ai-course-laptops-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3281
+  },
+  "ai-course-laptop-rows": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "ai-course-interactive-whiteboard": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "ai-course-whiteboard-pair": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "staff-training-course-room": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.4939
+  },
+  "wellbeing-course-yoga-studio": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 0.75
+  },
+  "wellbeing-course-mindfulness-studio": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "wellbeing-course-park-activity": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "wellbeing-course-puppets-workshop": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "outdoor-course-montjuic-view": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "outdoor-course-climbing-wall": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 0.75
+  },
+  "sustainability-course-wetland-walk": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.4021
+  },
+  "outdoor-course-gothic-courtyard": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "inclusion-course-school-classroom": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "inclusion-course-certificates-gallery": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 0.7525
+  },
+  "inclusion-course-card-worktable": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 1.5
+  },
+  "classroom-course-whiteboard-group": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "classroom-course-game-table": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "classroom-course-guided-activity": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "classroom-course-large-class": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.265
+  },
+  "creative-course-drawing-studio": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.3602
+  },
+  "creative-course-easels": {
+    "widths": [
+      800,
+      1200
+    ],
+    "ratio": 0.75
+  },
+  "creative-course-gallery-group": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3289
+  },
+  "ethics-course-arcade-cafe": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "ethics-course-institution-visit": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "english-course-worksheets-table": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 0.6882
+  },
+  "english-course-beginners-whiteboard": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "english-course-group-waving": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1
+  },
+  "english-course-wordgame-whiteboard": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "spanish-course-sitting-room": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.0413
+  },
+  "spanish-course-office-group": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "spanish-course-studio-whiteboard": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
+  },
+  "spanish-course-prints-wall": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.3333
   },
   "course-group-arc-de-triomf-barcelona": {
     "widths": [

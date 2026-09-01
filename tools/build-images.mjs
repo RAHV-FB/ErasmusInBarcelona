@@ -24,7 +24,6 @@ const WIDTHS = [800, 1200, 1600];   // a middle step so a 1440 viewport
 const PHOTOS = {
   'screenshot-2026-08-30-course-group.webp': 'course-group-sunlit-room',
   'photo_uploads-1787246868207-igg7.jpeg': 'spanish-course-group-whiteboard',
-  'photo_uploads-1787246868124-4i9m.png': 'course-group-trainer-spainbcn-classroom',
   'photo_uploads-1787246867962-f6e1.jpg': 'ict-course-group-day-by-day',
   'photo_uploads-1787246867970-fhh3.jpeg': 'course-group-gallery-room',
   'photo_uploads-1787246879625-qvdv.jpeg': 'spanish-course-group-spainbcn-office',
@@ -40,9 +39,52 @@ const PHOTOS = {
   //   ...880578-kn57  AI classroom (a soft video still; was briefly the home hero)
   //   ...875558-wqfk  ICT group with laptops — too dim and too small (825x464) to print well
   //   ...868185-3qqb  Four small views of the school (713px wide, too small to place)
+  //   ...868124-4i9m  trainer classroom (was the staff-training hero until the owner's
+  //                   Staff Training photograph arrived)
   // The three category graphics and the logo mark in uploads/ are not photographs.
   // screenshot-2026-08-30-course-group.webp was supplied by the owner on
   // 30 August 2026 for the home hero.
+};
+
+// The photographs the owner supplied in Images-Erasmus/ on 31 August 2026
+// for the course-group pages. Files named for a page go to that page; the
+// rest were placed by subject. Only the ones a page uses are processed;
+// the folder keeps the whole delivery as the untouched archive.
+const ERASMUS = {
+  'Main - universities page + main ai:ict page.jpeg': 'course-group-blue-screen-classroom',
+  'secondary ict page.jpeg': 'ai-course-laptops-classroom',
+  'aulas Gran Canaria 4.png': 'ai-course-laptop-rows',
+  'WhatsApp Image 2026-08-06 at 23.02.03.jpeg': 'ai-course-interactive-whiteboard',
+  'WhatsApp Image 2026-08-06 at 23.02.03 (2).jpeg': 'ai-course-whiteboard-pair',
+  'Staff Training -main.jpg': 'staff-training-course-room',
+  '565375908_1327804759037420_4533452975364599949_n.jpg': 'wellbeing-course-yoga-studio',
+  '001a.jpeg': 'wellbeing-course-mindfulness-studio',
+  'IMG20230810185734.jpg': 'wellbeing-course-park-activity',
+  '524130581_1262690682215495_566023478563279110_n.jpg': 'wellbeing-course-puppets-workshop',
+  '006.jpeg': 'outdoor-course-montjuic-view',
+  '01 Outdoors.jpeg': 'outdoor-course-climbing-wall',
+  '02 SUSTANIABILITY - copia.jpg': 'sustainability-course-wetland-walk',
+  'IMG20230509140713.jpg': 'outdoor-course-gothic-courtyard',
+  'sen01.jpg': 'inclusion-course-school-classroom',
+  'SEN.jpeg': 'inclusion-course-certificates-gallery',
+  'area-inclusion.webp': 'inclusion-course-card-worktable',
+  'IMG-20230630-WA0010.jpg': 'classroom-course-whiteboard-group',
+  'Marzo 14-16.jpg': 'classroom-course-game-table',
+  '04 concert in the park.jpg': 'classroom-course-guided-activity',
+  'ENGLIHS B.jpg': 'classroom-course-large-class',
+  '01 ART.jpg': 'creative-course-drawing-studio',
+  '02ll.jpg': 'creative-course-easels',
+  '000.jpeg': 'creative-course-gallery-group',
+  '00.jpeg': 'ethics-course-arcade-cafe',
+  'Adopcion 1.jpg': 'ethics-course-institution-visit',
+  '00 SpainBcn ENGLISH with JAMES.jpg': 'english-course-worksheets-table',
+  'May 9 -13 Level Beginners.jpg': 'english-course-beginners-whiteboard',
+  'ENGLISH 7.jpg': 'english-course-group-waving',
+  'WhatsApp Image 2026-08-06 at 23.02.03 (1).jpeg': 'english-course-wordgame-whiteboard',
+  'SPANISH 1.jpg': 'spanish-course-sitting-room',
+  'Marzo 27-31 español.jpg': 'spanish-course-office-group',
+  'SPANISH 3.jpg': 'spanish-course-studio-whiteboard',
+  'SPANISH 4.jpg': 'spanish-course-prints-wall',
 };
 
 // Already-compressed sources are re-encoded a little more gently, so a
@@ -91,6 +133,27 @@ for (const [src, name] of Object.entries(PHOTOS)) {
   }
   manifest[name] = { widths: sizes, ratio: +(meta.width / meta.height).toFixed(4) };
   console.log(name, sizes.join('/'), `${meta.width}x${meta.height}`);
+}
+
+for (const [src, name] of Object.entries(ERASMUS)) {
+  const from = path.join('Images-Erasmus', src);
+  if (!fs.existsSync(from)) { console.warn('missing original:', from); continue; }
+  const meta = await sharp(from).metadata();
+  const sizes = [];
+  for (const w of WIDTHS) {
+    if (w > meta.width) continue;
+    await sharp(from).rotate().resize({ width: w }).webp({ quality: 76 })
+      .toFile(path.join(OUT, `${name}-${w}.webp`));
+    sizes.push(w);
+  }
+  if (!sizes.length) {
+    await sharp(from).rotate().webp({ quality: 76 }).toFile(path.join(OUT, `${name}-${meta.width}.webp`));
+    sizes.push(meta.width);
+  }
+  const upright = (meta.orientation || 1) >= 5;   // EXIF says the pixels are rotated
+  const ratio = upright ? meta.height / meta.width : meta.width / meta.height;
+  manifest[name] = { widths: sizes, ratio: +ratio.toFixed(4) };
+  console.log(name, sizes.join('/'), `${meta.width}x${meta.height}${upright ? ' (rotated)' : ''}`);
 }
 
 for (const [src, name] of Object.entries(SPAINBCN)) {

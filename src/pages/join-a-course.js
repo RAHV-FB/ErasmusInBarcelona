@@ -70,7 +70,7 @@ export default function joinACourse() {
           <a class="link-strong" href="/universities/">Erasmus+ staff training for university staff →</a></p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.trainerClassroom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
+        ${img(d.images.staffTrainingRoom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
       </figure>
     </div>
   </section>

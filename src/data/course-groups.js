@@ -14,11 +14,11 @@
 // venues, which come from site-data.js and are rendered by the
 // template. Never restate one of those facts in this file.
 //
-// `image` names an entry in site-data's `images`. The group pages
-// currently reshow photographs that fit their subject; when a
-// group's own photographs arrive, process them with
-// tools/build-images.mjs and change the key here. `courses[].image`
-// is optional and empty for now for the same reason.
+// `image` (on a group and on each course) names an entry in
+// site-data's `images`. The photographs are the owner's
+// Images-Erasmus delivery, processed by tools/build-images.mjs;
+// files named for a page went to that page, the rest were placed
+// by subject.
 //
 // `dateCourses` lists the DATES-SPAINBCN sheet's own course labels
 // that belong to the group, so "Next in Barcelona" can show the
@@ -37,12 +37,13 @@ export const courseGroups = [
     method: 'Sessions move between demonstration, guided practice on your own teaching materials, '
       + 'and discussion of what deserves a place in your school.',
     language: 'English',
-    image: 'ictDayByDay',
+    image: 'blueScreenClassroom',
     dateCourses: ['AI & ICT'],
     desc: 'One-week courses in Barcelona on AI literacy and digital competence for teachers and school staff, from first principles to advanced classroom use.',
     courses: [
       {
         id: 'ai-literacy-for-educators',
+        image: 'aiLaptopsClassroom',
         title: 'AI literacy for educators',
         level: 'Introductory',
         audience: 'Teaching and non-teaching staff at any level of education. No technical background needed.',
@@ -63,6 +64,7 @@ export const courseGroups = [
       },
       {
         id: 'digital-tools-everyday-teaching',
+        image: 'aiWhiteboard',
         title: 'Digital tools for everyday teaching',
         level: 'Introductory',
         audience: 'Teachers and support staff who want their digital work organised rather than multiplied.',
@@ -83,6 +85,7 @@ export const courseGroups = [
       },
       {
         id: 'ai-planning-assessment-feedback',
+        image: 'aiWhiteboardPair',
         title: 'AI for planning, assessment and feedback',
         level: 'Advanced',
         audience: 'Teachers already comfortable with digital work who want structured, defensible AI practice.',
@@ -115,12 +118,13 @@ export const courseGroups = [
     method: 'The week alternates short theory with practice you do yourself, because a technique '
       + 'you have only heard about is not yet yours.',
     language: 'English',
-    image: 'sittingRoom',
+    image: 'yogaStudio',
     dateCourses: ['Mindfulness in the classroom'],
     desc: 'One-week courses in Barcelona on teacher wellbeing, student mental health and mindfulness for schools, for teaching and non-teaching staff.',
     courses: [
       {
         id: 'teacher-wellbeing-stress',
+        image: 'parkActivity',
         title: 'Teacher wellbeing and stress management',
         level: 'All levels',
         audience: 'Anyone who works in a school and feels the job’s weight — teachers, leaders, support staff.',
@@ -140,6 +144,7 @@ export const courseGroups = [
       },
       {
         id: 'student-wellbeing-mental-health',
+        image: 'puppetsWorkshop',
         title: 'Student wellbeing and mental health in the classroom',
         level: 'All levels',
         audience: 'Class teachers, tutors, counsellors and the support staff students actually talk to.',
@@ -159,6 +164,7 @@ export const courseGroups = [
       },
       {
         id: 'mindfulness-for-schools',
+        image: 'mindfulnessStudio',
         title: 'Mindfulness for schools',
         level: 'Introductory',
         audience: 'School staff curious about mindfulness for themselves first, their classrooms second.',
@@ -191,12 +197,13 @@ export const courseGroups = [
     method: 'Part of every course happens outside, because outdoor teaching is learned outdoors; '
       + 'what you practise here is what you will run at home.',
     language: 'English',
-    image: 'parkGuell',
+    image: 'montjuicView',
     dateCourses: [],
     desc: 'One-week courses in Barcelona on outdoor learning, education for sustainability and place-based teaching, practised in the city itself.',
     courses: [
       {
         id: 'outdoor-learning-beyond-classroom',
+        image: 'climbingWall',
         title: 'Outdoor learning: teaching beyond the classroom',
         level: 'Introductory',
         audience: 'Teachers of any subject — outdoor learning is not only for the sciences.',
@@ -216,6 +223,7 @@ export const courseGroups = [
       },
       {
         id: 'education-for-sustainability',
+        image: 'wetlandWalk',
         title: 'Education for sustainability',
         level: 'All levels',
         audience: 'Teachers and school staff bringing the green transition into subjects and school life.',
@@ -235,6 +243,7 @@ export const courseGroups = [
       },
       {
         id: 'barcelona-as-a-classroom',
+        image: 'gothicCourtyard',
         title: 'Barcelona as a classroom: place-based learning',
         level: 'All levels',
         audience: 'Teachers who want a transferable method, with Barcelona as the worked example.',
@@ -268,12 +277,13 @@ export const courseGroups = [
     method: 'You work throughout on your own materials and your own classes, so what you take home '
       + 'is your teaching adjusted, not a folder of someone else’s.',
     language: 'English',
-    image: 'galleryRoom',
+    image: 'senClassroom',
     dateCourses: [],
     desc: 'One-week courses in Barcelona on special educational needs, Universal Design for Learning and neurodiversity, for mainstream teachers and support staff.',
     courses: [
       {
         id: 'sen-mainstream-classroom',
+        image: 'senCertificates',
         title: 'Special educational needs in the mainstream classroom',
         level: 'Introductory',
         audience: 'Class and subject teachers who are not specialists but teach students with SEN every day.',
@@ -294,6 +304,7 @@ export const courseGroups = [
       },
       {
         id: 'udl-in-practice',
+        image: 'cardWorktable',
         title: 'Universal Design for Learning in practice',
         level: 'All levels',
         audience: 'Teachers and coordinators who would rather plan for variety than patch for it.',
@@ -314,6 +325,7 @@ export const courseGroups = [
       },
       {
         id: 'understanding-neurodiversity',
+        image: 'officeClassroom',
         title: 'Understanding neurodiversity at school',
         level: 'All levels',
         audience: 'Teachers, tutors and support staff at any stage, primary through VET and adult education.',
@@ -351,6 +363,7 @@ export const courseGroups = [
     courses: [
       {
         id: 'positive-management-foundations',
+        image: 'whiteboardGroup',
         title: 'Positive classroom management, foundations',
         level: 'Introductory',
         audience: 'Teachers at any stage who want their classroom order rebuilt on firmer ground.',
@@ -370,6 +383,7 @@ export const courseGroups = [
       },
       {
         id: 'conflict-resolution-restorative',
+        image: 'guidedActivity',
         title: 'Conflict resolution and restorative practice',
         level: 'All levels',
         audience: 'Teachers, tutors and leadership handling conflict between students, or with them.',
@@ -389,6 +403,7 @@ export const courseGroups = [
       },
       {
         id: 'motivation-behaviour-climate',
+        image: 'largeClass',
         title: 'Motivation, behaviour and classroom climate',
         level: 'Advanced',
         audience: 'Experienced teachers, mentors and coordinators working beyond incident response.',
@@ -421,12 +436,13 @@ export const courseGroups = [
     method: 'You learn the methods by working through them yourself, then plan their use in your '
       + 'own subject before the week ends.',
     language: 'English',
-    image: 'barcelonaClassroom',
+    image: 'drawingStudio',
     dateCourses: [],
     desc: 'One-week courses in Barcelona on project-based learning, active methodologies and creativity across the curriculum.',
     courses: [
       {
         id: 'pbl-in-practice',
+        image: 'easels',
         title: 'Project-based learning in practice',
         level: 'All levels',
         audience: 'Teachers and coordinators introducing PBL, or rescuing a version that drifted.',
@@ -446,6 +462,7 @@ export const courseGroups = [
       },
       {
         id: 'active-methodologies',
+        image: 'gameTable',
         title: 'Active methodologies for engaged classrooms',
         level: 'Introductory',
         audience: 'Teachers of any subject whose classrooms listen more than they work.',
@@ -465,6 +482,7 @@ export const courseGroups = [
       },
       {
         id: 'creativity-across-curriculum',
+        image: 'galleryGroup',
         title: 'Creativity across the curriculum',
         level: 'All levels',
         audience: 'Teachers of every subject — the sciences and mathematics expressly included.',
@@ -504,6 +522,7 @@ export const courseGroups = [
     courses: [
       {
         id: 'ethical-use-of-ai',
+        image: 'aiLaptopRows',
         title: 'Ethical use of AI in education',
         level: 'All levels',
         audience: 'Teachers, coordinators and leadership setting the terms for AI in their school.',
@@ -523,6 +542,7 @@ export const courseGroups = [
       },
       {
         id: 'european-values-citizenship',
+        image: 'arcadeCafe',
         title: 'Teaching European values and democratic citizenship',
         level: 'All levels',
         audience: 'Teachers of any subject; tutors and coordinators carrying citizenship in the timetable.',
@@ -542,6 +562,7 @@ export const courseGroups = [
       },
       {
         id: 'human-rights-everyday-teaching',
+        image: 'institutionVisit',
         title: 'Human rights education in everyday teaching',
         level: 'All levels',
         audience: 'Teachers who meet rights questions in their subject, their classroom or their corridor.',
@@ -574,12 +595,13 @@ export const courseGroups = [
     method: 'Classes are small and spoken: you use the language all week, in class and in the city, '
       + 'and the teaching adjusts to the level in the room.',
     language: 'English',
-    image: 'cafeTerrace',
+    image: 'englishWorksheets',
     dateCourses: ['English', 'Public Speaking'],
     desc: 'One-week English courses in Barcelona: general English from A1 to C1, communication skills, and methodology for teachers of English.',
     courses: [
       {
         id: 'general-english-a1-c1',
+        image: 'englishBeginners',
         title: 'General English, A1–C1',
         level: 'A1–C1, grouped by level',
         audience: 'Teachers and non-teaching staff at every level of English, beginner to advanced.',
@@ -599,6 +621,7 @@ export const courseGroups = [
       },
       {
         id: 'communication-skills-english',
+        image: 'englishWaving',
         title: 'Communication skills in English',
         level: 'From B1',
         audience: 'Staff whose English works but whose delivery could work harder — presenters, coordinators, leadership.',
@@ -618,6 +641,7 @@ export const courseGroups = [
       },
       {
         id: 'methodology-teaching-english',
+        image: 'englishWordgame',
         title: 'Methodology for teaching English',
         level: 'For teachers of English',
         audience: 'Practising English teachers, primary through adult education, refreshing their craft.',
@@ -650,12 +674,13 @@ export const courseGroups = [
     method: 'Courses in this group run in Spanish, adjusted to the level in the room; the city '
       + 'provides the immersion and the classes make it stick.',
     language: 'Spanish',
-    image: 'spanishWhiteboard',
+    image: 'spanishSittingRoom',
     dateCourses: ['Spanish'],
     desc: 'One-week Spanish courses in Barcelona: general Spanish from A1 to C1, communication skills, and methodology for teachers of Spanish.',
     courses: [
       {
         id: 'general-spanish-a1-c1',
+        image: 'spanishOfficeGroup',
         title: 'General Spanish, A1–C1',
         level: 'A1–C1, grouped by level',
         audience: 'Teachers and non-teaching staff at every level of Spanish, beginner to advanced.',
@@ -675,6 +700,7 @@ export const courseGroups = [
       },
       {
         id: 'communication-skills-spanish',
+        image: 'spanishStudioWhiteboard',
         title: 'Communication skills in Spanish',
         level: 'From B1',
         audience: 'Staff who use Spanish professionally — projects, partnerships, presentations, mobility.',
@@ -694,6 +720,7 @@ export const courseGroups = [
       },
       {
         id: 'methodology-teaching-spanish',
+        image: 'spanishPrintsWall',
         title: 'Methodology for teaching Spanish',
         level: 'For teachers of Spanish',
         audience: 'Practising teachers of Spanish as a foreign language, at any stage of career.',

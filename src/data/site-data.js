@@ -449,10 +449,11 @@ export const history = [
 // in uploads/ and source-photos/, which are not published.
 // ============================================================
 export const images = {
-  // Outside /courses/, each photograph appears on exactly one page. The
-  // course-group pages reuse the photographs that fit their subject until
-  // each group's own photographs are supplied. Alt text claims only what
-  // the photograph shows; a place is named only when it is identifiable.
+  // Each photograph appears on exactly one page, with two exceptions the
+  // owner named in the files themselves: blueScreenClassroom opens both
+  // /universities/ and the AI course group, and each group's hero appears
+  // again on its /courses/ index card. Alt text claims only what the
+  // photograph shows; a place is named only when it is identifiable.
   heroGroup: {
     file: 'course-group-sunlit-room',
     alt: 'A course group photographed together in a sunlit room',
@@ -475,10 +476,6 @@ export const images = {
     file: 'barceloneta-seafront-barcelona',
     alt: 'Palm trees and evening light on the Barceloneta seafront',
     focus: '50% 50%',
-  },
-  trainerClassroom: {
-    file: 'course-group-trainer-spainbcn-classroom',
-    alt: 'Participants at laptops with their trainer in the SpainBcn classroom',
   },
   galleryRoom: {
     file: 'course-group-gallery-room',
@@ -546,6 +543,153 @@ export const images = {
   barcelonaClassroom: {
     file: 'course-group-barcelona-classroom',
     alt: 'Participants and their trainer at the desks of a Barcelona classroom',
+  },
+
+  // ----------------------------------------------------------
+  // The owner's Images-Erasmus delivery of 31 August 2026,
+  // placed on the course-group pages (and the two pages the
+  // filenames name). Processed by tools/build-images.mjs from
+  // Images-Erasmus/, which keeps the originals.
+  // ----------------------------------------------------------
+  blueScreenClassroom: {
+    file: 'course-group-blue-screen-classroom',
+    alt: 'A course group in front of the blue screen of the classroom, two of them holding certificates',
+  },
+  aiLaptopsClassroom: {
+    file: 'ai-course-laptops-classroom',
+    alt: 'Participants at laptops in rows of desks in a modern classroom',
+  },
+  aiLaptopRows: {
+    file: 'ai-course-laptop-rows',
+    alt: 'A course group working at laptops in a modern classroom',
+  },
+  aiWhiteboard: {
+    file: 'ai-course-interactive-whiteboard',
+    alt: 'A trainer and a participant matching vocabulary pairs on an interactive whiteboard',
+  },
+  aiWhiteboardPair: {
+    file: 'ai-course-whiteboard-pair',
+    alt: 'Two participants working together at an interactive whiteboard',
+  },
+  staffTrainingRoom: {
+    file: 'staff-training-course-room',
+    alt: 'A staff training group of thirteen photographed in the course room',
+  },
+  yogaStudio: {
+    file: 'wellbeing-course-yoga-studio',
+    alt: 'Five participants balancing on one leg in a bright studio',
+    focus: '50% 45%',
+  },
+  mindfulnessStudio: {
+    file: 'wellbeing-course-mindfulness-studio',
+    alt: 'A session in a movement studio, four participants in embroidered Spanish shawls, Mindfulness on the whiteboard',
+  },
+  parkActivity: {
+    file: 'wellbeing-course-park-activity',
+    alt: 'Participants at a balance exercise among the trees of a park',
+  },
+  puppetsWorkshop: {
+    file: 'wellbeing-course-puppets-workshop',
+    alt: 'Participants holding hand puppets in a workshop space, a picture book behind them',
+  },
+  montjuicView: {
+    file: 'outdoor-course-montjuic-view',
+    alt: 'Course participants above the open-air pool on Montjuïc, Barcelona spread out below',
+  },
+  climbingWall: {
+    file: 'outdoor-course-climbing-wall',
+    alt: 'Three participants at an indoor climbing wall, one of them on the holds',
+  },
+  wetlandWalk: {
+    file: 'sustainability-course-wetland-walk',
+    alt: 'Five participants beside a wetland on a nature walk',
+  },
+  gothicCourtyard: {
+    file: 'outdoor-course-gothic-courtyard',
+    alt: 'A course group on the stone staircase of a Gothic courtyard in Barcelona',
+    focus: '50% 40%',
+  },
+  senClassroom: {
+    file: 'inclusion-course-school-classroom',
+    alt: 'A course group in a school classroom with child-size chairs and a mosaic screen',
+  },
+  senCertificates: {
+    file: 'inclusion-course-certificates-gallery',
+    alt: 'Seven participants holding their certificates in a room hung with paintings',
+    focus: '50% 55%',
+  },
+  cardWorktable: {
+    file: 'inclusion-course-card-worktable',
+    alt: 'Participants folding coloured card around a white worktable',
+  },
+  whiteboardGroup: {
+    file: 'classroom-course-whiteboard-group',
+    alt: 'A course group of twelve in front of the classroom whiteboard',
+  },
+  gameTable: {
+    file: 'classroom-course-game-table',
+    alt: 'A course group around a table with a board game mid-play',
+  },
+  guidedActivity: {
+    file: 'classroom-course-guided-activity',
+    alt: 'A guided group exercise on the terrace of a park',
+  },
+  largeClass: {
+    file: 'classroom-course-large-class',
+    alt: 'A large course group standing behind the front tables of a classroom',
+  },
+  drawingStudio: {
+    file: 'creative-course-drawing-studio',
+    alt: 'Participants drawing at the table of a painter\'s studio, the painter standing behind them',
+  },
+  easels: {
+    file: 'creative-course-easels',
+    alt: 'Two participants and their tutor beside easels holding their charcoal drawings',
+  },
+  galleryGroup: {
+    file: 'creative-course-gallery-group',
+    alt: 'A course group in a gallery hung with paintings, certificates in hand',
+  },
+  arcadeCafe: {
+    file: 'ethics-course-arcade-cafe',
+    alt: 'A course group at the tables of a café under a Barcelona arcade',
+  },
+  institutionVisit: {
+    file: 'ethics-course-institution-visit',
+    alt: 'A course group on a seminar visit to a Catalan children\'s-services institution',
+  },
+  englishWorksheets: {
+    file: 'english-course-worksheets-table',
+    alt: 'An English course group around the table with their worksheets',
+    focus: '50% 42%',
+  },
+  englishBeginners: {
+    file: 'english-course-beginners-whiteboard',
+    alt: 'A beginners\' English group waving, the week\'s grammar on the whiteboard',
+  },
+  englishWaving: {
+    file: 'english-course-group-waving',
+    alt: 'Eight participants waving in the SpainBcn sitting room',
+  },
+  englishWordgame: {
+    file: 'english-course-wordgame-whiteboard',
+    alt: 'Two participants at a word game on the interactive whiteboard',
+  },
+  spanishSittingRoom: {
+    file: 'spanish-course-sitting-room',
+    alt: 'A Spanish course group among the plates and paintings of the SpainBcn sitting room',
+  },
+  spanishOfficeGroup: {
+    file: 'spanish-course-office-group',
+    alt: 'A Spanish course group under the SpainBcn-Programs sign in the office',
+  },
+  spanishStudioWhiteboard: {
+    file: 'spanish-course-studio-whiteboard',
+    alt: 'A Spanish course group in an art studio, Spanish phrases on the whiteboard',
+  },
+  spanishPrintsWall: {
+    file: 'spanish-course-prints-wall',
+    alt: 'A course group in front of a wall of framed Spanish scenes',
   },
 };
 

@@ -44,7 +44,7 @@ export default function universities() {
         <p class="meta">Per person, per week, in Barcelona.</p>
       </div>
       <figure class="media media--photo">
-        ${img(d.images.officeClassroom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
+        ${img(d.images.blueScreenClassroom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
       </figure>
     </div>
   </section>

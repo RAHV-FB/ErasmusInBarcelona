@@ -10,6 +10,9 @@ date: 2026-08-31
 ### Updated in this project
 - The Barcelona catalogue went up: nine course groups, each with its own page under `/courses/`
   and two to five courses inside, rendered by one template from `src/data/course-groups.js`.
+- The owner's photographs arrived in `Images-Erasmus/` and were placed: every group has its own
+  hero, every course its own photograph, and the files named for a page (the universities and
+  AI/ICT main image, the staff-training main image) went where their names say.
 - The branch history was consolidated. Every `claude/*` working branch was verified fully merged
   into `main` and deleted, and `main` is the default branch. It is the repository's only branch,
   developed on and deployed from.
