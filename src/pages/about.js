@@ -32,7 +32,7 @@ export default function about() {
           staff-training courses, student-group programmes and projects for schools and other
           education organisations.</p>
         <p>Erasmus in Barcelona is the Barcelona site of SpainBcn-Programs.
-          <a href="${d.spainbcn.catalogue}" rel="noopener">Full SpainBcn catalogue ↗</a></p>
+          <a href="${d.spainbcn.catalogue}" rel="noopener">Full SpainBcn catalogue <span aria-hidden="true">↗</span></a></p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.founders, { sizes: '(min-width: 860px) 45vw, 100vw', eager: true })}
@@ -56,11 +56,10 @@ export default function about() {
     <div class="container cols cols--lead">
       <div>
         <h2>How the courses run</h2>
-        <p>Groups are small and international: most weeks bring together participants from several
-          European countries. Trainers teach in their own subject areas.</p>
+        <p>${d.schedule.groupSize} Trainers teach in their own subject areas.</p>
         <h2 style="margin-top:1.6em">Reviews</h2>
         <p><a class="link-strong" href="${d.reviews.url}" rel="noopener">${d.reviews.rating}/5 from
-          ${d.reviews.count} Google reviews ↗</a></p>
+          ${d.reviews.count} Google reviews <span aria-hidden="true">↗</span></a></p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.spanishOffice, { sizes: '(min-width: 860px) 45vw, 100vw' })}
@@ -95,12 +94,12 @@ export default function about() {
           <li><span class="facts__term">Office</span><span class="facts__value">${d.contact.address}</span></li>
         </ul>
         <p class="meta">The office address does not change. Course locations do —
-          <a href="/barcelona/">see where classes run →</a></p>
+          <a href="/barcelona/">see where classes run <span aria-hidden="true">→</span></a></p>
       </div>
       <div>
         <h2>Elsewhere in Spain</h2>
-        <p>SpainBcn also runs course weeks in Málaga, Mallorca, Gran Canaria, Tenerife and Tarragona.</p>
-        <p><a class="link-strong" href="${d.spainbcn.locations}" rel="noopener">See all locations ↗</a></p>
+        <p>${d.destinationsSentence}</p>
+        <p><a class="link-strong" href="${d.spainbcn.locations}" rel="noopener">See all locations <span aria-hidden="true">↗</span></a></p>
       </div>
     </div>
   </section>`;

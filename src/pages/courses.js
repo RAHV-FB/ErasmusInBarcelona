@@ -1,5 +1,5 @@
 // ============================================================
-// /courses/ — the Barcelona catalogue: nine course groups, each
+// /courses/ — the Barcelona catalogue: the course groups, each
 // linking to its own page. Group content from course-groups.js,
 // every fact from site-data.js.
 // ============================================================
@@ -24,8 +24,9 @@ export default function courses() {
   const body = `
   <section class="container hero hero--tight">
     <h1>Course groups in Barcelona</h1>
-    <p class="lede">One-week Erasmus+ KA1 staff training for teachers and education staff, in nine
-      groups. Every group runs Monday to Friday, with 20- or 25-hour options and the same fee.</p>
+    <p class="lede">One-week Erasmus+ KA1 staff training for teachers and education staff, in
+      ${d.countWord(courseGroups.length)} groups. Every group runs ${d.schedule.days}, at
+      ${d.schedule.hoursShort} a week, with the same fee.</p>
     <ul class="price price--inline">
       <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
       <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
@@ -35,7 +36,7 @@ export default function courses() {
 
   <section class="section section--tight">
     <div class="container">
-      <h2 class="visually-hidden">The nine groups</h2>
+      <h2 class="visually-hidden">The groups</h2>
       <div class="group-cards">
       ${cards}
       </div>
@@ -46,16 +47,14 @@ export default function courses() {
     <div class="container cols cols--split">
       <div>
         <h2>Choosing between them</h2>
-        <p>Each group page describes its courses, with the objectives and learning outcomes of
-          each. Most courses run at more than one level; the language pages group by level from
-          A1 to C1. If a project sits across two groups, say so — a week can be built around it.</p>
-        <p><a class="link-strong" href="/join-a-course/">Fees, cancellation and how joining works →</a></p>
+        <p>Every course states its objectives and learning outcomes. ${esc(d.schedule.levels)}
+          If a project sits across two groups, say so — a week can be built around it.</p>
+        <p><a class="link-strong" href="/join-a-course/">Fees, cancellation and how joining works <span aria-hidden="true">→</span></a></p>
       </div>
       <div>
         <h2>When they run</h2>
-        <p>${esc(d.schedule.pattern)} The scheduled Barcelona weeks are on the dates page, and each
-          group page shows its own next weeks. ${esc(d.datesSource.note)}</p>
-        <p><a class="link-strong" href="/dates/">All Barcelona dates →</a></p>
+        <p>${esc(d.schedule.pattern)} ${esc(d.datesSource.note)}</p>
+        <p><a class="link-strong" href="/dates/">All Barcelona dates <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>
@@ -77,6 +76,6 @@ export default function courses() {
     current: 'courses',
     crumb: 'Course groups',
     title: 'Erasmus+ KA1 Course Groups in Barcelona | SpainBcn-Programs',
-    description: `The nine Barcelona course groups — AI and digital tools, wellbeing, outdoor learning and sustainability, inclusion, classroom management, creative teaching, ethics and European values, English and Spanish. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25.`,
+    description: `The ${courseGroups.length} Barcelona course groups — ${courseGroups.map((g) => g.navLabel).join(' · ')}. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25.`,
   }, body);
 }

@@ -15,7 +15,7 @@ export default function planAMobility() {
         <p class="lede">Private course weeks, job shadowing and educational visits for schools and other
           education organisations, with the documents your Erasmus+ application needs.</p>
         <p class="meta">Sending individual staff to a scheduled week instead?
-          <a href="/join-a-course/">See the courses →</a></p>
+          <a href="/join-a-course/">See the courses <span aria-hidden="true">→</span></a></p>
         <div class="btn-row">
           <a class="btn" href="/contact/">Tell us about the project</a>
           <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -54,7 +54,6 @@ export default function planAMobility() {
     <div class="container">
       <div class="section-head">
         <h2>Documents we provide</h2>
-        <p>SpainBcn-Programs · Erasmus+ OID ${d.organisation.oid} · registered as ${d.organisation.legalName}</p>
       </div>
       <ul class="facts">
         ${documents}
@@ -80,14 +79,13 @@ export default function planAMobility() {
         <h2>Fees and invoicing</h2>
         <p>Course fees are per person: in Barcelona,
           ${d.pricing.currency}${d.pricing.barcelona.hours20} for 20 hours and
-          ${d.pricing.currency}${d.pricing.barcelona.hours25} for 25. A private week or a group project
-          is quoted on numbers, length and content.</p>
-        <p>We invoice whoever is booking — your institution, or the participant directly.
-          ${d.booking.payment}</p>
-        <p class="meta">The fee is exempt from VAT as an educational service. ${d.pricing.travelKa1}</p>
+          ${d.pricing.currency}${d.pricing.barcelona.hours25} for 25. ${esc(d.pricing.groups)}</p>
+        <p>${esc(d.booking.contractWith)} ${d.booking.payment}</p>
+        <p class="meta">${esc(d.booking.vatLine)} ${d.pricing.travelKa1}</p>
         <h2 style="margin-top:1.6em">Where it runs</h2>
-        <p>Barcelona, in the Gràcia and Barceloneta areas. A project can also run at SpainBcn's five
-          other Spanish destinations — <a href="${d.spainbcn.locations}" rel="noopener">see locations ↗</a>.</p>
+        <p>Barcelona, in the Gràcia and Barceloneta areas. A project can also run at SpainBcn's
+          other Spanish destinations —
+          <a href="${d.spainbcn.locations}" rel="noopener">see locations <span aria-hidden="true">↗</span></a>.</p>
       </div>
     </div>
   </section>
@@ -119,8 +117,8 @@ export default function planAMobility() {
       <h2>Where to start</h2>
       <p class="lede">Send us the group, the objectives and the dates you have in mind.</p>
       <div class="btn-row">
-        <a class="btn" href="/contact/">Email us</a>
-        <a class="btn btn--ghost" href="${d.spainbcn.projects}" rel="noopener">How projects work on SpainBcn ↗</a>
+        <a class="btn" href="/contact/">Get in touch</a>
+        <a class="btn btn--ghost" href="${d.spainbcn.projects}" rel="noopener">How projects work on SpainBcn <span aria-hidden="true">↗</span></a>
       </div>
     </div>
   </section>`;

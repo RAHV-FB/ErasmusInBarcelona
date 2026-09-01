@@ -4,10 +4,12 @@
 //   node tools/build-images.mjs
 //
 // Sources: uploads/ (the organisation's own photographs, kept as
-// the untouched archive), source-photos/spainbcn/ (photographs from
-// www.spainbcn.com, same owner — see the README there), and the
-// twelve team portraits in source-photos/team/, downloaded once from
-// the old site's CDN.
+// the untouched archive), Images-Erasmus/ (the owner's 31 August
+// 2026 delivery, kept whole as a second untouched archive),
+// source-photos/spainbcn/ (photographs from www.spainbcn.com, same
+// owner — see the README there), and the twelve team portraits in
+// source-photos/team/, downloaded once from the old site's CDN.
+// None of the source directories is ever published.
 // Output: src/assets/images/, descriptive filenames, WebP, two
 // widths for photographs that are ever displayed large.
 // Re-running is cheap and idempotent.
@@ -51,7 +53,8 @@ const PHOTOS = {
 // rest were placed by subject. Only the ones a page uses are processed;
 // the folder keeps the whole delivery as the untouched archive.
 const ERASMUS = {
-  'Main - universities page + main ai:ict page.jpeg': 'course-group-blue-screen-classroom',
+  // Renamed from the delivery's "ai:ict" — a colon cannot be checked out on Windows.
+  'Main - universities page + main ai-ict page.jpeg': 'course-group-blue-screen-classroom',
   'secondary ict page.jpeg': 'ai-course-laptops-classroom',
   'aulas Gran Canaria 4.png': 'ai-course-laptop-rows',
   'WhatsApp Image 2026-08-06 at 23.02.03.jpeg': 'ai-course-interactive-whiteboard',
@@ -119,65 +122,38 @@ fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(path.join(OUT, 'team'), { recursive: true });
 
 const manifest = {};
-for (const [src, name] of Object.entries(PHOTOS)) {
-  const from = path.join('uploads', src);
-  if (!fs.existsSync(from)) { console.warn('missing original:', from); continue; }
-  const meta = await sharp(from).metadata();
-  const sizes = [];
-  for (const w of WIDTHS) {
-    if (w > meta.width) continue;
-    const to = path.join(OUT, `${name}-${w}.webp`);
-    await sharp(from).resize({ width: w }).webp({ quality: 76 }).toFile(to);
-    sizes.push(w);
+
+// One pipeline for all three photograph sets: .rotate() bakes in any
+// EXIF orientation, and the ratio follows the same orientation so the
+// rendered width/height can never be the transpose of the pixels.
+async function processSet(photos, dir, quality) {
+  for (const [src, name] of Object.entries(photos)) {
+    const from = path.join(dir, src);
+    if (!fs.existsSync(from)) { console.warn('missing original:', from); continue; }
+    const meta = await sharp(from).metadata();
+    const upright = (meta.orientation || 1) >= 5;   // EXIF says the pixels are rotated
+    const sourceW = upright ? meta.height : meta.width;
+    const sizes = [];
+    for (const w of WIDTHS) {
+      if (w > sourceW) continue;
+      await sharp(from).rotate().resize({ width: w }).webp({ quality })
+        .toFile(path.join(OUT, `${name}-${w}.webp`));
+      sizes.push(w);
+    }
+    if (!sizes.length) {
+      await sharp(from).rotate().webp({ quality }).toFile(path.join(OUT, `${name}-${sourceW}.webp`));
+      sizes.push(sourceW);
+    }
+    const ratio = upright ? meta.height / meta.width : meta.width / meta.height;
+    manifest[name] = { widths: sizes, ratio: +ratio.toFixed(4) };
+    console.log(name, sizes.join('/'), `${meta.width}x${meta.height}${upright ? ' (rotated)' : ''}`);
   }
-  if (!sizes.length) {
-    const to = path.join(OUT, `${name}-${meta.width}.webp`);
-    await sharp(from).webp({ quality: 76 }).toFile(to);
-    sizes.push(meta.width);
-  }
-  manifest[name] = { widths: sizes, ratio: +(meta.width / meta.height).toFixed(4) };
-  console.log(name, sizes.join('/'), `${meta.width}x${meta.height}`);
 }
 
-for (const [src, name] of Object.entries(ERASMUS)) {
-  const from = path.join('Images-Erasmus', src);
-  if (!fs.existsSync(from)) { console.warn('missing original:', from); continue; }
-  const meta = await sharp(from).metadata();
-  const sizes = [];
-  for (const w of WIDTHS) {
-    if (w > meta.width) continue;
-    await sharp(from).rotate().resize({ width: w }).webp({ quality: 76 })
-      .toFile(path.join(OUT, `${name}-${w}.webp`));
-    sizes.push(w);
-  }
-  if (!sizes.length) {
-    await sharp(from).rotate().webp({ quality: 76 }).toFile(path.join(OUT, `${name}-${meta.width}.webp`));
-    sizes.push(meta.width);
-  }
-  const upright = (meta.orientation || 1) >= 5;   // EXIF says the pixels are rotated
-  const ratio = upright ? meta.height / meta.width : meta.width / meta.height;
-  manifest[name] = { widths: sizes, ratio: +ratio.toFixed(4) };
-  console.log(name, sizes.join('/'), `${meta.width}x${meta.height}${upright ? ' (rotated)' : ''}`);
-}
-
-for (const [src, name] of Object.entries(SPAINBCN)) {
-  const from = path.join('source-photos/spainbcn', src);
-  if (!fs.existsSync(from)) { console.warn('missing:', from); continue; }
-  const meta = await sharp(from).metadata();
-  const sizes = [];
-  for (const w of WIDTHS) {
-    if (w > meta.width) continue;
-    await sharp(from).resize({ width: w }).webp({ quality: 82 })
-      .toFile(path.join(OUT, `${name}-${w}.webp`));
-    sizes.push(w);
-  }
-  if (!sizes.length) {
-    await sharp(from).webp({ quality: 82 }).toFile(path.join(OUT, `${name}-${meta.width}.webp`));
-    sizes.push(meta.width);
-  }
-  manifest[name] = { widths: sizes, ratio: +(meta.width / meta.height).toFixed(4) };
-  console.log(name, sizes.join('/'), `${meta.width}x${meta.height}`);
-}
+await processSet(PHOTOS, 'uploads', 76);
+await processSet(ERASMUS, 'Images-Erasmus', 76);
+// Already-compressed sources re-encode a little more gently (see above).
+await processSet(SPAINBCN, 'source-photos/spainbcn', 82);
 
 // Team portraits: one modest width, square-ish crop handled in CSS.
 const TEAM_DIR = 'source-photos/team';

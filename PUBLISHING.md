@@ -63,10 +63,11 @@ bash upload-to-dinahosting.sh
 
 Both build from source and both run `scripts/guards.mjs` — one file, so no two callers can
 enforce different things. They do not verify equally afterwards: the workflow checks that every
-file in `dist/` came back in a remote listing, then five pages, the 404 and three redirects.
-The shell script reads every file's size back off the server, then checks eleven pages, the
-404, four redirects and `site.css` served whole. When you want to know the site is right, run
-the script.
+file in `dist/` came back in a remote listing, then five pages, the 404, the 410 and five
+sampled legacy redirects. The shell script reads every file's size back off the server, then
+checks every page in the built sitemap — so a new page can never publish unchecked — plus the
+404, five sampled redirects and `site.css` served whole. When you want to know the site is
+right, run the script.
 
 ---
 
@@ -89,7 +90,7 @@ It reads its settings from the environment, so it can run unattended:
 | `FTP_HOST` | `erasmusinbarcelona-com.espacioseguro.com` |
 | `FTP_USER` | `erasmusinbarcelona` |
 | `WEB_ROOT` | `www` |
-| `CHECK_URL` | the hosting's preview URL |
+| `CHECK_URL` | `https://www.erasmusinbarcelona.com` (`--check-url` points it at the preview when wanted) |
 
 The password is the one thing it will not take from the environment — it prompts, hidden, and
 never stores it. **If you are scripting an unattended deploy, do not add a `FTP_PASS`

@@ -5,10 +5,10 @@
 //
 // The inventory comes from the 2026-08-20 capture of the old site
 // (notes/audit.md) plus the URLs still in search indexes on
-// 2026-08-22. Old course pages go to the matching subject area on
-// /join-a-course/, whose rows link on to the SpainBcn programme
-// pages — not to the SpainBcn catalogue directly, so a visitor
-// stays in the Barcelona context they searched for.
+// 2026-08-22. Old course pages go to the matching course group —
+// its /join-a-course/ row or its own /courses/ page — not to the
+// SpainBcn catalogue directly, so a visitor stays in the Barcelona
+// context they searched for.
 //
 // server.mjs answers these with a 301. A static host cannot, so
 // the prototype build also writes a small redirecting page at
@@ -30,13 +30,13 @@ export const REDIRECTS = {
   '/b1-spanish/': '/join-a-course/#spanish',
   '/b2-spanish/': '/join-a-course/#spanish',
   '/c1-spanish/': '/join-a-course/#spanish',
-  '/sen/': '/join-a-course/#inclusion',
+  '/sen/': '/courses/inclusive-education/',
   '/course-catalogue/': '/join-a-course/',
   '/program-information/': '/your-week/',
-  '/ai-ict/': '/join-a-course/#ai',
-  '/ict/': '/join-a-course/#ai',
-  '/ict-integration/': '/join-a-course/#ai',
-  '/e-learning-ict/': '/join-a-course/#ai',
+  '/ai-ict/': '/courses/ai-literacy/',
+  '/ict/': '/courses/ai-literacy/',
+  '/ict-integration/': '/courses/ai-literacy/',
+  '/e-learning-ict/': '/courses/ai-literacy/',
   '/school-students/': '/bring-a-group/',
   '/english-courses-students/': '/bring-a-group/',
   '/spanish-courses-for-students/': '/bring-a-group/',

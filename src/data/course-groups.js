@@ -113,8 +113,8 @@ export const courseGroups = [
     navLabel: 'Wellbeing at school',
     short: 'Wellbeing for the people who teach, and for the classrooms they run.',
     lede: 'Teacher wellbeing and student wellbeing, treated as professional skills rather than luck.',
-    welcome: 'A school works when the people in it do. These courses take wellbeing seriously as '
-      + 'something that can be learned, practised, and carried home to a whole school.',
+    welcome: 'These courses take wellbeing seriously as something that can be learned, practised, '
+      + 'and carried home to a whole school.',
     method: 'The week alternates short theory with practice you do yourself, because a technique '
       + 'you have only heard about is not yet yours.',
     language: 'English',
@@ -190,10 +190,8 @@ export const courseGroups = [
     title: 'Outdoor learning and sustainability',
     navLabel: 'Outdoor learning and sustainability',
     short: 'Teaching beyond the classroom, and teaching for the green transition.',
-    lede: 'Learning that happens outdoors, and teaching that takes sustainability seriously.',
-    welcome: 'Barcelona is a good city to learn outdoors in: parks, coastline, and streets that '
-      + 'reward attention. These courses use that setting to make outdoor teaching and education '
-      + 'for sustainability part of ordinary school practice.',
+    welcome: 'These courses use Barcelona — its parks and its coastline — to make outdoor teaching '
+      + 'and education for sustainability part of ordinary school practice.',
     method: 'Part of every course happens outside, because outdoor teaching is learned outdoors; '
       + 'what you practise here is what you will run at home.',
     language: 'English',
@@ -428,8 +426,8 @@ export const courseGroups = [
     slug: 'creative-teaching',
     title: 'Creative teaching, PBL and active methodologies',
     navLabel: 'Creative teaching and PBL',
-    short: 'Projects worth doing, methods that move students, creativity in every subject.',
-    lede: 'Teaching where students think, talk and make — and the knowledge stays central.',
+    short: 'Project-based learning, active methodologies and creativity across the curriculum.',
+    lede: 'Teaching where students work on the subject — and the knowledge stays central.',
     welcome: 'Active does not mean busy. These courses are about methods that earn their time: '
       + 'project-based learning done properly, a wider repertoire of active approaches, and '
       + 'creativity treated as teachable.',
@@ -466,8 +464,8 @@ export const courseGroups = [
         title: 'Active methodologies for engaged classrooms',
         level: 'Introductory',
         audience: 'Teachers of any subject whose classrooms listen more than they work.',
-        summary: 'A working repertoire of methods that put students in motion — thinking, talking, '
-          + 'making — and the judgement to know when each one earns its lesson time.',
+        summary: 'A working repertoire of methods that put students in motion, and the judgement '
+          + 'to know when each one earns its lesson time.',
         objectives: [
           'Widen your repertoire of active methods across subjects and ages',
           'Match method to purpose rather than to fashion',
@@ -510,9 +508,8 @@ export const courseGroups = [
     navLabel: 'Ethics, values and rights',
     short: 'The ethics of AI, democratic citizenship and human rights, taught through practice.',
     lede: 'The questions technology and society put to schools — and how to teach inside them.',
-    welcome: 'Schools are where the next generation learns what fairness, dignity and participation '
-      + 'mean in practice. These courses work on exactly that: the ethics of AI, democratic '
-      + 'citizenship and human rights as everyday teaching.',
+    welcome: 'These courses work on the ethics of AI, democratic citizenship and human rights as '
+      + 'everyday teaching.',
     method: 'The methods mirror the content: structured discussion, disagreement done well, and '
       + 'cases close enough to school life to matter.',
     language: 'English',
@@ -589,9 +586,8 @@ export const courseGroups = [
     navLabel: 'English',
     short: 'Language by level, communication skills, and methodology for English teachers.',
     lede: 'English by level from A1 to C1, communication for professional life, and methodology for the people who teach it.',
-    welcome: 'A week of English in an international group does what a year of good intentions at '
-      + 'home does not. These courses serve staff improving their own English and teachers '
-      + 'refreshing how they teach it.',
+    welcome: 'These courses serve staff improving their own English and teachers refreshing how '
+      + 'they teach it.',
     method: 'Classes are small and spoken: you use the language all week, in class and in the city, '
       + 'and the teaching adjusts to the level in the room.',
     language: 'English',
@@ -668,9 +664,8 @@ export const courseGroups = [
     navLabel: 'Spanish',
     short: 'Language by level, communication skills, and methodology for Spanish teachers.',
     lede: 'Spanish by level from A1 to C1, communication for professional life, and methodology for the people who teach it — in the language’s own city.',
-    welcome: 'Spanish learned in Barcelona keeps working after class: the market, the metro and the '
-      + 'menu are all part of the course. These courses serve staff learning the language and '
-      + 'teachers of Spanish refreshing their methodology.',
+    welcome: 'These courses serve staff learning the language and teachers of Spanish refreshing '
+      + 'their methodology.',
     method: 'Courses in this group run in Spanish, adjusted to the level in the room; the city '
       + 'provides the immersion and the classes make it stick.',
     language: 'Spanish',
@@ -741,8 +736,3 @@ export const courseGroups = [
     ],
   },
 ];
-
-/** The group a sheet course label belongs to, for cross-references. */
-export function groupForDateCourse(label) {
-  return courseGroups.find((g) => g.dateCourses.includes(label));
-}

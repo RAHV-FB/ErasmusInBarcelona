@@ -29,7 +29,7 @@ export default function cookies() {
         "${d.formsApp.sidetab.text}" tab on the other pages — comes from forms.app and is not
         loaded unless you allow it. Until then the tab is drawn by this site and requests nothing.
         Once loaded, it uses its own cookies under its
-        <a href="${d.formsApp.cookies}" rel="noopener">cookie policy ↗</a>. Those cookies are set by
+        <a href="${d.formsApp.cookies}" rel="noopener">cookie policy <span aria-hidden="true">↗</span></a>. Those cookies are set by
         forms.app on its own domain, so we cannot delete them for you; clearing site data in your
         browser removes them.</p>
 

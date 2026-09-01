@@ -52,7 +52,7 @@ export function img(image, { sizes = '100vw', eager = false, className = '' } = 
 }
 
 /** Portrait from src/assets/images/team. */
-export function portrait(person, size = 'people') {
+export function portrait(person) {
   const m = manifest[person.img];
   const w = m.widths[0];
   return `<img src="/assets/images/team/${person.img}.webp" width="${w}" height="${Math.round(w * 11 / 10)}"
@@ -116,9 +116,9 @@ function footer() {
         <div>
           <h2>SpainBcn-Programs</h2>
           <ul>
-            <li><a href="${spainbcn.catalogue}" rel="noopener">Full course catalogue ↗</a></li>
-            <li><a href="${spainbcn.locations}" rel="noopener">Other locations in Spain ↗</a></li>
-            <li><a href="${spainbcn.projects}" rel="noopener">Projects and groups ↗</a></li>
+            <li><a href="${spainbcn.catalogue}" rel="noopener">Full course catalogue <span aria-hidden="true">↗</span></a></li>
+            <li><a href="${spainbcn.locations}" rel="noopener">Other locations in Spain <span aria-hidden="true">↗</span></a></li>
+            <li><a href="${spainbcn.projects}" rel="noopener">Projects and groups <span aria-hidden="true">↗</span></a></li>
           </ul>
         </div>
         <div>
@@ -154,7 +154,7 @@ function privacyUi() {
           provided by forms.app and loads only if you allow it; forms.app uses its own cookies.</p>
       </div>
       <div class="privacy-banner__actions">
-        <button type="button" class="btn btn--ghost" data-privacy-set="false">Necessary only</button>
+        <button type="button" class="btn btn--ghost" data-privacy-set="false">Don't allow the form</button>
         <button type="button" class="btn" data-privacy-set="true">Allow sign-up form</button>
         <a href="/privacy/">Privacy</a>
       </div>
@@ -218,7 +218,7 @@ function signupTab() {
         <button type="button" class="btn btn--ghost" data-signup-close>Close</button>
       </div>
       <p>Or email <a href="${data.contact.emailHref}">${data.contact.email}</a> or message us on
-        <a href="${data.contact.whatsapp}" rel="noopener">WhatsApp ↗</a>.</p>
+        <a href="${data.contact.whatsapp}" rel="noopener">WhatsApp <span aria-hidden="true">↗</span></a>.</p>
       <p class="meta"><a href="/privacy/">Privacy</a></p>
     </div>
   </div>`;
@@ -294,7 +294,7 @@ ${meta.noindex || PROTOTYPE ? '<meta name="robots" content="noindex, follow">' :
 <meta property="og:image" content="${SITE_URL}/assets/images/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Course group holding their certificates at the end of a week in Barcelona">
+<meta property="og:image:alt" content="A course group holding up their certificates in a classroom">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#3157D5">
@@ -302,15 +302,12 @@ ${meta.noindex || PROTOTYPE ? '<meta name="robots" content="noindex, follow">' :
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/site.css?v=${CSS_V}">
 <script>
-/* Read the visitor's forms.app choice before first paint, so an allowed
-   form never flashes its permission gate and the banner never appears
-   to someone who has already answered it. */
+/* Read the visitor's forms.app choice before first paint, so the local
+   stand-in sign-up tab never flashes for a visitor whose choice already
+   replaced it with the real one (site.css hides it on this class). */
 try {
   var p = JSON.parse(localStorage.getItem('eib-privacy-v1') || 'null');
-  if (p && typeof p.formsApp === 'boolean') {
-    document.documentElement.classList.add('privacy-decided');
-    if (p.formsApp) document.documentElement.classList.add('formsapp-allowed');
-  }
+  if (p && p.formsApp === true) document.documentElement.classList.add('formsapp-allowed');
 } catch (e) {}
 </script>
 ${ld}

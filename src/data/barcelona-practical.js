@@ -13,6 +13,8 @@
 // confirmed, the field says so rather than carrying a guess.
 // ============================================================
 
+import { schedule } from './site-data.js';
+
 export const checked = '2026-08-21';
 
 export const sources = {
@@ -27,10 +29,11 @@ export const sources = {
 };
 
 // Metro lines at the stations that matter for the two course areas.
-// Read off TMB's own station pages on the date above.
+// Read off TMB's own station pages on the date above. `walk` is the
+// walking time from the station to the office.
 export const stations = {
-  sagradaFamilia: { name: 'Sagrada Família', lines: ['L2', 'L5'] },
-  verdaguer: { name: 'Verdaguer', lines: ['L4', 'L5'] },
+  sagradaFamilia: { name: 'Sagrada Família', lines: ['L2', 'L5'], walk: "about 5 minutes' walk" },
+  verdaguer: { name: 'Verdaguer', lines: ['L4', 'L5'], walk: "about 10 minutes' walk" },
   barceloneta: { name: 'Barceloneta', lines: ['L4'] },
   passeigDeGracia: { name: 'Passeig de Gràcia', lines: ['L2', 'L3', 'L4'], rodalies: true },
   collblanc: { name: 'Collblanc', lines: ['L5', 'L9 Sud', 'L10 Sud'] },
@@ -180,12 +183,13 @@ export const afternoons = [
   { time: 'A full afternoon', what: 'Montjuïc, Park Güell, or the coast north of the city by train.' },
 ];
 
-export const lunch = 'Lunch is not included. Both course areas have cafés and restaurants within a few '
-  + 'minutes\' walk, and a menú del día — a set lunch of two courses — is the usual weekday option.';
+const LUNCH_NEARBY = 'Both course areas have cafés and restaurants within a few minutes\' walk';
+export const lunchNearby = `${LUNCH_NEARBY}.`;
+export const lunch = `Lunch is not included. ${LUNCH_NEARBY}, and a menú del día — a set lunch of `
+  + 'two courses — is the usual weekday option.';
 
 export const language = 'Signs, announcements and menus are in Catalan and Spanish, often with English '
-  + 'as well. Courses are taught in English, except the Spanish programmes, which are taught in '
-  + 'Spanish; the Language + ICT week runs in either.';
+  + `as well. ${schedule.language}`;
 
 export const accessibility = 'The two course areas are different buildings, so step-free access is not '
   + 'the same in both. Tell us what you need when you enquire and we will confirm what the venue for '

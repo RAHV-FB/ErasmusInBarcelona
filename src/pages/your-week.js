@@ -1,18 +1,9 @@
 import { page, img, esc } from '../layout.js';
 import * as d from '../data/site-data.js';
-
-// The example week SpainBcn publishes for Barcelona. Which activities run
-// changes from week to week, which the page says next to the table.
-const WEEK = [
-  { day: 'Monday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Old town walking tour', kind: 'activity' }] },
-  { day: 'Tuesday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Free', kind: 'free' }] },
-  { day: 'Wednesday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Free', kind: 'free' }] },
-  { day: 'Thursday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Montjuïc and the Olympic Stadium', kind: 'activity' }] },
-  { day: 'Friday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Free', kind: 'free' }] },
-];
+import { lunchNearby } from '../data/barcelona-practical.js';
 
 export default function yourWeek() {
-  const week = WEEK.map((day) => `<div class="week__day">
+  const week = d.exampleWeek.map((day) => `<div class="week__day">
           <p class="week__name">${day.day}</p>
           ${day.slots.map((s) => `<div class="week__slot week__slot--${s.kind}">
             <b>${s.kind === 'class' ? 'Morning' : 'Afternoon'}</b>${esc(s.label)}
@@ -60,9 +51,8 @@ export default function yourWeek() {
       <div class="week">
         ${week}
       </div>
-      <p class="meta" style="margin-top:16px">An example week. The cultural activities vary by week;
-        both are included in the fee and optional to attend. We send the final timetable before you
-        arrive.</p>
+      <p class="meta" style="margin-top:16px">An example week. The cultural activities vary by week.
+        ${d.schedule.activitiesTerms} We send the final timetable before you arrive.</p>
     </div>
   </section>
 
@@ -80,11 +70,9 @@ export default function yourWeek() {
       </div>
       <div>
         <h2>Lunch and afternoons</h2>
-        <p>There's no canteen, so lunch is on your own. Both course areas have cafés and restaurants
-          within a few minutes' walk.</p>
-        <p>Two afternoons are the week's cultural activities, and someone from the team goes with the
-          group. The other three are yours.</p>
-        <p><a class="link-strong" href="/barcelona/">What to do with a free afternoon →</a></p>
+        <p>There's no canteen, so lunch is on your own. ${esc(lunchNearby)}</p>
+        <p>${d.schedule.activitiesShort} ${d.schedule.freeAfternoons}</p>
+        <p><a class="link-strong" href="/barcelona/">What to do with a free afternoon <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>
@@ -93,8 +81,7 @@ export default function yourWeek() {
     <div class="container cols cols--split">
       <div>
         <h2>Documents we provide</h2>
-        <p>We can provide these documents when your institution needs them. Your
-          ${d.schedule.certificate.toLowerCase()} is issued on the final day of the course.</p>
+        <p>We can provide these documents when your institution needs them.</p>
         <ul class="facts">
           ${documents}
         </ul>

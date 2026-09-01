@@ -9,9 +9,9 @@
 //   1. the organisation's own DATES-SPAINBCN sheet (course weeks)
 //   2. www.spainbcn.com, the current catalogue and price list
 //   3. the organisation's published contact/legal details
-// Everything below was checked against those sources on
-// 2026-08-20. Re-check prices, dates and programme names against
-// SpainBcn before each publish.
+// Each block records when it was checked against those sources.
+// Re-check prices, dates and programme names against SpainBcn
+// before each publish.
 // ============================================================
 
 export const organisation = {
@@ -24,6 +24,8 @@ export const organisation = {
   founders: 'María Ángeles and Miriam',
 };
 
+const OFFICE_WALK = 'five minutes on foot from the Sagrada Família';
+
 export const contact = {
   email: 'Hola@SpainBcn.com',
   emailHref: 'mailto:Hola@SpainBcn.com',
@@ -34,7 +36,8 @@ export const contact = {
   postcode: '08025',
   city: 'Barcelona',
   get address() { return `${this.street}, ${this.postcode} ${this.city}`; },
-  officeNote: 'Five minutes on foot from the Sagrada Família. Metro: Sagrada Família (L2, L5), Verdaguer (L4, L5).',
+  officeWalk: OFFICE_WALK,
+  officeNote: `${OFFICE_WALK.charAt(0).toUpperCase()}${OFFICE_WALK.slice(1)}. Metro: Sagrada Família (L2, L5), Verdaguer (L4, L5).`,
   venueNote: 'Courses run in two parts of the city: Gràcia, around the office, and Barceloneta by the '
     + 'sea. We confirm which one when you sign up.',
   replyTime: 'We normally reply within two working days.',
@@ -110,14 +113,6 @@ export const formsApp = {
   },
 };
 
-// The office never moves. Course rooms do: which area a given week runs
-// in depends on the course, the week and what is free, and it is settled
-// at sign-up rather than published in advance.
-export const venues = [
-  { area: 'Gràcia', note: 'Around the office, five minutes on foot from the Sagrada Família.' },
-  { area: 'Barceloneta', note: 'By the sea, on the L4 metro line.' },
-];
-
 // Fees per person, Barcelona, from the subject-area pages on SpainBcn.
 // Other Spanish destinations cost more; they are SpainBcn's to publish.
 export const pricing = {
@@ -128,8 +123,20 @@ export const pricing = {
   travel: 'You arrange travel, accommodation and meals.',
   travelKa1: 'Under Erasmus+ KA1, travel and accommodation come from the grant\'s own budget lines '
     + 'rather than from the course fee.',
-  groups: 'A private programme or a group project is quoted for the group: tell us the group and we confirm the fee and the invoicing in writing before you commit.',
+  groups: 'A private week or a group project is quoted on numbers, length and content, and the fee and the invoicing are confirmed in writing before you commit.',
 };
+
+// The other SpainBcn destinations, from spainbcn.com/locations.html
+// (checked 2026-08-20). Barcelona is this site's own and is not listed.
+export const destinations = ['Málaga', 'Mallorca', 'Gran Canaria', 'Tenerife', 'Tarragona'];
+export const destinationsSentence = `SpainBcn also runs course weeks in ${destinations.slice(0, -1).join(', ')} and ${destinations[destinations.length - 1]}.`;
+
+// Body prose spells a small count out ("nine groups", not "9 groups");
+// derived counts render through this so the word can never drift from
+// the data. Board and meta-description counts stay digits, as /dates/
+// established.
+export const countWord = (n) =>
+  ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'][n] ?? String(n);
 
 // Booking, money and cancellation, from SpainBcn's published terms
 // (spainbcn.com/terms.html, reviewed there 4 August 2026). These are the
@@ -148,6 +155,9 @@ export const pricing = {
 // visitor reads, which is why there is no data field for it: writing it
 // out once, where it helps, beats interpolating a taxonomy everywhere.
 
+const VAT_LINE = 'The fee is exempt from VAT as an educational service, so no VAT is added and none '
+  + 'appears on the invoice.';
+
 export const booking = {
   steps: [
     'You write with the course and the week. We reply within two working days.',
@@ -155,9 +165,9 @@ export const booking = {
     'You sign up and confirm. We send an acceptance letter if your institution needs one.',
     'We set out the fee, the dates and the invoicing in writing. That confirmation is the contract.',
   ],
-  contractWith: 'We invoice whoever is booking — your institution, or you directly.',
-  vat: 'The fee is exempt from VAT as an educational service, so no VAT is added and none appears on '
-    + 'the invoice. If your finance office needs that in writing for a purchase order or a grant claim, ask.',
+  contractWith: 'We invoice whoever is booking — your institution, or the participant directly.',
+  vatLine: VAT_LINE,
+  vat: `${VAT_LINE} If your finance office needs that in writing for a purchase order or a grant claim, ask.`,
   payment: 'There is no deposit, and nothing is payable until the arrangement is agreed in writing.',
   cancellation: 'Cancel more than 14 days before the course and we refund the fee in full. At 14 days '
     + 'or less we refund half and hold the rest as credit towards another week, at any SpainBcn '
@@ -166,20 +176,53 @@ export const booking = {
   changes: 'Changing a participant\'s name, moving to another week or switching course costs nothing.',
 };
 
+// The atoms below exist so that pages needing part of a fact — the days
+// alone, the activities without their terms — compose from the same
+// strings the full sentences use, and the two can never disagree.
+const DAYS = 'Monday to Friday';
+const CERTIFICATE = 'Certificate of attendance';
+const ACTIVITIES = 'Two afternoons are given to the week\'s cultural activities.';
+const ACTIVITIES_TERMS = 'Both are included in the fee, both are optional, and someone from the team goes with the group.';
+
 export const schedule = {
-  pattern: 'Classes run Monday to Friday mornings.',
+  days: DAYS,
+  pattern: `Classes run ${DAYS} mornings.`,
+  hoursShort: '20 or 25 hours',
   hours: 'You choose 20 or 25 hours a week when you book.',
   // The two-week format belongs to one programme. Every SpainBcn subject
   // area publishes "One week, Mon-Fri"; only AI & ICT adds "or two
   // (50 over two weeks)", for the AI & ICT Intensive. Checked area by
   // area on spainbcn.com, 2026-08-22.
   twoWeeks: 'Courses run one week; the two-week AI & ICT Intensive runs 50 hours across two adjacent weeks.',
-  activities: 'Two afternoons are given to the week\'s cultural activities. Both are included in the fee, both are optional, and someone from the team goes with the group.',
+  activitiesShort: ACTIVITIES,
+  activitiesTerms: ACTIVITIES_TERMS,
+  activities: `${ACTIVITIES} ${ACTIVITIES_TERMS}`,
+  freeAfternoons: 'The other three afternoons are yours.',
   materials: 'Course materials are handed out on the first day.',
-  certificate: 'Certificate of attendance',
+  certificate: CERTIFICATE,
   certificateNote: 'Issued on the final day of the course.',
+  certificateLine: `${CERTIFICATE}, issued on the final day of the course.`,
   groupSize: 'Groups are small, usually with participants from several European countries.',
+  // Counted from the `level` fields in src/data/course-groups.js on
+  // 2026-09-01: 12 of the 27 courses run for all levels, 9 at a single
+  // introductory or advanced level, and the English and Spanish groups
+  // also run language weeks grouped by level.
+  levels: 'Most courses run for all levels or at a single introductory or advanced level; the English and Spanish language weeks group by level from A1 to C1.',
+  // Checked area by area on spainbcn.com, 2026-08-22; the Language + ICT
+  // exception is the one SpainBcn's AI & ICT area publishes.
+  language: 'Courses are taught in English, except the Spanish courses, which are taught in Spanish. The Language + ICT week runs in either.',
 };
+
+// The example week SpainBcn publishes for Barcelona
+// (spainbcn.com/barcelona.html, checked 2026-08-20). Which activities
+// run changes from week to week; /your-week/ says so beside the table.
+export const exampleWeek = [
+  { day: 'Monday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Old town walking tour', kind: 'activity' }] },
+  { day: 'Tuesday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Free', kind: 'free' }] },
+  { day: 'Wednesday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Free', kind: 'free' }] },
+  { day: 'Thursday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Montjuïc and the Olympic Stadium', kind: 'activity' }] },
+  { day: 'Friday', slots: [{ label: 'Class', kind: 'class' }, { label: 'Free', kind: 'free' }] },
+];
 
 // Documents the organisation provides for Erasmus+ paperwork.
 export const documents = [
@@ -187,7 +230,7 @@ export const documents = [
   { name: 'Pre-registration confirmation', note: 'For KA1 applications.' },
   { name: 'Acceptance letter', note: 'Sent once a place is confirmed, where one is needed.' },
   { name: 'Course description and programme', note: 'With the contact hours and what the week covers.' },
-  { name: 'Certificate of attendance', note: 'Issued on the final day.' },
+  { name: schedule.certificate, note: schedule.certificateNote },
   { name: 'Europass Mobility support', note: 'Course information, dates and confirmation.' },
   { name: 'Invoice', note: 'For your grant records.' },
 ];
@@ -202,121 +245,24 @@ export const projectFormats = [
 ];
 
 // ============================================================
-// COURSES
+// SUBJECT AREAS
 //
-// SpainBcn keeps the full catalogue: 39 programmes across 14
-// subject areas. This site curates them into six choices below and
-// links each programme to its own entry on SpainBcn.
-//
-// The Barcelona course groups in src/data/course-groups.js are a
-// separate thing: the organisation's own Barcelona catalogue, nine
-// groups defined by the owner in August 2026, each with its own
-// page under /courses/. Fees, schedule and booking terms on those
-// pages come from this file, never from the group data.
+// The DATES-SPAINBCN sheet tags each course week with one of these
+// areas; the /dates/ filter groups weeks by them, and
+// tools/refresh-dates.mjs validates every imported row against the
+// ids. The courses this site sells are the nine Barcelona course
+// groups in src/data/course-groups.js; the full SpainBcn catalogue
+// stays on spainbcn.com.
 // ============================================================
 const SB = 'https://www.spainbcn.com/';
 
 export const courseAreas = [
-  {
-    id: 'ai',
-    label: 'AI and digital teaching',
-    short: 'AI, digital tools and classroom technology.',
-    desc: 'Artificial intelligence, digital teaching tools and practical classroom uses of ICT.',
-    language: 'English; the Language + ICT week also runs in Spanish',
-    subjects: [{ name: 'AI & ICT in Education', url: SB + 'group-ai-ict.html' }],
-    programmes: [
-      { name: 'Artificial Intelligence in Education', url: SB + 'group-ai-ict.html#artificial-intelligence-in-education' },
-      { name: 'School AI & ICT', url: SB + 'group-ai-ict.html#school-ai-and-ict' },
-      { name: 'University AI & ICT', url: SB + 'group-ai-ict.html#university-ai-and-ict' },
-      { name: 'AI for Language Teaching', url: SB + 'group-ai-ict.html#ai-for-language-teaching' },
-      { name: 'AI & ICT Intensive (two weeks)', url: SB + 'group-ai-ict.html#ai-and-ict-intensive-two-weeks' },
-    ],
-  },
-  {
-    id: 'english',
-    label: 'English and communication',
-    short: 'Language, methodology and presentation.',
-    desc: 'English language for teachers, teaching methodology, CLIL and public speaking.',
-    language: 'English',
-    subjects: [
-      { name: 'English', url: SB + 'group-english.html' },
-      { name: 'Presentation & Communication', url: SB + 'group-presentation.html' },
-      { name: 'CLIL & Bilingual Teaching', url: SB + 'group-clil.html' },
-    ],
-    programmes: [
-      { name: 'General English by level', url: SB + 'group-english.html#general-english-by-level' },
-      { name: 'Teaching Methodology in English', url: SB + 'group-english.html#teaching-methodology-in-english' },
-      { name: 'Presentation Skills', url: SB + 'group-presentation.html#presentation-skills' },
-      { name: 'CLIL', url: SB + 'group-clil.html#clil' },
-    ],
-  },
-  {
-    id: 'spanish',
-    label: 'Spanish',
-    short: 'Language, culture and teaching.',
-    desc: 'Spanish language by level, Spanish culture and history, and methodology for teaching Spanish.',
-    language: 'Spanish',
-    subjects: [{ name: 'Spanish', url: SB + 'group-spanish.html' }],
-    programmes: [
-      { name: 'General Spanish by level', url: SB + 'group-spanish.html#general-spanish-by-level' },
-      { name: 'Culture & History in Spanish', url: SB + 'group-spanish.html#culture-and-history-in-spanish' },
-      { name: 'Teaching Methodology in Spanish', url: SB + 'group-spanish.html#teaching-methodology-in-spanish' },
-    ],
-  },
-  {
-    id: 'inclusion',
-    label: 'Inclusion and special needs',
-    short: 'SEN, inclusion and classroom support.',
-    desc: 'Special educational needs, inclusive classrooms, integration and classroom management.',
-    language: 'English',
-    subjects: [
-      { name: 'Special Needs Education (SEN)', url: SB + 'group-sen.html' },
-      { name: 'Inclusion & Diversity', url: SB + 'group-inclusion.html' },
-    ],
-    programmes: [
-      { name: 'Special Needs Education', url: SB + 'group-sen.html#special-needs-education' },
-      { name: 'Digital tools for SEN', url: SB + 'group-sen.html#digital-tools-for-sen' },
-      { name: 'Inclusion & Integration', url: SB + 'group-inclusion.html#inclusion-and-integration' },
-      { name: 'Learning by Doing', url: SB + 'group-inclusion.html#learning-by-doing' },
-    ],
-  },
-  {
-    id: 'wellbeing',
-    label: 'Wellbeing and classroom practice',
-    short: 'Wellbeing, mindfulness and classroom management.',
-    desc: 'Teacher wellbeing and mental health, mindfulness, yoga and meditation in school.',
-    language: 'English',
-    subjects: [
-      { name: 'Wellbeing for Educators', url: SB + 'group-wellbeing.html' },
-      { name: 'Classroom Management', url: SB + 'group-classroom.html' },
-    ],
-    programmes: [
-      { name: 'Mental Health & Well-being for Teachers', url: SB + 'group-wellbeing.html#mental-health-and-well-being-for-teachers' },
-      { name: 'Yoga & Meditation', url: SB + 'group-wellbeing.html#yoga-and-meditation' },
-      { name: 'Classroom Management, foundations', url: SB + 'group-classroom.html#classroom-management-foundations' },
-      { name: 'Classroom Management, advanced', url: SB + 'group-classroom.html#classroom-management-advanced' },
-    ],
-  },
-  {
-    id: 'creative',
-    label: 'Creative and experiential learning',
-    short: 'Art, outdoor learning, sustainability and citizenship.',
-    desc: 'Art in education, outdoor and experiential learning, sustainability and citizenship.',
-    language: 'English',
-    subjects: [
-      { name: 'Art & Creative Teaching', url: SB + 'group-art.html' },
-      { name: 'Outdoor & Experiential Learning', url: SB + 'group-outdoor.html' },
-      { name: 'Sustainability & Eco-Education', url: SB + 'group-sustainability.html' },
-      { name: 'Citizenship & Human Rights', url: SB + 'group-citizenship.html' },
-      { name: 'Leadership & Careers', url: SB + 'group-leadership.html' },
-    ],
-    programmes: [
-      { name: 'Art-Based Teaching', url: SB + 'group-art.html#art-based-teaching' },
-      { name: 'Outdoor Learning, basics', url: SB + 'group-outdoor.html#outdoor-learning-basics' },
-      { name: 'Sustainability, green basics', url: SB + 'group-sustainability.html#sustainability-green-basics' },
-      { name: 'Leadership', url: SB + 'group-leadership.html#leadership' },
-    ],
-  },
+  { id: 'ai', label: 'AI and digital teaching' },
+  { id: 'english', label: 'English and communication' },
+  { id: 'spanish', label: 'Spanish' },
+  { id: 'inclusion', label: 'Inclusion and special needs' },
+  { id: 'wellbeing', label: 'Wellbeing and classroom practice' },
+  { id: 'creative', label: 'Creative and experiential learning' },
 ];
 
 
@@ -370,10 +316,12 @@ export const universityProgrammes = {
 // ============================================================
 // COURSE WEEKS IN BARCELONA
 //
-// Exported by hand from the organisation's DATES-SPAINBCN sheet
-// (gid 480287972) on 2026-08-20 — the owner asked for no live
-// connection. Barcelona rows only; the other destinations belong
-// to SpainBcn. Course labels are the sheet's own.
+// A snapshot of the organisation's DATES-SPAINBCN sheet
+// (gid 480287972), refreshed by `npm run dates`
+// (tools/refresh-dates.mjs), which rewrites `dates` and
+// datesSource.importedOn — the date of the last refresh — in
+// place. Barcelona rows only; the other destinations belong to
+// SpainBcn. Course labels are the sheet's own.
 //
 // The sheet records scheduled weeks and nothing else, so every
 // row here is "scheduled". Do not invent another state.
@@ -399,9 +347,6 @@ export const dates = [
   { start: '2026-11-09', end: '2026-11-13', label: '9–13', month: 'Nov', course: 'English', area: 'english' },
 ];
 
-// ============================================================
-// PEOPLE — names and roles as the organisation publishes them.
-// ============================================================
 // `dates` has one row per course, so several rows share a calendar week.
 // Anything that counts or lists weeks must go through here, or the site
 // says "12 weeks" when there are twelve courses across six.
@@ -417,6 +362,23 @@ export const weeks = (() => {
   return [...byWeek.values()];
 })();
 
+// What the pages render: the weeks that have not ended by the build
+// date, so a stale snapshot can never present a past week as upcoming.
+// `dates` and `weeks` above stay unfiltered on purpose — the publish
+// guard (scripts/guards.mjs) reads them to demand a re-export, and
+// `npm run dates` rewrites the raw rows.
+const today = new Date().toISOString().slice(0, 10);
+export const upcomingWeeks = weeks.filter((w) => w.end >= today);
+
+/** The next upcoming weeks offering one of the sheet's course labels. */
+export const upcomingWeeksFor = (labels, limit) => upcomingWeeks
+  .map((w) => ({ ...w, courses: w.courses.filter((c) => labels.includes(c.course)) }))
+  .filter((w) => w.courses.length)
+  .slice(0, limit);
+
+// ============================================================
+// PEOPLE — names and roles as the organisation publishes them.
+// ============================================================
 export const team = {
   core: [
     { name: 'Miriam', role: 'Academic coordinator', img: 'team-miriam' },
@@ -440,7 +402,7 @@ export const history = [
   { year: '1997', title: 'The beginning', text: 'María Ángeles and Miriam founded SpainBcn in Barcelona, teaching Spanish to international students.' },
   { year: '2000s', title: 'A language school', text: 'Students came from all over the world to learn Spanish in Barcelona.' },
   { year: '2010s', title: 'From language courses to European mobility', text: 'European teachers began arriving through Erasmus+ staff mobility, and the catalogue grew from language classes into professional training.' },
-  { year: 'Today', title: 'Barcelona and five more destinations', text: 'Courses run in Barcelona, Málaga, Mallorca, Gran Canaria, Tenerife and Tarragona, for schools, universities, VET and adult-education organisations across Europe.' },
+  { year: 'Today', title: `Barcelona and ${countWord(destinations.length)} more destinations`, text: `Courses run in ${['Barcelona', ...destinations.slice(0, -1)].join(', ')} and ${destinations[destinations.length - 1]}, for schools, universities, VET and adult-education organisations across Europe.` },
 ];
 
 // ============================================================

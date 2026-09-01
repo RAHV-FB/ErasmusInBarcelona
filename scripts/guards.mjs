@@ -274,6 +274,48 @@ if (buildable) {
 }
 
 // ------------------------------------------------------------
+// Fragments resolve. A redirect or an internal link that names an
+// anchor must land on an element carrying that id — the home page's
+// course grid once pointed at /join-a-course/ anchors a restructure
+// had removed, and nothing noticed until an audit did.
+// ------------------------------------------------------------
+if (buildable) {
+  const pageIds = new Map();
+  const idsFor = (target) => {
+    if (!pageIds.has(target)) {
+      const rel = target === '/' ? 'index.html' : path.join(target.replace(/^\//, ''), 'index.html');
+      pageIds.set(target, has(rel)
+        ? new Set([...read(rel).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
+        : null);
+    }
+    return pageIds.get(target);
+  };
+
+  for (const [from, to] of Object.entries(REDIRECTS)) {
+    if (!to.includes('#')) continue;
+    const [target, fragment] = to.split('#');
+    const ids = idsFor(target);
+    if (ids && !ids.has(fragment)) {
+      fail(`redirect ${from} → ${to}: the built page has no id="${fragment}"`);
+    }
+  }
+
+  for (const file of htmlFiles) {
+    const text = fs.readFileSync(file, 'utf8');
+    const own = new Set([...text.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+    for (const m of text.matchAll(/href="([^"]*#[^"]+)"/g)) {
+      const url = m[1];
+      if (/^[a-z][a-z0-9+.-]*:/i.test(url)) continue;   // absolute URLs are link-check's job
+      const [target, fragment] = url.split('#');
+      const ids = target === '' ? own : (target.startsWith('/') ? idsFor(target.split('?')[0]) : null);
+      if (ids && !ids.has(fragment)) {
+        fail(`${path.relative(DIST, file)}: link to ${url}, but the target has no id="${fragment}"`);
+      }
+    }
+  }
+}
+
+// ------------------------------------------------------------
 // The canonical redirect, and the condition that keeps the site up.
 //
 // Varnish sits in front of Apache and terminates TLS, so %{HTTPS} is
@@ -324,10 +366,12 @@ if (buildable && has('.htaccess')) {
 // ------------------------------------------------------------
 // Course weeks that have already happened.
 //
-// `dates` is a hand export from the DATES-SPAINBCN sheet and no page
-// compares a row against today, so a stale export does not look stale:
-// the home page goes on calling a week that has been and gone
-// "upcoming". Nothing else in the repository would catch it.
+// The pages render `upcomingWeeks`, which drops rows whose `end` is
+// past at build time — so a published page never calls a finished
+// week "upcoming". This guard reads the unfiltered export instead:
+// a past row still in `dates` means the sheet has moved on and the
+// snapshot needs re-exporting (`npm run dates`), or the calendar
+// thins out with nothing to say so.
 //
 // Set ALLOW_STALE_DATES=1 to publish anyway — for an urgent fix that has
 // nothing to do with the dates. It is deliberately something you have to

@@ -26,6 +26,7 @@ date: 2026-08-31
 | `/courses/` | src/pages/courses.js | dist/courses/index.html |
 | `/courses/<group>/` (nine) | src/pages/course-group.js from src/data/course-groups.js | dist/courses/&lt;group&gt;/index.html |
 | `/join-a-course/` | src/pages/join-a-course.js | dist/join-a-course/index.html |
+| `/universities/` | src/pages/universities.js | dist/universities/index.html |
 | `/bring-a-group/` | src/pages/bring-a-group.js | dist/bring-a-group/index.html |
 | `/plan-a-mobility/` | src/pages/plan-a-mobility.js | dist/plan-a-mobility/index.html |
 | `/dates/` | src/pages/dates.js | dist/dates/index.html |
@@ -36,11 +37,11 @@ date: 2026-08-31
 | `/privacy/` · `/cookies/` | src/pages/privacy.js · cookies.js | dist/privacy/ · dist/cookies/ |
 | `/404.html` | src/pages/not-found.js | dist/404.html |
 | shared shell | src/layout.js | header, footer, `<head>`, structured data |
-| all facts | src/data/site-data.js | every page |
-| course weeks | Google Sheet DATES-SPAINBCN gid=480287972 | exported by hand into site-data.js |
+| all facts | src/data/ (site-data.js, course-groups.js, barcelona-practical.js) | every page |
+| course weeks | Google Sheet DATES-SPAINBCN gid=480287972 | refreshed by `npm run dates` (tools/refresh-dates.mjs) into site-data.js |
 
 ## Not published
-`uploads/` and `source-photos/` hold the original photographs and are excluded from `dist/`.
+`uploads/`, `Images-Erasmus/` and `source-photos/` hold the original photographs and are excluded from `dist/`.
 `dist/` itself is generated and git-ignored; build it with `npm run build`.
 
 ## Deployment

@@ -32,7 +32,8 @@ cannot fall behind what it is checking.
 ├── server.mjs                   the local server: same redirect table, in JavaScript
 ├── src/
 │   ├── data/                    every fact the site states
-│   │   ├── site-data.js           prices, dates, courses, people, the OID, the addresses
+│   │   ├── site-data.js           prices, dates, people, the OID, the addresses
+│   │   ├── course-groups.js       the nine Barcelona course groups and their courses
 │   │   ├── barcelona-practical.js transport, fares, airport, neighbourhoods
 │   │   ├── redirects.js           the legacy URL table, and the 410 list
 │   │   └── analytics.js           Umami, once, including the EU host
@@ -44,13 +45,14 @@ cannot fall behind what it is checking.
 │       └── images/                the WebP files the site serves
 ├── tools/
 │   ├── build-htaccess.mjs       redirects.js → the production .htaccess
-│   ├── build-images.mjs         uploads/ and source-photos/ → src/assets/images
+│   ├── build-images.mjs         uploads/, Images-Erasmus/ and source-photos/ → src/assets/images
 │   └── refresh-dates.mjs        the DATES-SPAINBCN sheet → dates in site-data.js
 ├── scripts/
 │   ├── guards.mjs               the publish guards, run by CI and both deploys
 │   ├── health-check.mjs         the browser audit, npm run check
 │   └── link-check.mjs           off-site links, npm run links
-├── uploads/  source-photos/     photograph originals; never published
+├── uploads/  Images-Erasmus/  source-photos/
+│                                photograph originals; never published
 ├── notes/production-report.md   what was decided, and what is still unresolved
 ├── upload-to-dinahosting.sh     build, upload, verify — curl only
 ├── cutover.sh                   the domain move, kept for the other eight domains
@@ -124,13 +126,16 @@ again inside both deploy paths. They are the same file in all three places.
 **A price changes.** `pricing` in `src/data/site-data.js`. Every page that mentions it follows.
 Check it against www.spainbcn.com first — SpainBcn's prices are the source, not this site's.
 
-**The course weeks need refreshing.** `dates` in `src/data/site-data.js`, exported by hand from
-the DATES-SPAINBCN sheet linked in `datesSource` — Barcelona rows only. One row per course, so
-several rows share a calendar week; anything that counts weeks goes through `weeks`, never
-`dates`, or the site says twelve weeks when there are six.
+**The course weeks need refreshing.** `npm run dates` reads the DATES-SPAINBCN sheet linked in
+`datesSource` and rewrites `dates` in `src/data/site-data.js` — Barcelona rows only; preview with
+`npm run dates -- --dry-run`, review with `git diff`. Hand-editing the array is the fallback. One
+row per course, so several rows share a calendar week; anything that counts weeks goes through
+`weeks`, never `dates`, or the site says twelve weeks when there are six.
 
-The guard fails once a listed week has ended. **The current export runs out on 13 November
-2026**, and the first week goes stale on 19 September 2026, so this is the next content job due.
+The pages render only weeks that have not ended at build time, and the guard fails a publish once
+a listed week has ended, so the snapshot cannot silently mislead — but only a refresh brings the
+next weeks in. **The current export runs out on 13 November 2026**, so this is the recurring
+content job.
 
 **A new page.** Add the module to `src/pages/`, then its route to `PAGES` in `build.mjs`. The
 sitemap, the canonical, the breadcrumb and the nav all read from there. The guards will tell you
@@ -170,10 +175,7 @@ password rather than reading a secret:
 | `bash upload-to-dinahosting.sh --dry-run` | say what would change, send nothing |
 | `bash upload-to-dinahosting.sh --verify-only` | check the live site, upload nothing |
 
-**Left for the owner:** make `main` the repository's default branch, in GitHub → Settings →
-Branches. It is still `claude/site-health-check-df5ie0`, a session name doing a permanent job.
-Nothing depends on the flip any more — both workflows trigger on `main` alone — but until it
-happens a new clone and a new pull request both start from the wrong branch.
+`main` is the repository's default and only long-lived branch (since 31 August 2026).
 
 ## How to undo one
 
