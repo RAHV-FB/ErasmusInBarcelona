@@ -675,6 +675,25 @@ export const images = {
     file: 'english-course-wordgame-whiteboard',
     alt: 'Two participants at a word game on the interactive whiteboard',
   },
+  // The Jovenes set, for /bring-a-group/: a student week in four
+  // photographs — in class, the certificates, and two evenings out.
+  jovenesClass: {
+    file: 'student-group-laptops-classroom',
+    alt: 'A student class at laptops, their teachers standing at the back',
+  },
+  jovenesCertificates: {
+    file: 'student-group-certificates-teacher',
+    alt: 'A student group holding up their certificates with their teacher',
+  },
+  jovenesViewpoint: {
+    file: 'student-group-viewpoint-dusk-barcelona',
+    alt: 'A student group with their teachers at a viewpoint over Barcelona at dusk',
+  },
+  jovenesSculpture: {
+    file: 'student-group-sculpture-courtyard',
+    alt: 'A student group in front of a large sculpture in a floodlit stone courtyard, on an evening visit',
+    focus: '50% 70%',
+  },
   spanishSittingRoom: {
     file: 'spanish-course-sitting-room',
     alt: 'A Spanish course group among the plates and paintings of the SpainBcn sitting room',

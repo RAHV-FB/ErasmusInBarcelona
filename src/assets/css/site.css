@@ -453,6 +453,10 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--ink-55); }
 .group-card p { margin: 0; color: var(--ink-70); font-size: .95rem; }
 .group-card .meta { margin-top: 2px; }
 
+/* Four photographs of equal weight, two by two (/bring-a-group/). */
+.gallery-quad { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) { .gallery-quad { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 /* The courses inside a group, opened and closed with native <details>. */
 .course-list { border-top: 1px solid var(--graphite); }
 .course { border-bottom: 1px solid var(--line); }

@@ -62,6 +62,10 @@ export default function planAMobility() {
     </div>
   </section>
 
+  <figure class="media media--band">
+    ${img(d.images.barcelonaClassroom, { sizes: '100vw' })}
+  </figure>
+
   <section class="section">
     <div class="container cols cols--split">
       <div>

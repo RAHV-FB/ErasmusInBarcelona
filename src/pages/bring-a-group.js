@@ -62,6 +62,25 @@ export default function bringAGroup() {
     </div>
   </section>
 
+  <section class="section section--tight">
+    <div class="container">
+      <div class="gallery-quad">
+        <figure class="media media--photo">
+          ${img(d.images.jovenesClass, { sizes: '(min-width: 640px) 45vw, 100vw' })}
+        </figure>
+        <figure class="media media--photo">
+          ${img(d.images.jovenesCertificates, { sizes: '(min-width: 640px) 45vw, 100vw' })}
+        </figure>
+        <figure class="media media--photo">
+          ${img(d.images.jovenesViewpoint, { sizes: '(min-width: 640px) 45vw, 100vw' })}
+        </figure>
+        <figure class="media media--photo">
+          ${img(d.images.jovenesSculpture, { sizes: '(min-width: 640px) 45vw, 100vw' })}
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container cols cols--split">
       <div>

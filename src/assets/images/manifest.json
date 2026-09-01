@@ -325,6 +325,32 @@
     ],
     "ratio": 1.3333
   },
+  "student-group-certificates-teacher": {
+    "widths": [
+      800,
+      1200,
+      1600
+    ],
+    "ratio": 1.1296
+  },
+  "student-group-viewpoint-dusk-barcelona": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.399
+  },
+  "student-group-sculpture-courtyard": {
+    "widths": [
+      800
+    ],
+    "ratio": 0.7551
+  },
+  "student-group-laptops-classroom": {
+    "widths": [
+      800
+    ],
+    "ratio": 1.3972
+  },
   "spanish-course-sitting-room": {
     "widths": [
       800,
