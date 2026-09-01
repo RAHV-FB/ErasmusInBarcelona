@@ -52,7 +52,9 @@ function sendFile(res, status, file) {
 }
 
 function resolve(pathname) {
-  const rel = decodeURIComponent(pathname).replace(/^\/+/, '');
+  // Malformed percent-encoding (/%zz) throws here; answer 404, don't crash.
+  let rel;
+  try { rel = decodeURIComponent(pathname).replace(/^\/+/, ''); } catch { return null; }
   const target = path.resolve(ROOT, rel);
   if (target !== ROOT && !target.startsWith(ROOT + path.sep)) return null;
   if (fs.existsSync(target)) {
@@ -83,8 +85,13 @@ const server = http.createServer((req, res) => {
     pathname = pathname.slice(BASE_PATH.length) || '/';
   }
 
+  // Apache passes the query string through except on #fragment targets
+  // (QSD in tools/build-htaccess.mjs); match it so the two agree.
   const redirect = REDIRECTS[pathname] || REDIRECTS[pathname.replace(/\/$/, '')];
-  if (redirect) return send(res, 301, '', { Location: BASE_PATH + redirect });
+  if (redirect) {
+    const loc = BASE_PATH + redirect + (redirect.includes('#') ? '' : url.search);
+    return send(res, 301, '', { Location: loc });
+  }
 
   if (GONE.includes(pathname)) {
     const goneFile = path.join(ROOT, '404.html');

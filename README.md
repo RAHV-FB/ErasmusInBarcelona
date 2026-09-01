@@ -16,22 +16,21 @@ student groups, and institutional mobility. Plain static HTML, built from one da
 | `npm run check` | build, serve, and audit every page in a browser |
 | `npm run links` | check every off-site link and anchor (hits real servers) |
 | `npm run images` | regenerate the images in `src/assets/images` |
+| `npm run dates` | refresh the Barcelona course weeks from the sheet (`-- --dry-run` to preview) |
+| `npm run serve` | serve the existing `dist/` without rebuilding |
 
 Changing something? [CONTRIBUTING.md](CONTRIBUTING.md) has the recipe for each of the usual
 jobs, what will stop you and why, how it gets published and how to undo it.
 
 ### The GitHub Pages prototype
 
-<https://rahv-fb.github.io/ErasmusInBarcelona/> is a prototype for review, not the live site.
+The Pages deploy workflow was removed when the domain went live on 22 August 2026. The prototype
+at <https://rahv-fb.github.io/ErasmusInBarcelona/> still serves — noindexed and robots-disallowed —
+until the owner disables Pages (owner action 4 in notes/production-report.md). It is not the live
+site and no longer updates.
 
-`.github/workflows/deploy-pages.yml` builds the site on every push to this branch and deploys it
-to Pages. `actions/configure-pages` reports the URL the site will be served from and the build
-takes its base path from that, so the repository name is not written into the workflow.
-
-Nothing generated is committed: the repository holds source only, and the deployed site comes from
-the workflow's artifact.
-
-To build and check it locally the way Pages serves it:
+`npm run build:pages` remains for building and checking a prototype locally, the way Pages
+served it:
 
 ```bash
 npm run build:pages
@@ -41,7 +40,10 @@ BASE_PATH=/ErasmusInBarcelona npm run check
 ## How it fits together
 
 ```
-src/data/site-data.js     every fact the site states, in one place
+src/data/                 every fact the site states: site-data.js (shared facts),
+                          course-groups.js (the nine Barcelona course groups),
+                          barcelona-practical.js (fares, airport, metro),
+                          redirects.js, analytics.js
 src/pages/*.js            one module per page, returning its HTML
 src/layout.js             <head>, header, footer, image helpers, structured data
 src/assets/css/site.css   the whole stylesheet
@@ -50,14 +52,16 @@ src/assets/images/        production images (WebP, generated)
 build.mjs                 renders src/pages → dist/
 server.mjs                static server: clean URLs, legacy redirects, real 404
 tools/build-images.mjs    originals → resized WebP with descriptive names
+tools/refresh-dates.mjs   the DATES-SPAINBCN sheet → `dates` in site-data.js
 scripts/health-check.mjs  the browser audit behind `npm run check`
 scripts/guards.mjs        the publish guards, shared by CI and both deploy paths
-uploads/, source-photos/  the untouched original photographs; never published
+uploads/, Images-Erasmus/, source-photos/
+                          the untouched original photographs; never published
 notes/                    the live-site audit and the production report
 ```
 
 Every number, price, date, address, programme name and person on the site comes from
-`src/data/site-data.js`. Nothing factual belongs in a page template. Change the data, run
+`src/data/`. Nothing factual belongs in a page template. Change the data, run
 `npm run build`, and every page that mentions it follows.
 
 Pages are ordinary HTML when they arrive: titles, descriptions, canonicals, Open Graph tags and
@@ -81,9 +85,12 @@ the scheduled weeks, and the programme names and their links on SpainBcn.
 
 ## Adding or changing a course week
 
-Weeks are exported by hand from the sheet, as the owner asked — no live connection. Update the
-`dates` array in `src/data/site-data.js`, set `datesSource.importedOn`, and rebuild. The home
-page, the courses page and the dates page all read from it.
+`npm run dates` reads the sheet's public CSV export and rewrites the `dates` array and
+`datesSource.importedOn` in `src/data/site-data.js` (`npm run dates -- --dry-run` to preview);
+review with `git diff`, rebuild, publish. Hand-editing the array remains the fallback. The home
+page (through the derived `weeks`), `/dates/`, `/join-a-course/`, `/universities/` and each
+course-group page read from it, and the pages render only the weeks that have not yet ended at
+build time.
 
 ## Third parties
 
@@ -116,7 +123,8 @@ except `cgi-bin/` and `.well-known/`, which belong to the server and are exclude
 repository secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`); the web root is the repository
 variable `DEPLOY_DIR`, defaulting to `/www/`. The workflow refuses to publish a prototype build or
 to mirror anywhere but the web root; after uploading it lists the server and fails if any file in
-`dist/` is missing, then checks five pages, the 404 status and three legacy redirects over HTTP.
+`dist/` is missing, then checks five pages, the 404 status, the 410 and five legacy redirects
+over HTTP.
 
 Uploads run one file at a time. In parallel the host starts refusing data connections part-way
 through and individual files die while their neighbours succeed.

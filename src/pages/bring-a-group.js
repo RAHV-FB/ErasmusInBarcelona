@@ -26,7 +26,7 @@ export default function bringAGroup() {
         <p class="lede">Programmes for secondary, high-school and VET student groups, in English or
           Spanish, with the accompanying teachers taking part alongside the students.</p>
         <p class="meta">Looking for training for your staff instead?
-          <a href="/join-a-course/">See the courses →</a></p>
+          <a href="/join-a-course/">See the courses <span aria-hidden="true">→</span></a></p>
         <div class="btn-row">
           <a class="btn" href="#plan">Plan your group</a>
           <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
@@ -49,7 +49,7 @@ export default function bringAGroup() {
           high-school and VET student groups, travelling with their own teachers.</span></li>
         <li><span class="facts__term">Subjects</span><span class="facts__value">Language, AI and ICT,
           and culture and citizenship are the usual choices, on their own or combined across the
-          week. Ask about other subjects. <a href="/join-a-course/">See the areas →</a></span></li>
+          week. Ask about other subjects. <a href="/join-a-course/">See the areas <span aria-hidden="true">→</span></a></span></li>
         <li><span class="facts__term">Language</span><span class="facts__value">English or Spanish.</span></li>
         <li><span class="facts__term">Length</span><span class="facts__value">A week is usual. We also
           run two-week and shorter programmes.</span></li>
@@ -85,8 +85,7 @@ export default function bringAGroup() {
     <div class="container cols cols--split">
       <div>
         <h2>What a group price covers</h2>
-        <p>Group prices depend on the number of participants, the length of the programme and what you
-          want to include. Send us those details and we'll quote the group in writing.</p>
+        <p>${esc(d.pricing.groups)}</p>
         <ul>
           <li>Teaching</li>
           <li>Course materials</li>
@@ -94,14 +93,14 @@ export default function bringAGroup() {
           <li>Agreed cultural activities, with someone from the team along</li>
           <li>Certificates and the documents your project needs</li>
         </ul>
-        <p class="meta">The fee is exempt from VAT as an educational service.</p>
+        <p class="meta">${esc(d.booking.vatLine)}</p>
       </div>
       <div>
         <h2>Travel and accommodation</h2>
         <p>Your school arranges travel, accommodation, meals, local transport and insurance. Students
           are in our care during the programme hours and the agreed activities, and in yours the rest
           of the time.</p>
-        <p><a class="link-strong" href="/barcelona/">Where groups usually stay in Barcelona →</a></p>
+        <p><a class="link-strong" href="/barcelona/">Where groups usually stay in Barcelona <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>
@@ -141,8 +140,9 @@ export default function bringAGroup() {
       </div>
       <div>
         <h2>If you are the coordinator</h2>
-        <p>The documents, the OID and how invoicing works are on the institutional page.</p>
-        <p><a class="link-strong" href="/plan-a-mobility/">Institutional programmes →</a></p>
+        <p>We provide the documents, the registration details and the written invoicing terms your
+          project needs.</p>
+        <p><a class="link-strong" href="/plan-a-mobility/">Institutional programmes <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>

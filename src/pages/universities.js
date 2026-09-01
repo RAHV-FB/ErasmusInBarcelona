@@ -11,23 +11,26 @@ export default function universities() {
   const groups = uni.groups.map((g) => `<div>
           <h3>${esc(g.label)}</h3>
           <ul>
-            ${g.items.map((p) => `<li><a href="${p.url}" rel="noopener">${esc(p.name)} ↗</a></li>`).join('\n            ')}
+            ${g.items.map((p) => `<li><a href="${p.url}" rel="noopener">${esc(p.name)} <span aria-hidden="true">↗</span></a></li>`).join('\n            ')}
           </ul>
         </div>`).join('\n        ');
 
-  const rows = d.dates.filter((r) => UNI_AREAS.includes(r.area)).slice(0, 5);
+  const rows = d.upcomingWeeks
+    .map((w) => ({ ...w, courses: w.courses.filter((c) => UNI_AREAS.includes(c.area)) }))
+    .filter((w) => w.courses.length)
+    .slice(0, 5);
   const board = rows.length
     ? `<div class="board">
         ${rows.map((w) => `<a class="board__row" href="/dates/">
           <span class="board__when">${w.label} <span class="board__month">${w.month}</span></span>
-          <span class="board__course">${esc(w.course)}</span>
+          <span class="board__course">${w.courses.map((c) => esc(c.course)).join(' · ')}</span>
         </a>`).join('\n        ')}
       </div>
       <div class="board__foot">
-        <a class="link-strong" href="/dates/">All Barcelona dates →</a>
+        <a class="link-strong" href="/dates/">All Barcelona dates <span aria-hidden="true">→</span></a>
       </div>`
     : `<p>No scheduled Barcelona week in the current calendar.</p>
-      <p><a class="link-strong" href="/contact/">Ask us about your dates →</a></p>`;
+      <p><a class="link-strong" href="/contact/">Ask us about your dates <span aria-hidden="true">→</span></a></p>`;
 
   const body = `
   <section class="container hero hero--tight">
@@ -54,13 +57,13 @@ export default function universities() {
       <div>
         <h2>AI and digital tools for university work</h2>
         <p><a class="link-strong" href="${uni.dedicated.url}" rel="noopener">${esc(uni.dedicated.name)} —
-          the one-week course for ${esc(uni.dedicated.audience)} ↗</a></p>
+          the one-week course for ${esc(uni.dedicated.audience)} <span aria-hidden="true">↗</span></a></p>
         <p>${esc(uni.dedicated.desc)} Its published audience is university staff alone.</p>
       </div>
       <div>
         <h2>AI as the subject</h2>
         <p><a class="link-strong" href="${uni.groups[0].items[0].url}" rel="noopener">Artificial
-          Intelligence in Education ↗</a></p>
+          Intelligence in Education <span aria-hidden="true">↗</span></a></p>
         <p>Practical AI for planning, materials and feedback. University staff are in its audience
           alongside teachers, school leaders and education administrators.</p>
       </div>
@@ -72,8 +75,7 @@ export default function universities() {
       <div class="section-head">
         <h2>Courses university staff join</h2>
       </div>
-      <p>Each programme names university staff in its audience. The links go to the programme's own
-        entry on SpainBcn.</p>
+      <p>Each programme names university staff in its audience.</p>
       <div class="grid-cards grid-cards--three">
         ${groups}
       </div>
@@ -89,9 +91,9 @@ export default function universities() {
           <li><span class="facts__term">Hours</span><span class="facts__value">${d.schedule.hours}</span></li>
           <li><span class="facts__term">Fee</span><span class="facts__value">${d.pricing.currency}${hours20} for
             20 hours a week, ${d.pricing.currency}${hours25} for 25. ${d.pricing.includes}</span></li>
-          <li><span class="facts__term">Certificate</span><span class="facts__value">${d.schedule.certificate}, issued on the final day.</span></li>
+          <li><span class="facts__term">Certificate</span><span class="facts__value">${esc(d.schedule.certificateLine)}</span></li>
         </ul>
-        <p style="margin-top:20px"><a class="link-strong" href="/your-week/">See a typical Barcelona week →</a></p>
+        <p style="margin-top:20px"><a class="link-strong" href="/your-week/">See a typical Barcelona week <span aria-hidden="true">→</span></a></p>
       </div>
       <div>
         <h2>Booking and your mobility</h2>
@@ -99,7 +101,7 @@ export default function universities() {
           for Erasmus+ KA1 staff mobility.</p>
         <p>${d.booking.payment}</p>
         <p><a class="link-strong" href="/plan-a-mobility/">Registration details and documents for
-          coordinators →</a></p>
+          coordinators <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>

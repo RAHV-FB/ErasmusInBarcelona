@@ -6,6 +6,10 @@ turned out to be wrong (see "Factual corrections" below).
 
 ## What the site is now
 
+*[Superseded 1 September 2026: `/universities/` was added on 22 August and the `/courses/`
+catalogue — nine course-group pages — on 31 August 2026; the site now builds 23 pages. The
+current route list is github.md's screen map. The table below is the 2026-08-20 record.]*
+
 Twelve static pages built by `build.mjs` from `src/pages/*.js`, rendering `src/data/site-data.js`.
 No runtime framework, no client-side rendering, no third-party requests on page view.
 
@@ -193,6 +197,14 @@ consent banner is gone, because there is nothing left to consent to on page view
    Either re-export the sheet before each publish, as the file's own header already says to, or
    filter `dates` on `end` at build time so a stale export cannot mislead anyone. The second is
    the one that survives someone forgetting.
+
+   *Addendum, 1 September 2026: resolved in three layers since this was written. `npm run dates`
+   (tools/refresh-dates.mjs) automates the re-export; the publish guard in scripts/guards.mjs
+   fails a publish whose export contains an ended week (ALLOW_STALE_DATES=1 to override); and the
+   pages now render `upcomingWeeks`, which drops ended weeks at build time — with empty states on
+   the home board and `/dates/` for a fully expired export. A published build still only updates
+   when it is rebuilt, so the refresh remains the recurring job; the calendar runs out on
+   13 November 2026.*
 
 ---
 

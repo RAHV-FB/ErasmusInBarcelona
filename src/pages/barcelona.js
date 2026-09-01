@@ -48,10 +48,10 @@ export default function barcelona() {
       <div class="cols cols--split">
         <div>
           <h3>Gràcia</h3>
-          <p>Around the office at ${d.contact.address}, five minutes on foot from the Sagrada Família.</p>
+          <p>Around the office at ${d.contact.address}, ${d.contact.officeWalk}.</p>
           <ul class="facts">
-            <li><span class="facts__term">${b.stations.sagradaFamilia.name}</span><span class="facts__value">${lines(b.stations.sagradaFamilia)} · about 5 minutes' walk</span></li>
-            <li><span class="facts__term">${b.stations.verdaguer.name}</span><span class="facts__value">${lines(b.stations.verdaguer)} · about 10 minutes' walk</span></li>
+            <li><span class="facts__term">${b.stations.sagradaFamilia.name}</span><span class="facts__value">${lines(b.stations.sagradaFamilia)} · ${esc(b.stations.sagradaFamilia.walk)}</span></li>
+            <li><span class="facts__term">${b.stations.verdaguer.name}</span><span class="facts__value">${lines(b.stations.verdaguer)} · ${esc(b.stations.verdaguer.walk)}</span></li>
           </ul>
           <p class="meta">Wherever your course runs, the office stays here.</p>
         </div>
@@ -138,8 +138,10 @@ export default function barcelona() {
             metro both ways.</p>
         </div>
       </div>
-      <p class="meta" style="margin-top:18px">Fares checked ${b.checked} and they do change.
-        <a href="${b.sources.tmbFares}" rel="noopener">Current TMB fares ↗</a></p>
+      <p class="meta" style="margin-top:18px">Fares checked ${new Date(b.checked + 'T12:00:00Z')
+        .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}
+        and they do change.
+        <a href="${b.sources.tmbFares}" rel="noopener">Current TMB fares <span aria-hidden="true">↗</span></a></p>
     </div>
   </section>
 
@@ -158,7 +160,7 @@ export default function barcelona() {
       </div>
       <div>
         <h2>Free afternoons</h2>
-        <p>Two afternoons are the week's cultural activities. The rest are yours.</p>
+        <p>${d.schedule.activitiesShort} ${d.schedule.freeAfternoons}</p>
         <ul class="facts">
           ${afternoons}
         </ul>
@@ -174,16 +176,15 @@ export default function barcelona() {
       </div>
       <div>
         <h2>Elsewhere in Spain</h2>
-        <p>This page is Barcelona only. SpainBcn also runs weeks in Málaga, Mallorca, Gran Canaria,
-          Tenerife and Tarragona.</p>
-        <p><a class="link-strong" href="${d.spainbcn.locations}" rel="noopener">See all locations ↗</a></p>
+        <p>${d.destinationsSentence}</p>
+        <p><a class="link-strong" href="${d.spainbcn.locations}" rel="noopener">See all locations <span aria-hidden="true">↗</span></a></p>
       </div>
     </div>
   </section>
 
   <section class="section section--rule">
     <div class="container">
-      <p><a class="link-strong" href="/dates/">See Barcelona course dates →</a></p>
+      <p><a class="link-strong" href="/dates/">See Barcelona course dates <span aria-hidden="true">→</span></a></p>
     </div>
   </section>`;
 

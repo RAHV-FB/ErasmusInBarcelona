@@ -116,7 +116,7 @@ ${data.spainbcn.home}.
 
 ## Pages
 
-- [Course groups](${SITE_URL}/courses/): the Barcelona catalogue — nine groups of one-week KA1 courses, each with its own page
+- [Course groups](${SITE_URL}/courses/): the Barcelona catalogue — ${courseGroups.length} groups of one-week KA1 courses, each with its own page
 - [Staff training courses](${SITE_URL}/join-a-course/): the course groups, fees and the next scheduled Barcelona weeks
 - [University staff](${SITE_URL}/universities/): the courses whose published audience includes university teaching, research and administrative staff
 - [Dates](${SITE_URL}/dates/): the scheduled course weeks in Barcelona; other weeks open on request
@@ -171,7 +171,8 @@ if (PROTOTYPE) {
 fs.writeFileSync(path.join(DIST, '.nojekyll'), '');
 
 console.log(`${count} pages → ${DIST}/${BASE_PATH ? ` (base path ${BASE_PATH})` : ''}${PROTOTYPE ? ' [prototype: noindex]' : ''}`);
-console.log(`${urls.length} URLs in sitemap.xml · ${data.weeks.length} weeks (${data.dates.length} courses) · ` +
+console.log(`${urls.length} URLs in sitemap.xml · ${data.upcomingWeeks.length} upcoming of ` +
+  `${data.weeks.length} weeks (${data.dates.length} courses) · ` +
   `${data.courseAreas.length} subject areas · ${courseGroups.length} course groups ` +
   `(${courseGroups.reduce((n, g) => n + g.courses.length, 0)} courses)`);
 console.log(analytics.websiteId

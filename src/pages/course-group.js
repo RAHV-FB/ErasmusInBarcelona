@@ -9,10 +9,8 @@
 import { page, img, esc } from '../layout.js';
 import * as d from '../data/site-data.js';
 
-/** The next scheduled Barcelona weeks whose sheet label belongs to this group. */
-function nextWeeks(group, limit = 4) {
-  return d.dates.filter((w) => group.dateCourses.includes(w.course)).slice(0, limit);
-}
+/** The next upcoming Barcelona weeks whose sheet labels belong to this group. */
+const nextWeeks = (group, limit = 4) => d.upcomingWeeksFor(group.dateCourses, limit);
 
 function courseEntry(c) {
   const photo = c.image
@@ -37,7 +35,7 @@ function courseEntry(c) {
           <ul>
             ${c.outcomes.map((o) => `<li>${esc(o)}</li>`).join('\n            ')}
           </ul>
-          <p class="course__ask"><a class="link-strong" href="/contact/">Ask about this course →</a></p>
+          <p class="course__ask"><a class="link-strong" href="/contact/">Ask about this course <span aria-hidden="true">→</span></a></p>
         </div>
       </details>`;
 }
@@ -50,17 +48,17 @@ export function renderCourseGroup(g) {
     ? `<div class="board">
         ${weeks.map((w) => `<a class="board__row" href="/dates/">
           <span class="board__when">${esc(w.label)} <span class="board__month">${esc(w.month)}</span></span>
-          <span class="board__course">${esc(w.course)}</span>
+          <span class="board__course">${w.courses.map((c) => esc(c.course)).join(' · ')}</span>
         </a>`).join('\n        ')}
       </div>
       <div class="board__foot">
-        <a class="link-strong" href="/dates/">All Barcelona dates →</a>
+        <a class="link-strong" href="/dates/">All Barcelona dates <span aria-hidden="true">→</span></a>
         <p class="meta">${esc(d.datesSource.note)}</p>
       </div>`
     : `<p>No scheduled Barcelona week in the current calendar. ${esc(d.datesSource.note)}</p>
       <div class="board__foot">
-        <a class="link-strong" href="/contact/">Ask us about your dates →</a>
-        <a class="link-strong" href="/dates/">All Barcelona dates →</a>
+        <a class="link-strong" href="/contact/">Ask us about your dates <span aria-hidden="true">→</span></a>
+        <a class="link-strong" href="/dates/">All Barcelona dates <span aria-hidden="true">→</span></a>
       </div>`;
 
   const body = `
@@ -69,7 +67,7 @@ export function renderCourseGroup(g) {
       <div>
         <p class="eyebrow">Course group</p>
         <h1>${esc(g.title)}</h1>
-        <p class="lede">${esc(g.lede)}</p>
+        ${g.lede ? `<p class="lede">${esc(g.lede)}</p>` : ''}
         <p>${esc(g.welcome)}</p>
         <ul class="price price--inline">
           <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
@@ -108,10 +106,10 @@ export function renderCourseGroup(g) {
             <li><span class="facts__term">Group</span><span class="facts__value">${esc(d.schedule.groupSize)}</span></li>
             <li><span class="facts__term">Materials</span><span class="facts__value">${esc(d.schedule.materials)}</span></li>
             <li><span class="facts__term">Activities</span><span class="facts__value">${esc(d.schedule.activities)}</span></li>
-            <li><span class="facts__term">Certificate</span><span class="facts__value">${esc(d.schedule.certificate)}, ${esc(d.schedule.certificateNote.charAt(0).toLowerCase() + d.schedule.certificateNote.slice(1))}</span></li>
+            <li><span class="facts__term">Certificate</span><span class="facts__value">${esc(d.schedule.certificateLine)}</span></li>
             <li><span class="facts__term">Where</span><span class="facts__value">${esc(d.contact.venueNote)}</span></li>
           </ul>
-          <p style="margin-top:20px"><a class="link-strong" href="/your-week/">See a typical Barcelona week →</a></p>
+          <p style="margin-top:20px"><a class="link-strong" href="/your-week/">See a typical Barcelona week <span aria-hidden="true">→</span></a></p>
         </div>
         <div>
           <h3>Fees and booking</h3>
@@ -139,7 +137,7 @@ export function renderCourseGroup(g) {
         <a class="btn" href="/contact/">Ask about a course</a>
         <a class="btn btn--ghost" href="${d.contact.emailHref}">${d.contact.email}</a>
       </div>
-      <p style="margin-top:24px"><a href="/courses/">All course groups →</a></p>
+      <p style="margin-top:24px"><a href="/courses/">All course groups <span aria-hidden="true">→</span></a></p>
     </div>
   </section>`;
 

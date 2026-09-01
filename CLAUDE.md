@@ -7,8 +7,10 @@ anything.
 ## Architecture rules
 
 - **One source of truth.** Every fact the site states — price, date, address, OID, programme name,
-  person, document — lives in `src/data/site-data.js` and is rendered from there. Never type a
-  fact into a page template, and never state one in two places with different words.
+  person, document — lives in `src/data/` (shared facts in `site-data.js`, the course groups in
+  `course-groups.js`, the volatile Barcelona facts in `barcelona-practical.js`) and is rendered
+  from there. Never type a fact into a page template, and never state one in two places with
+  different words.
 - **Plain HTML out.** No framework, no client-side rendering, no build-time magic beyond string
   templates. Titles, descriptions, canonicals, Open Graph and JSON-LD are in the markup, never
   assigned by script.
@@ -26,7 +28,8 @@ anything.
 - **Never send anything personal to analytics.** No names, emails, form contents, planner answers,
   or identifiers. The planner's answers travel in the query string, which is exactly why the
   tracker excludes query strings.
-- **Images are local.** Originals stay in `uploads/` and `source-photos/` (never published);
+- **Images are local.** Originals stay in `uploads/`, `Images-Erasmus/` and `source-photos/`
+  (never published);
   `tools/build-images.mjs` produces the WebP files in `src/assets/images` under descriptive names.
   No hotlinking, ever.
 - **Run `npm run check` before committing.** It fails on dead links, missing or duplicate

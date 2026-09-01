@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { datesSource, dates as currentDates, courseAreas } from '../src/data/site-data.js';
+import { courseGroups } from '../src/data/course-groups.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'src/data/site-data.js');
@@ -128,6 +129,18 @@ if (!rows.length) fail('no upcoming Barcelona weeks found — the site would off
 
 const areaIds = new Set(courseAreas.map((a) => a.id));
 for (const r of rows) if (!areaIds.has(r.area)) fail(`"${r.course}" maps to area "${r.area}", which site-data.js does not define.`);
+
+// A label no course group claims still renders on /dates/ and the home
+// board, but every "Next in Barcelona" column skips it silently — say so
+// rather than let the two quietly disagree.
+const claimed = new Set(courseGroups.flatMap((g) => g.dateCourses));
+const unclaimed = [...new Set(rows.map((r) => r.course))].filter((c) => !claimed.has(c));
+if (unclaimed.length) {
+  console.warn('warning: no course group lists these labels in its dateCourses, so their weeks '
+    + 'will not appear in any "Next in Barcelona" column:\n'
+    + unclaimed.map((c) => `  · "${c}"`).join('\n')
+    + '\nAdd each to the right group in src/data/course-groups.js if it should.');
+}
 
 // Keep the sheet's own row order within a start date, so a re-run with an
 // unchanged sheet produces an unchanged file.

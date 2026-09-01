@@ -1,5 +1,6 @@
 import { page, img, esc } from '../layout.js';
 import * as d from '../data/site-data.js';
+import { courseGroups } from '../data/course-groups.js';
 
 const ROUTES = [
   { href: '/join-a-course/', label: 'Staff training courses',
@@ -11,7 +12,7 @@ const ROUTES = [
 ];
 
 export default function home() {
-  const soon = d.weeks.slice(0, 4);
+  const soon = d.upcomingWeeks.slice(0, 4);
 
   const routes = ROUTES.map((r, i) => `<li>
           <a href="${r.href}">
@@ -28,9 +29,9 @@ export default function home() {
           <span class="board__course">${w.courses.map((c) => esc(c.course)).join(' · ')}</span>
         </a>`).join('\n        ');
 
-  const areas = d.courseAreas.map((a) => `<div>
-          <h3><a href="/join-a-course/#${a.id}">${esc(a.label)}</a></h3>
-          <p>${esc(a.short)}</p>
+  const groups = courseGroups.map((g) => `<div>
+          <h3><a href="/courses/${g.slug}/">${esc(g.navLabel)}</a></h3>
+          <p>${esc(g.short)}</p>
         </div>`).join('\n        ');
 
   const body = `
@@ -44,8 +45,6 @@ export default function home() {
           <a class="btn" href="/dates/">See course dates</a>
           <a class="btn btn--ghost" href="/join-a-course/">Explore courses</a>
         </div>
-        <p class="meta" style="margin-top:20px">Run by SpainBcn-Programs, in Barcelona since
-          ${d.organisation.founded}.</p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.heroGroup, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
@@ -66,13 +65,14 @@ export default function home() {
       <div class="section-head">
         <h2>Upcoming weeks in Barcelona</h2>
       </div>
-      <div class="board">
+      ${soon.length ? `<div class="board">
         ${board}
       </div>
       <div class="board__foot">
-        <a class="link-strong" href="/dates/">All ${d.weeks.length} weeks →</a>
+        <a class="link-strong" href="/dates/">All ${d.upcomingWeeks.length} weeks <span aria-hidden="true">→</span></a>
         <span class="meta">Confirm your place before booking travel.</span>
-      </div>
+      </div>` : `<p>No scheduled Barcelona week in the current calendar. ${esc(d.datesSource.note)}</p>
+      <p><a class="link-strong" href="/contact/">Ask us about your dates <span aria-hidden="true">→</span></a></p>`}
     </div>
   </section>
 
@@ -83,12 +83,12 @@ export default function home() {
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <h2>Course areas</h2>
+        <h2>Course groups</h2>
       </div>
       <div class="grid-cards grid-cards--three">
-        ${areas}
+        ${groups}
       </div>
-      <p style="margin-top:28px"><a class="link-strong" href="/join-a-course/">See courses in Barcelona →</a></p>
+      <p style="margin-top:28px"><a class="link-strong" href="/join-a-course/">Fees and the next weeks for every group <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
 
@@ -96,9 +96,9 @@ export default function home() {
     <div class="container cols cols--lead">
       <div>
         <h2>A typical staff training week</h2>
-        <p>Class every morning, Monday to Friday, at 20 or 25 hours for the week. Two afternoons are
-          the week’s cultural activities; the rest are free.</p>
-        <p><a class="link-strong" href="/your-week/">What a week involves →</a></p>
+        <p>${d.schedule.pattern} ${d.schedule.hours} ${d.schedule.activitiesShort}
+          ${d.schedule.freeAfternoons}</p>
+        <p><a class="link-strong" href="/your-week/">What a week involves <span aria-hidden="true">→</span></a></p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.spanishWhiteboard, { sizes: '(min-width: 860px) 48vw, 100vw' })}
@@ -111,7 +111,7 @@ export default function home() {
       <div>
         <h2>Barcelona</h2>
         <p>${d.contact.venueNote}</p>
-        <p><a class="link-strong" href="/barcelona/">Plan your stay in Barcelona →</a></p>
+        <p><a class="link-strong" href="/barcelona/">Plan your stay in Barcelona <span aria-hidden="true">→</span></a></p>
       </div>
       <div class="hero-media hero-media--even">
         <figure class="media media--photo">${img(d.images.cafeTerrace, { sizes: '(min-width: 860px) 28vw, 50vw' })}</figure>

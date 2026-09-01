@@ -133,7 +133,12 @@
       document.head.appendChild(script);
     }
     script.addEventListener('load', onReady);
-    script.addEventListener('error', onFail);
+    script.addEventListener('error', function () {
+      // A failed tag never fires again; remove it so a later attempt
+      // (withdraw and re-allow) creates a fresh one.
+      script.remove();
+      onFail();
+    });
   };
 
   var gate = document.querySelector('[data-form-gate]');
@@ -188,7 +193,13 @@
     }
     instance = null;
     if (mountPoint) mountPoint.replaceChildren();
-    if (gate) gate.hidden = false;
+    if (!gate) return;
+    // Clear any earlier failure, so the gate offers the choice again.
+    var failed = gate.querySelector('[data-form-failed]');
+    if (failed) failed.hidden = true;
+    var action = gate.querySelector('[data-privacy-set]');
+    if (action) action.hidden = false;
+    gate.hidden = false;
   };
 
   /* ---------- the sign-up side tab, behind the same permission ---------- */
@@ -296,7 +307,6 @@
   var writePrivacy = function (formsApp) {
     var value = { version: 1, formsApp: formsApp, decidedAt: new Date().toISOString() };
     try { localStorage.setItem(STORE, JSON.stringify(value)); } catch (e) {}
-    document.documentElement.classList.add('privacy-decided');
     document.documentElement.classList.toggle('formsapp-allowed', formsApp);
     return value;
   };

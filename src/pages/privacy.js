@@ -36,7 +36,7 @@ export default function privacy() {
         legitimate interest in a website that stays up and is not attacked, Article 6(1)(f) GDPR.
         ${d.hosting.name} handles them on our instructions, as our processor.</p>
       <p class="meta"><a href="${d.hosting.privacy}" rel="noopener">${d.hosting.name} data
-        protection ↗</a></p>
+        protection <span aria-hidden="true">↗</span></a></p>
       <p>The site stores one thing on your device: your answer to the privacy choice below, under the
         name <code>eib-privacy-v1</code> in your browser's local storage. It records whether you
         allowed the sign-up form and when you answered. It holds no identifier and never leaves your
@@ -80,8 +80,8 @@ export default function privacy() {
         taking steps at your request before entering into a contract, Article 6(1)(b). You never have
         to use it — our email address, telephone number and WhatsApp are on the contact page in plain
         text.</p>
-      <p class="meta"><a href="${d.formsApp.privacy}" rel="noopener">forms.app privacy policy ↗</a> ·
-        <a href="${d.formsApp.cookies}" rel="noopener">forms.app cookie policy ↗</a></p>
+      <p class="meta"><a href="${d.formsApp.privacy}" rel="noopener">forms.app privacy policy <span aria-hidden="true">↗</span></a> ·
+        <a href="${d.formsApp.cookies}" rel="noopener">forms.app cookie policy <span aria-hidden="true">↗</span></a></p>
 
       <h2>When you contact us</h2>
       <p>If you email, call or send a WhatsApp message, we hold what you send: your name, contact
@@ -134,7 +134,7 @@ export default function privacy() {
         affecting what was done before. Write to
         <a href="${d.contact.emailHref}">${d.contact.email}</a> and we will answer within one month.</p>
       <p>You can also complain to the Spanish data protection authority, the Agencia Española de
-        Protección de Datos (<a href="https://www.aepd.es" rel="noopener">aepd.es ↗</a>).</p>
+        Protección de Datos (<a href="https://www.aepd.es" rel="noopener">aepd.es <span aria-hidden="true">↗</span></a>).</p>
 
       <h2>Student groups and minors</h2>
       <p>Student group programmes are arranged with the school or institution, which is responsible

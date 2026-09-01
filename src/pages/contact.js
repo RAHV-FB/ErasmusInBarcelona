@@ -22,7 +22,7 @@ export default function contact() {
         <h2>Write or call</h2>
         <ul class="facts">
           <li><span class="facts__term">Email</span><span class="facts__value"><a href="${d.contact.emailHref}" data-mail-prefill>${d.contact.email}</a></span></li>
-          <li><span class="facts__term">Phone and WhatsApp</span><span class="facts__value"><a href="${d.contact.phoneHref}">${d.contact.phone}</a> · <a href="${d.contact.whatsapp}" rel="noopener">WhatsApp ↗</a></span></li>
+          <li><span class="facts__term">Phone and WhatsApp</span><span class="facts__value"><a href="${d.contact.phoneHref}">${d.contact.phone}</a> · <a href="${d.contact.whatsapp}" rel="noopener">WhatsApp <span aria-hidden="true">↗</span></a></span></li>
           <li><span class="facts__term">Office</span><span class="facts__value">${d.contact.address}<br>${d.contact.officeNote}</span></li>
         </ul>
 
@@ -53,7 +53,7 @@ export default function contact() {
               <p class="meta"><a href="/privacy/">Privacy</a></p>
               <p class="form-gate__failed" data-form-failed hidden>The form couldn't be loaded. Email
                 <a href="${d.contact.emailHref}">${d.contact.email}</a> or message us on
-                <a href="${d.contact.whatsapp}" rel="noopener">WhatsApp ↗</a>.</p>
+                <a href="${d.contact.whatsapp}" rel="noopener">WhatsApp <span aria-hidden="true">↗</span></a>.</p>
             </div>
           </div>
         </div>
