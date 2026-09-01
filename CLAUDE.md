@@ -13,8 +13,8 @@ anything.
   templates. Titles, descriptions, canonicals, Open Graph and JSON-LD are in the markup, never
   assigned by script.
 - **CSS decides layout, not JavaScript.** `src/assets/js/site.js` handles the menu, the date
-  filter, the group planner and loading the sign-up form. Nothing else. No React, Vue, Tailwind,
-  Bootstrap, jQuery or animation libraries.
+  filter, the group planner, loading the sign-up form and opening the course dropdown a link
+  points at. Nothing else. No React, Vue, Tailwind, Bootstrap, jQuery or animation libraries.
 - **Two third parties, both on a leash.** Umami Cloud runs on every page, on its EU region:
   cookie-free, query strings and fragments excluded, do-not-track respected, reporting only from
   the production domains, no Distinct ID, no replay, no custom events, configured once in

@@ -117,7 +117,7 @@ ${data.spainbcn.home}.
 ## Pages
 
 - [Course groups](${SITE_URL}/courses/): the Barcelona catalogue — nine groups of one-week KA1 courses, each with its own page
-- [Staff training courses](${SITE_URL}/join-a-course/): the subject areas, fees and the next scheduled Barcelona weeks
+- [Staff training courses](${SITE_URL}/join-a-course/): the course groups, fees and the next scheduled Barcelona weeks
 - [University staff](${SITE_URL}/universities/): the courses whose published audience includes university teaching, research and administrative staff
 - [Dates](${SITE_URL}/dates/): the scheduled course weeks in Barcelona; other weeks open on request
 - [Your week](${SITE_URL}/your-week/): how a course week runs, booking steps and the documents provided

@@ -420,6 +420,8 @@ figcaption { margin-top: 8px; font-size: .8rem; color: var(--ink-55); }
   }
 }
 .area h3 { margin: 0 0 .35em; font-size: clamp(1.05rem, 1.6vw, 1.25rem); }
+.area h3 a { text-decoration: none; }
+.area h3 a:hover { color: var(--cobalt); text-decoration: underline; }
 .area__subject p { margin: 0; color: var(--ink-70); font-size: .95rem; }
 .area__programmes ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
 .area__programmes a { font-size: .97rem; }

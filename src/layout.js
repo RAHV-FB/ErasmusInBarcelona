@@ -4,9 +4,22 @@
 // src/data/site-data.js.
 // ============================================================
 
+import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import * as data from './data/site-data.js';
 import { analyticsTag } from './data/analytics.js';
 import manifest from './assets/images/manifest.json' with { type: 'json' };
+
+// The stylesheet and the script are cached for a year (.htaccess), so
+// their URLs carry a hash of their content: change a file and every page
+// asks for a new URL. Without this, a returning visitor renders new pages
+// with last week's stylesheet — which is how the course pages first
+// reached the owner unstyled.
+const assetVersion = (rel) => createHash('md5')
+  .update(fs.readFileSync(new URL(rel, import.meta.url)))
+  .digest('hex').slice(0, 10);
+const CSS_V = assetVersion('./assets/css/site.css');
+const JS_V = assetVersion('./assets/js/site.js');
 
 // Where the build will be published. The GitHub Pages prototype sets both
 // of these (see `npm run build:pages`); a real deploy needs neither.
@@ -287,7 +300,7 @@ ${meta.noindex || PROTOTYPE ? '<meta name="robots" content="noindex, follow">' :
 <meta name="theme-color" content="#3157D5">
 <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/site.css?v=${CSS_V}">
 <script>
 /* Read the visitor's forms.app choice before first paint, so an allowed
    form never flashes its permission gate and the banner never appears
@@ -312,7 +325,7 @@ ${body}
 ${footer()}
 ${meta.path === '/contact/' ? '' : signupTab()}
 ${privacyUi()}
-<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/site.js?v=${JS_V}" defer></script>
 </body>
 </html>
 `;

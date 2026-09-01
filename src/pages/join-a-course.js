@@ -1,31 +1,23 @@
 import { page, img, esc } from '../layout.js';
 import * as d from '../data/site-data.js';
+import { courseGroups } from '../data/course-groups.js';
 
-const INDEX_LABELS = {
-  ai: 'AI + digital',
-  english: 'English',
-  spanish: 'Spanish',
-  inclusion: 'Inclusion',
-  wellbeing: 'Wellbeing',
-  creative: 'Creative',
-};
-
-/** The next scheduled Barcelona weeks for one subject area. */
-function nextWeeks(areaId, limit = 3) {
-  return d.dates.filter((w) => w.area === areaId).slice(0, limit);
+/** The next scheduled Barcelona weeks whose sheet label belongs to the group. */
+function nextWeeks(group, limit = 3) {
+  return d.dates.filter((w) => group.dateCourses.includes(w.course)).slice(0, limit);
 }
 
 export default function joinACourse() {
   const { hours20, hours25 } = d.pricing.barcelona;
 
-  const jumpIndex = d.courseAreas.map((a) =>
-    `<a href="#${a.id}">${esc(INDEX_LABELS[a.id] || a.label)}</a>`).join('\n        ');
+  const jumpIndex = courseGroups.map((g) =>
+    `<a href="#${g.slug}">${esc(g.navLabel)}</a>`).join('\n        ');
 
-  const directory = d.courseAreas.map((a) => {
-    const programmes = a.programmes.map((p) =>
-      `<li><a href="${p.url}" rel="noopener">${esc(p.name)}</a></li>`).join('\n              ');
+  const directory = courseGroups.map((g) => {
+    const courses = g.courses.map((c) =>
+      `<li><a href="/courses/${g.slug}/#${c.id}">${esc(c.title)}</a></li>`).join('\n              ');
 
-    const weeks = nextWeeks(a.id);
+    const weeks = nextWeeks(g);
     const when = weeks.length
       ? `<ul class="area__dates">
               ${weeks.map((w) => `<li><a href="/dates/"><b>${w.label}</b> ${w.month}
@@ -35,17 +27,17 @@ export default function joinACourse() {
       : `<p class="area__none">No scheduled Barcelona week in the current calendar.</p>
             <p class="area__more"><a href="/contact/">Ask us about your dates →</a></p>`;
 
-    return `<article class="area" id="${a.id}">
+    return `<article class="area" id="${g.slug}">
           <div class="area__subject">
-            <h3>${esc(a.label)}</h3>
-            <p>${esc(a.desc)}</p>
-            <p class="area__lang">Taught in ${esc(a.language)}</p>
+            <h3><a href="/courses/${g.slug}/">${esc(g.navLabel)}</a></h3>
+            <p>${esc(g.short)}</p>
+            <p class="area__lang">Taught in ${esc(g.language)}</p>
           </div>
           <div class="area__programmes">
             <ul>
-              ${programmes}
+              ${courses}
             </ul>
-            <p class="area__more"><a href="${a.subjects[0].url}" rel="noopener">Full ${esc(a.subjects[0].name)} area on SpainBcn ↗</a></p>
+            <p class="area__more"><a href="/courses/${g.slug}/">Full group page →</a></p>
           </div>
           <div class="area__when">
             <p class="eyebrow">Next in Barcelona</p>
@@ -66,8 +58,7 @@ export default function joinACourse() {
           <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>
         </ul>
         <p class="meta">Per person, per week, in Barcelona.</p>
-        <p><a class="link-strong" href="/courses/">Browse the nine Barcelona course groups →</a><br>
-          <a class="link-strong" href="/universities/">Erasmus+ staff training for university staff →</a></p>
+        <p><a class="link-strong" href="/universities/">Erasmus+ staff training for university staff →</a></p>
       </div>
       <figure class="media media--photo">
         ${img(d.images.staffTrainingRoom, { sizes: '(min-width: 860px) 48vw, 100vw', eager: true })}
@@ -77,14 +68,16 @@ export default function joinACourse() {
 
   <section class="section section--tight">
     <div class="container">
-      <h2 class="visually-hidden">Course areas</h2>
-      <nav class="jump" aria-label="Course areas">
+      <h2 class="visually-hidden">Course groups</h2>
+      <nav class="jump" aria-label="Course groups">
         ${jumpIndex}
       </nav>
 
       <div class="directory">
         ${directory}
       </div>
+      <p class="meta" style="margin-top:16px">The full SpainBcn catalogue, with the other Spanish
+        destinations, is on <a href="${d.spainbcn.catalogue}" rel="noopener">SpainBcn.com ↗</a>.</p>
     </div>
   </section>
 
@@ -152,6 +145,6 @@ export default function joinACourse() {
     current: 'join',
     crumb: 'Staff training',
     title: 'Erasmus+ KA1 Staff Training Courses in Barcelona | SpainBcn-Programs',
-    description: `The six subject areas taught in Barcelona, with the next scheduled Erasmus+ KA1 week for each. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25. Erasmus+ funding is not required.`,
+    description: `The nine Barcelona course groups with their courses, and the next scheduled Erasmus+ KA1 week for each. ${d.pricing.currency}${hours20} for 20 hours a week, ${d.pricing.currency}${hours25} for 25. Erasmus+ funding is not required.`,
   }, body);
 }

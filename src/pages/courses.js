@@ -10,9 +10,9 @@ import { courseGroups } from '../data/course-groups.js';
 export default function courses() {
   const { hours20, hours25 } = d.pricing.barcelona;
 
-  const cards = courseGroups.map((g) => `<article class="group-card">
+  const cards = courseGroups.map((g, i) => `<article class="group-card">
         <figure class="group-card__photo">
-          ${img(d.images[g.image], { sizes: '(min-width: 960px) 30vw, (min-width: 640px) 45vw, 100vw' })}
+          ${img(d.images[g.image], { sizes: '(min-width: 960px) 30vw, (min-width: 640px) 45vw, 100vw', eager: i < 3 })}
         </figure>
         <div class="group-card__body">
           <h3><a href="/courses/${g.slug}/">${esc(g.navLabel)}</a></h3>

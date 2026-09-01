@@ -1,8 +1,9 @@
 /* ============================================================
    ErasmusInBarcelona.com — the small amount of behaviour the
    site actually needs. Layout is CSS; this file only handles
-   the menu, the date filter, the group planner and the
-   consent-gated form embed.
+   the menu, the date filter, the group planner, the
+   consent-gated form embed, and opening the course dropdown
+   a link points at.
    ============================================================ */
 
 (function () {
@@ -39,9 +40,22 @@
     // A resize past the breakpoint leaves the panel hidden by CSS;
     // clear the state so the button and the body agree with it.
     window.addEventListener('resize', function () {
-      if (window.innerWidth > 900 && toggle.getAttribute('aria-expanded') === 'true') open(false);
+      if (window.innerWidth > 1080 && toggle.getAttribute('aria-expanded') === 'true') open(false);
     });
   }
+
+  /* ---------- course dropdowns ---------- */
+
+  // A link can point at one course inside a group page
+  // (/courses/<group>/#<course-id>). The <details> it lands on opens,
+  // so the reader arrives at the course rather than at a closed row.
+  var openLinkedCourse = function () {
+    if (!location.hash) return;
+    var target = document.getElementById(location.hash.slice(1));
+    if (target && target.tagName === 'DETAILS') target.open = true;
+  };
+  openLinkedCourse();
+  window.addEventListener('hashchange', openLinkedCourse);
 
   /* ---------- date filter ---------- */
 
