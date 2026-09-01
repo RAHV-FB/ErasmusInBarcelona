@@ -25,8 +25,8 @@ export default function courses() {
   <section class="container hero hero--tight">
     <h1>Course groups in Barcelona</h1>
     <p class="lede">One-week Erasmus+ KA1 staff training for teachers and education staff, in
-      ${courseGroups.length} groups. Every group runs ${d.schedule.days}, at ${d.schedule.hoursShort}
-      a week, with the same fee.</p>
+      ${d.countWord(courseGroups.length)} groups. Every group runs ${d.schedule.days}, at
+      ${d.schedule.hoursShort} a week, with the same fee.</p>
     <ul class="price price--inline">
       <li><span class="price__amount">${d.pricing.currency}${hours20}</span><span class="price__hours">20 hours</span></li>
       <li><span class="price__amount">${d.pricing.currency}${hours25}</span><span class="price__hours">25 hours</span></li>

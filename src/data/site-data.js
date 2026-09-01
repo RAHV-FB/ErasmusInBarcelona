@@ -131,6 +131,13 @@ export const pricing = {
 export const destinations = ['Málaga', 'Mallorca', 'Gran Canaria', 'Tenerife', 'Tarragona'];
 export const destinationsSentence = `SpainBcn also runs course weeks in ${destinations.slice(0, -1).join(', ')} and ${destinations[destinations.length - 1]}.`;
 
+// Body prose spells a small count out ("nine groups", not "9 groups");
+// derived counts render through this so the word can never drift from
+// the data. Board and meta-description counts stay digits, as /dates/
+// established.
+export const countWord = (n) =>
+  ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'][n] ?? String(n);
+
 // Booking, money and cancellation, from SpainBcn's published terms
 // (spainbcn.com/terms.html, reviewed there 4 August 2026). These are the
 // questions a participant or a finance office actually asks, so the site
@@ -395,7 +402,7 @@ export const history = [
   { year: '1997', title: 'The beginning', text: 'María Ángeles and Miriam founded SpainBcn in Barcelona, teaching Spanish to international students.' },
   { year: '2000s', title: 'A language school', text: 'Students came from all over the world to learn Spanish in Barcelona.' },
   { year: '2010s', title: 'From language courses to European mobility', text: 'European teachers began arriving through Erasmus+ staff mobility, and the catalogue grew from language classes into professional training.' },
-  { year: 'Today', title: 'Barcelona and five more destinations', text: `Courses run in ${['Barcelona', ...destinations.slice(0, -1)].join(', ')} and ${destinations[destinations.length - 1]}, for schools, universities, VET and adult-education organisations across Europe.` },
+  { year: 'Today', title: `Barcelona and ${countWord(destinations.length)} more destinations`, text: `Courses run in ${['Barcelona', ...destinations.slice(0, -1)].join(', ')} and ${destinations[destinations.length - 1]}, for schools, universities, VET and adult-education organisations across Europe.` },
 ];
 
 // ============================================================

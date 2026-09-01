@@ -84,7 +84,7 @@ export default function planAMobility() {
         <p class="meta">${esc(d.booking.vatLine)} ${d.pricing.travelKa1}</p>
         <h2 style="margin-top:1.6em">Where it runs</h2>
         <p>Barcelona, in the Gràcia and Barceloneta areas. A project can also run at SpainBcn's
-          ${d.destinations.length} other Spanish destinations —
+          other Spanish destinations —
           <a href="${d.spainbcn.locations}" rel="noopener">see locations <span aria-hidden="true">↗</span></a>.</p>
       </div>
     </div>
